@@ -1,0 +1,71 @@
+body {
+    background-color: firebrick;
+}
+
+h1 {
+	font-family: "Courier New", monospace;
+	text-align: center;
+    font-weight: bold;
+    font-size: 3em;
+    color: white;
+}
+
+h3 {
+    font-family: "Courier New", monospace;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: white;
+}
+
+textarea {
+    outline-color: blue;
+    resize: none;
+    font-family: "Courier New", monospace;
+    border-radius: 7px;
+}
+
+div {
+	text-align: center;
+    font-family: "Courier New", monospace;
+}
+
+label { 
+    width: 300px; 
+    float: left; 
+    margin: 0 20px 0 75px; 
+}
+
+form {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}
+
+input[type=submit],
+input[type=button] {
+    padding:5px 15px; 
+    background:#ccc; 
+    border:0 none;
+    cursor:pointer;
+    border-radius: 7px; 
+}
+
+div.buttonWrapper  {
+   text-align: center;    
+}
+
+form.updatepage {
+    background-color: indianred;
+    border-radius: 7px;
+}
+
+p {
+    text-align: center;
+    font-family: "Courier New", monospace;
+    color: white;
+}
+
+a {
+    color: white;
+}
