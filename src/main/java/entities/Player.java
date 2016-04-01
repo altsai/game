@@ -1,18 +1,18 @@
 package entities;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import game_objects.Powerup;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
+
 /**
  * Defines the Player object.
  *
- * Player is an instance of an Entity and also has a circular hitbox.
- * Player also implements the PlayerAction interface for player specifics.
+ * Player is an instance of an Entity and also has a circular hitbox. Player
+ * also implements the PlayerAction interface for player specifics.
  *
  * @author bl48
  *
@@ -49,12 +49,10 @@ public class Player extends Entity implements PlayerAction {
     this.right = Window.width;
   }
 
-
   @Override
   public int getLives() {
     return this.lives;
   }
-
 
   @Override
   public void loseLife() {
@@ -71,13 +69,13 @@ public class Player extends Entity implements PlayerAction {
   @Override
   public void collectPowerup(Powerup p) {
     this.powerup = p;
+    p.kill();
   }
 
   @Override
   public int getScore() {
     return this.score;
   }
-
 
   @Override
   public void incrementScore() {
@@ -88,7 +86,6 @@ public class Player extends Entity implements PlayerAction {
   public void usePowerup() {
     this.powerup.activate();
   }
-
 
   @Override
   /**
@@ -120,13 +117,12 @@ public class Player extends Entity implements PlayerAction {
 
   }
 
-
   /**
    * Method to determine if the player is currently invincible
    *
    * Players are invincible if they have just spawned in.
    *
-   * @return    Boolean, true if invincible
+   * @return Boolean, true if invincible
    */
   public boolean isInvincible() {
     return this.state;
@@ -140,8 +136,10 @@ public class Player extends Entity implements PlayerAction {
   /**
    * Method to determine the player's new position according to WASD input.
    *
-   * @param input    Input, the key pressed
-   * @param delta    Integer, amount fo time since last update
+   * @param input
+   *          Input, the key pressed
+   * @param delta
+   *          Integer, amount fo time since last update
    */
   private void move(Input input, int delta) {
     if (input.isKeyDown(Input.KEY_W)) {
@@ -168,6 +166,5 @@ public class Player extends Entity implements PlayerAction {
       }
     }
   }
-
 
 }

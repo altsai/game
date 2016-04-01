@@ -21,8 +21,8 @@ public interface Powerup {
   /**
    * Method to remove the powerup from the map.
    *
-   * Different from deactivate in that kill() can
-   * be called without using the powerup.
+   * Different from deactivate in that kill() can be called without using the
+   * powerup.
    */
   public abstract void kill();
 }
