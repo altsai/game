@@ -2,7 +2,6 @@ package entities;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 import edu.brown.cs.altsai.game.Resources;
@@ -56,12 +55,6 @@ public class Player extends Entity implements PlayerAction {
     return this.lives;
   }
 
-  @Override
-  public void render(GameContainer gc, Graphics g) {
-    if (this.image != null) {
-      image.draw(this.x, this.y, this.radius, this.radius, this.color);
-    }
-  }
 
   @Override
   public void loseLife() {
@@ -69,7 +62,7 @@ public class Player extends Entity implements PlayerAction {
       return;
     } else {
       this.lives--;
-      this.color = Color.blue;
+      this.image = Resources.getImage("invinciblePlayer");
       this.setState(true);
       this.invincibleTime = System.currentTimeMillis();
     }
@@ -109,7 +102,7 @@ public class Player extends Entity implements PlayerAction {
 
     if (System.currentTimeMillis() - this.invincibleTime > 5000) {
       this.setState(false);
-      this.color = null;
+      this.image = Resources.getImage("player");
     }
 
     // move the player according to input and delta.

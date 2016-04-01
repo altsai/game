@@ -4,7 +4,7 @@ package game_objects;
  * Defines a circular hitbox.
  *
  * Used by player and zombie and some powerups as a
- * base.
+ * base. Circles in the game are 30 x 30 px
  *
  * @author bl48
  *
