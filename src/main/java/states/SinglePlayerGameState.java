@@ -17,6 +17,7 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
+import game_objects.Circle;
 import game_objects.Powerup;
 
 /**
@@ -81,7 +82,6 @@ public class SinglePlayerGameState extends BasicGameState {
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
-
     spawnZombie();
     spawnPowerup();
     this.player1.update(gc, delta);
@@ -138,6 +138,14 @@ public class SinglePlayerGameState extends BasicGameState {
         }
       }
     }
+
+    // check for player collision with every powerup
+    for (int i = 0; i < this.powerups.size(); i++) {
+      // check player's lives and mark invincible as necessary
+      if (player1.isCollision((Circle) powerups.get(i))) {
+        player1.collectPowerup(powerups.get(i));
+      }
+    }
   }
 
   /**
@@ -185,7 +193,7 @@ public class SinglePlayerGameState extends BasicGameState {
 
       // TODO: code to randomize Powerups
 
-      Bomb bomb = new Bomb(this.player1);
+      Bomb bomb = new Bomb(this.player1, powerups, entities);
       this.powerups.add(bomb);
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();

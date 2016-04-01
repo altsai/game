@@ -2,10 +2,12 @@ package powerups;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
 import entities.Player;
 import game_objects.Circle;
 import game_objects.Powerup;
 
+import java.util.List;
 import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
@@ -14,8 +16,11 @@ import org.newdawn.slick.Image;
 
 public class Bomb extends Circle implements Powerup {
   private Image image;
+  private int explosionRadius;
+  private List<Powerup> powerups;
+  private List<Entity> entities;
 
-  public Bomb(Player p) {
+  public Bomb(Player p, List<Powerup> power, List<Entity> ent) {
     super();
 
     Random r = new Random();
@@ -34,11 +39,19 @@ public class Bomb extends Circle implements Powerup {
 
     this.radius = 20;
     this.image = Resources.getImage("invinciblePlayer");
+    explosionRadius = 50;
+    powerups = power;
+    entities = ent;
   }
 
   @Override
   public void activate() {
-    // TODO Auto-generated method stub
+    for (int i = 0; i < entities.size(); i++) {
+
+    }
+  }
+
+  private boolean withinRadius(Entity e) {
 
   }
 
@@ -50,7 +63,7 @@ public class Bomb extends Circle implements Powerup {
 
   @Override
   public void kill() {
-    image = null;
+    powerups.remove(this);
   }
 
   @Override
