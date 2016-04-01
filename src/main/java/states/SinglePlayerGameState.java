@@ -18,6 +18,7 @@ import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
 import powerups.Bomb;
+import powerups.Speed;
 
 /**
  * Defines the Single Player game state.
@@ -74,6 +75,7 @@ public class SinglePlayerGameState extends BasicGameState {
     }
 
     g.drawString("Player has " + player1.getLives() + " lives", 100, 100);
+    g.drawString("Player speed: " + player1.getSpeed(), 50, 50);
 
     g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
   }
@@ -83,9 +85,11 @@ public class SinglePlayerGameState extends BasicGameState {
       throws SlickException {
     spawnZombie();
     spawnPowerup();
+
     this.player1.update(gc, delta);
 
     updateAndCheckCollisions(gc, s, delta);
+    updatePowerups(gc, delta);
 
     // go to the home menu state when 'esc' is pressed
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
@@ -147,6 +151,17 @@ public class SinglePlayerGameState extends BasicGameState {
   }
 
   /**
+   * Method that loops through powerups and updates them
+   * @param gc
+   * @param delta
+   */
+  private void updatePowerups(GameContainer gc, int delta) {
+    for (int i = 0; i < this.powerups.size(); i++) {
+      this.powerups.get(i).update(gc, delta);
+    }
+  }
+
+  /**
    * Method that spawns in zombies.
    *
    * Zombies spawn every second, but quantity depends on difficulty level.
@@ -189,10 +204,16 @@ public class SinglePlayerGameState extends BasicGameState {
 
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      // TODO: code to randomize Powerups
+      double randomNum = random.nextDouble();
+      if (randomNum < 0.35) {
+        Bomb bomb = new Bomb(powerups, entities);
+        this.powerups.add(bomb);
+      } else if (randomNum < 0.9 && randomNum >= 0.35) {
+        Speed speed = new Speed(powerups);
+        this.powerups.add(speed);
+      }
 
-      Bomb bomb = new Bomb(this.player1, powerups, entities);
-      this.powerups.add(bomb);
+
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }

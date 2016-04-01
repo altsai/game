@@ -67,7 +67,8 @@ public class Player extends Entity implements PlayerAction {
   @Override
   public void collectPowerup(Powerup p) {
     this.powerup = p;
-    p.kill();
+    this.powerup.setPlayer(this);
+    p.pickUp();
   }
 
   @Override
@@ -82,7 +83,9 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public void usePowerup() {
-    this.powerup.activate();
+    if (this.powerup != null) {
+      this.powerup.activate();
+    }
   }
 
   @Override
@@ -106,6 +109,7 @@ public class Player extends Entity implements PlayerAction {
     // use powerup on press of action key
     if (input.isKeyPressed(Input.KEY_SPACE)) {
       usePowerup();
+      this.powerup = null;
     }
   }
 

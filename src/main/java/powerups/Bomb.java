@@ -3,8 +3,6 @@ package powerups;
 import java.util.List;
 import java.util.Random;
 
-import org.newdawn.slick.GameContainer;
-
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
@@ -18,20 +16,15 @@ public class Bomb extends Powerup {
   private List<Entity> entities;
   // animation field
 
-  public Bomb(Player p, List<Powerup> power, List<Entity> ent) {
+  public Bomb(List<Powerup> power, List<Entity> ent) {
+    // call the superconstructor to start timing
+    super();
+
     Random r = new Random();
 
     this.x = r.nextFloat() * Window.width;
 
-    while (Math.abs(this.x - p.getX()) <= 100) {
-      this.x = r.nextFloat() * Window.width;
-    }
-
     this.y = r.nextFloat() * Window.height;
-
-    while (Math.abs(this.y - p.getY()) <= 100) {
-      this.y = r.nextFloat() * Window.height;
-    }
 
     this.radius = 20;
 
@@ -44,6 +37,7 @@ public class Bomb extends Powerup {
 
   @Override
   public void activate() {
+    super.activate();
     for (int i = 0; i < entities.size(); i++) {
 
     }
@@ -84,17 +78,17 @@ public class Bomb extends Powerup {
   public void deactivate() {
     // TODO Auto-generated method stub
 
+    // kill after deactivating
+    if (this.isUsed) {
+      // do something to deactivate after use
+      // then kill
+      kill();
+    }
   }
 
   @Override
   public void kill() {
     powerups.remove(this);
-  }
-
-  @Override
-  public void update(GameContainer gc, int delta) {
-    // TODO Auto-generated method stub
-
   }
 
 }
