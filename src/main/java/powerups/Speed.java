@@ -1,13 +1,13 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import game_objects.Powerup;
+
 import java.util.List;
 import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Powerup;
 
 /**
  * Defines the speed powerup that boosts a Players speed by +20%.
@@ -17,28 +17,27 @@ import game_objects.Powerup;
  */
 public class Speed extends Powerup {
 
-  private List<Powerup> powerups;
   // keeps track of how long the speed increase has been
   private long speedIncreaseStartTime;
 
   /**
    * Constructor for a Speed Powerup.
    *
-   * Takes in a list of powerups in the game (so that we can update the powerup).
-   * Also calls the super constructor which will start timers necessary for
-   * keeping track of expiration and usage.
+   * Takes in a list of powerups in the game (so that we can update the
+   * powerup). Also calls the super constructor which will start timers
+   * necessary for keeping track of expiration and usage.
    *
-   * @param powerups    List of powerups in the game currently
+   * @param powerups
+   *          List of powerups in the game currently
    */
-  public Speed(List<Powerup> powerups) {
+  public Speed(List<Powerup> p) {
     // call the super constructor first to start timers
-    super();
+    super(p);
 
     Random r = new Random();
     this.x = r.nextFloat() * Window.width;
     this.y = r.nextFloat() * Window.height;
     this.radius = 20;
-    this.powerups = powerups;
     this.image = Resources.getImage("speed");
   }
 
@@ -83,11 +82,6 @@ public class Speed extends Powerup {
         kill();
       }
     }
-  }
-
-  @Override
-  public void kill() {
-    this.powerups.remove(this);
   }
 
 }

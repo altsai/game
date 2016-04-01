@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 
 import entities.Player;
 
-
 /**
  * Interface that all Powerup objects must implement.
  *
@@ -27,26 +26,28 @@ public abstract class Powerup extends Circle {
   protected long spawnInTime;
   protected boolean isPickedUp;
   protected boolean isUsed;
+  protected List<Powerup> powerups;
 
   /**
    * Constructor for a powerup.
    *
-   * This constructor sets the spawnInTime of the powerup and also
-   * sets isPickedUp to be false.
+   * This constructor sets the spawnInTime of the powerup and also sets
+   * isPickedUp to be false.
    *
    * This constructor must be called by the subclass.
    *
    */
-  public Powerup() {
+  public Powerup(List<Powerup> p) {
     this.spawnInTime = System.currentTimeMillis();
     this.isPickedUp = false;
+    this.powerups = p;
   }
 
   /**
    * Method to set the player to effect after pickup.
    *
-   * Used during two player mode when either player could pickup powerup.
-   * This method is called in the Player.collectPowerup() method.
+   * Used during two player mode when either player could pickup powerup. This
+   * method is called in the Player.collectPowerup() method.
    *
    * @param player
    */
@@ -57,8 +58,10 @@ public abstract class Powerup extends Circle {
   /**
    * Method to render the Entity object and draw it in to the game window.
    *
-   * @param gc    GameContainer, window of the game.
-   * @param g     Graphics
+   * @param gc
+   *          GameContainer, window of the game.
+   * @param g
+   *          Graphics
    */
   public void render(GameContainer gc, Graphics g) {
     if (this.image != null && !this.isPickedUp) {
@@ -76,11 +79,13 @@ public abstract class Powerup extends Circle {
   /**
    * Method that loops and updates new information about powerups objects.
    *
-   * This is the method that should check if the powerups has expired.
-   * Should also check if the powerup's effect has worn off.
+   * This is the method that should check if the powerups has expired. Should
+   * also check if the powerup's effect has worn off.
    *
-   * @param gc        GameContainer, window of the game
-   * @param delta     Integer, change in time since last update
+   * @param gc
+   *          GameContainer, window of the game
+   * @param delta
+   *          Integer, change in time since last update
    */
   public void update(GameContainer gc, int delta) {
     if (!this.isPickedUp
@@ -95,7 +100,7 @@ public abstract class Powerup extends Circle {
   /**
    * Returns the location (x,y) of the Entity as a list.
    *
-   * @return   List of floats, first float is x, second is y.
+   * @return List of floats, first float is x, second is y.
    */
   List<Float> getLocation() {
     return Lists.newArrayList(this.x, this.y);
@@ -121,6 +126,8 @@ public abstract class Powerup extends Circle {
    * Different from deactivate in that kill() can be called without using the
    * powerup.
    */
-  public abstract void kill();
+  public void kill() {
+    powerups.remove(this);
+  }
 
 }
