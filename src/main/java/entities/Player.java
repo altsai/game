@@ -1,6 +1,8 @@
 package entities;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 import edu.brown.cs.altsai.game.Resources;
@@ -26,6 +28,8 @@ public class Player extends Entity implements PlayerAction {
   private int lives;
   private Powerup powerup;
   private int score;
+  private long invincibleTime;
+  private Color color;
 
   @Override
   /**
@@ -34,12 +38,16 @@ public class Player extends Entity implements PlayerAction {
   public void init(Entity other) {
     this.x = 500;
     this.y = 500;
-    this.radius = 10;
+    this.radius = 20;
     this.lives = 3;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
     this.speed = 0.3;
+    this.top = 0;
+    this.left = 0;
+    this.bottom = Window.height;
+    this.right = Window.width;
   }
 
 
@@ -49,8 +57,22 @@ public class Player extends Entity implements PlayerAction {
   }
 
   @Override
-  public void updateLives(int numLives) {
-    this.lives = numLives;
+  public void render(GameContainer gc, Graphics g) {
+    if (this.image != null) {
+      image.draw(this.x, this.y, this.radius, this.radius, this.color);
+    }
+  }
+
+  @Override
+  public void loseLife() {
+    if (this.lives == 0) {
+      return;
+    } else {
+      this.lives--;
+      this.color = Color.blue;
+      this.setState(true);
+      this.invincibleTime = System.currentTimeMillis();
+    }
   }
 
   @Override
@@ -84,6 +106,11 @@ public class Player extends Entity implements PlayerAction {
    */
   public void update(GameContainer gc, int delta) {
     Input input = gc.getInput();
+
+    if (System.currentTimeMillis() - this.invincibleTime > 5000) {
+      this.setState(false);
+      this.color = null;
+    }
 
     // move the player according to input and delta.
     move(input, delta);
@@ -120,20 +147,25 @@ public class Player extends Entity implements PlayerAction {
    */
   private void move(Input input, int delta) {
     if (input.isKeyDown(Input.KEY_W)) {
-      if (this.y - speed * delta >= 0) {
+      double newY = this.y - speed * delta;
+
+      if (newY >= this.top) {
         this.y -= speed * delta;
       }
     } else if (input.isKeyDown(Input.KEY_S)) {
-      if (this.y + speed * delta <= Window.height - this.image.getHeight()) {
+      double newY = this.y + speed * delta;
+      if (newY <= this.bottom - this.image.getHeight()) {
         this.y += speed * delta;
       }
     }
     if (input.isKeyDown(Input.KEY_A)) {
-      if (this.x - speed * delta >= 0) {
+      double newX = this.x - speed * delta;
+      if (newX >= this.left) {
         this.x -= speed * delta;
       }
     } else if (input.isKeyDown(Input.KEY_D)) {
-      if (this.x + speed * delta <= Window.width - this.image.getWidth()) {
+      double newX = this.x + speed * delta;
+      if (newX <= this.right - this.image.getWidth()) {
         this.x += speed * delta;
       }
     }

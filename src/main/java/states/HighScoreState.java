@@ -7,6 +7,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Window;
+
 /**
  * Defines the high score game state.
  *
@@ -27,7 +29,7 @@ public class HighScoreState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    // TODO Auto-generated method stub
+    g.drawString("Hit escape to go to menu", Window.width / 2, Window.height / 2);
 
   }
 

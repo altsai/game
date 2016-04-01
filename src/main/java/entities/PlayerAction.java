@@ -6,7 +6,7 @@ public interface PlayerAction {
 
   int getLives();
 
-  void updateLives(int numLives);
+  void loseLife();
 
   void collectPowerup(Powerup p);
 

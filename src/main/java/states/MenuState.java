@@ -7,6 +7,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Window;
+
 /**
  * Defines the Menu state of the game.
  *
@@ -25,7 +27,7 @@ public class MenuState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    // TODO Auto-generated method stub
+    g.drawString("Hit 1 to go to single player", Window.width / 2, Window.height / 2);
 
   }
 
@@ -35,6 +37,7 @@ public class MenuState extends BasicGameState {
 
     // go to the singleplayer game when user presses 1
     if (gc.getInput().isKeyPressed(Input.KEY_1)) {
+      s.getState(States.SINGLE_PLAYER).init(gc, s);
       s.enterState(States.SINGLE_PLAYER);
     } else if (gc.getInput().isKeyPressed(Input.KEY_3)) {
       s.enterState(States.HIGH_SCORES);

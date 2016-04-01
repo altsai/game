@@ -55,9 +55,9 @@ public class Zombie extends Entity {
       this.y = r.nextFloat() * Window.height;
     }
 
-    this.radius = 10;
+    this.radius = 20;
     this.image = Resources.getImage("zombie");
-    this.speed = player.getSpeed() * 10;
+    this.speed = player.getSpeed() * 3;
 
     // give the zombie a random target of the player to track
     this.target = r.nextInt(LEFT + 1);
@@ -98,7 +98,7 @@ public class Zombie extends Entity {
       case LEFT:
         playerX -= CUSHION;
       case RIGHT:
-        playerX -= CUSHION;
+        playerX += CUSHION;
     }
 
 

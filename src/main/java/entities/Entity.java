@@ -51,7 +51,7 @@ public abstract class Entity extends Circle {
    */
   public void render(GameContainer gc, Graphics g) {
     if (this.image != null) {
-      image.draw(this.x, this.y, this.radius * 2, this.radius * 2, this.color);
+      image.draw(this.x, this.y, this.radius, this.radius, this.color);
     }
   }
 

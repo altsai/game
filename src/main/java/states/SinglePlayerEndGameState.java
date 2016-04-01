@@ -7,15 +7,16 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import edu.brown.cs.altsai.game.Window;
+public class SinglePlayerEndGameState extends BasicGameState {
+  SinglePlayerGameState spgs;
 
-/**
- * Defines the two player game state.
- *
- * @author bl48
- *
- */
-public class TwoPlayerGameState extends BasicGameState {
+  public SinglePlayerEndGameState() {
+
+  }
+
+  public SinglePlayerEndGameState(SinglePlayerGameState singlePlayerGameState) {
+    this.spgs = singlePlayerGameState;
+  }
 
   @Override
   public void init(GameContainer gc, StateBasedGame s)
@@ -27,8 +28,8 @@ public class TwoPlayerGameState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    g.drawString("hit esc to go to menu", Window.width / 2, Window.height / 2);
-
+    g.drawString("You Died, Score was: " + this.spgs.getScore(), 100, 100);
+    g.drawString("Hit esc to go back to Menu", 100, 200);
   }
 
   @Override
@@ -43,6 +44,6 @@ public class TwoPlayerGameState extends BasicGameState {
 
   @Override
   public int getID() {
-    return States.TWO_PLAYER;
+    return States.SINGLE_PLAYER_END_GAME;
   }
 }

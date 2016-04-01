@@ -5,8 +5,11 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import states.HighScoreState;
 import states.MenuState;
+import states.SinglePlayerEndGameState;
 import states.SinglePlayerGameState;
+import states.TwoPlayerGameState;
 
 /**
  * @author
@@ -39,7 +42,12 @@ public class Main extends StateBasedGame {
 
     new Resources();
 
-    this.addState(new SinglePlayerGameState());
+    SinglePlayerGameState singlePlayer = new SinglePlayerGameState();
+
+    this.addState(singlePlayer);
     this.addState(new MenuState());
+    this.addState(new SinglePlayerEndGameState(singlePlayer));
+    this.addState(new HighScoreState());
+    this.addState(new TwoPlayerGameState());
   }
 }
