@@ -30,7 +30,7 @@ public class Bomb extends Powerup {
 
     // load bomb image and animation
     this.image = Resources.getImage("bomb");
-    this.explosionRadius = 50;
+    this.explosionRadius = 200;
     this.entities = e;
   }
 
@@ -39,16 +39,9 @@ public class Bomb extends Powerup {
     super.activate();
     for (int i = 0; i < entities.size(); i++) {
       if (withinRadius(entities.get(i))) {
-        if (entities.get(i) instanceof Player) {
-          if (!(entities.get(i) == affectedPlayer)) {
-            // TODO: if player2 is in radius
-            // reduce speed, break jail
-          }
-        } else {
-          entities.remove(i);
-          affectedPlayer.incrementScore();
-          i--;
-        }
+        entities.remove(i);
+        affectedPlayer.incrementScore();
+        i--;
       }
     }
   }

@@ -76,7 +76,6 @@ public class SinglePlayerGameState extends BasicGameState {
 
     g.drawString("Player has " + player1.getLives() + " lives", 100, 100);
     g.drawString("Player speed: " + player1.getSpeed(), 50, 50);
-    g.drawString("Zombies: " + (entities.size() - 1), 150, 150);
 
     g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
   }
