@@ -35,8 +35,8 @@ public class SinglePlayerGameState extends BasicGameState {
   // list of constants
   private static final int ZOMBIE_SPAWN_DELAY = 1000;
   private static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
-  private static final int MAX_DIFFICULTY_LEVEL = 10;
-  private static final double SPEED_MULTIPLIER = 0.2;
+  private static final int MAX_DIFFICULTY_LEVEL = 15;
+  private static final double SPEED_MULTIPLIER = 0.3;
 
 
   private Random random;
