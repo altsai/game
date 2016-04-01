@@ -12,6 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.Bomb;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
@@ -67,6 +68,9 @@ public class SinglePlayerGameState extends BasicGameState {
     this.player1.render(gc, g);
     for (int i = 0; i < this.entities.size(); i++) {
       this.entities.get(i).render(gc, g);
+    }
+    for (int i = 0; i < this.powerups.size(); i++) {
+      this.powerups.get(i).render(gc, g);
     }
 
     g.drawString("Player has " + player1.getLives() + " lives", 100, 100);
@@ -179,33 +183,12 @@ public class SinglePlayerGameState extends BasicGameState {
 
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      // at any given time there is a 30% chance of multiple spawns
-      if (random.nextInt(9) < 3) {
-        for (int i = 0; i < this.difficultyLevel; i++) {
-          Zombie newZombie = new Zombie(this.player1);
+      // TODO: code to randomize Powerups
 
-          newZombie.setSpeed(ZOMBIE_BASE_SPEED
-              + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-              * ZOMBIE_BASE_SPEED);
-          this.entities.add(new Zombie(this.player1));
-        }
-      }
+      Bomb bomb = new Bomb(this.player1);
+      this.powerups.add(bomb);
 
-      Zombie newZombie = new Zombie(this.player1);
-
-      newZombie.setSpeed(ZOMBIE_BASE_SPEED + ((this.difficultyLevel - 1) * 0.1)
-          * ZOMBIE_BASE_SPEED);
-      this.entities.add(new Zombie(this.player1));
-
-      this.lastZombieSpawnTime = System.currentTimeMillis();
-    }
-
-    if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
-      if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > 10000) {
-
-        this.difficultyLevel++;
-        this.lastDifficultyIncreaseTime = System.currentTimeMillis();
-      }
+      this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
   }
 

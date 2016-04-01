@@ -1,5 +1,8 @@
 package game_objects;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+
 /**
  * Interface that all Powerup objects must implement.
  *
@@ -25,4 +28,6 @@ public interface Powerup {
    * powerup.
    */
   public abstract void kill();
+
+  public abstract void render(GameContainer gc, Graphics g);
 }
