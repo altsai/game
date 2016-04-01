@@ -47,6 +47,7 @@ public class Bomb extends Powerup {
         } else {
           entities.remove(i);
           affectedPlayer.incrementScore();
+          i--;
         }
       }
     }
@@ -80,12 +81,10 @@ public class Bomb extends Powerup {
       return false;
     }
 
-    if (Math.abs(this.x - e.getX()) > (e.getRadius() + this.explosionRadius)
-        || Math.abs(this.y - e.getY()) > (e.getRadius() + this.explosionRadius)) {
-      return false;
-    } else {
-      return distTo(e) <= this.explosionRadius;
-    }
+    double distance = Math.sqrt(Math.pow(x - e.getX(), 2)
+        + Math.pow(y - e.getY(), 2));
+
+    return distance <= explosionRadius;
   }
 
   @Override

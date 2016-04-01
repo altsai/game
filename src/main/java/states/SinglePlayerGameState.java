@@ -12,13 +12,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.Bomb;
+import powerups.Speed;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.Bomb;
-import powerups.Speed;
 
 /**
  * Defines the Single Player game state.
@@ -76,6 +76,7 @@ public class SinglePlayerGameState extends BasicGameState {
 
     g.drawString("Player has " + player1.getLives() + " lives", 100, 100);
     g.drawString("Player speed: " + player1.getSpeed(), 50, 50);
+    g.drawString("Zombies: " + (entities.size() - 1), 150, 150);
 
     g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
   }
@@ -152,6 +153,7 @@ public class SinglePlayerGameState extends BasicGameState {
 
   /**
    * Method that loops through powerups and updates them
+   *
    * @param gc
    * @param delta
    */
@@ -178,7 +180,7 @@ public class SinglePlayerGameState extends BasicGameState {
           newZombie.setSpeed(ZOMBIE_BASE_SPEED
               + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
               * ZOMBIE_BASE_SPEED);
-          this.entities.add(new Zombie(this.player1));
+          this.entities.add(newZombie);
         }
       }
 
@@ -186,7 +188,7 @@ public class SinglePlayerGameState extends BasicGameState {
 
       newZombie.setSpeed(ZOMBIE_BASE_SPEED + ((this.difficultyLevel - 1) * 0.1)
           * ZOMBIE_BASE_SPEED);
-      this.entities.add(new Zombie(this.player1));
+      this.entities.add(newZombie);
 
       this.lastZombieSpawnTime = System.currentTimeMillis();
     }
@@ -212,8 +214,6 @@ public class SinglePlayerGameState extends BasicGameState {
         Speed speed = new Speed(powerups);
         this.powerups.add(speed);
       }
-
-
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
