@@ -24,6 +24,7 @@ public class Zombie extends Entity {
     super(other);
   }
 
+  // constants for targeting the player's box
   private static final int UP = 0;
   private static final int RIGHT = 1;
   private static final int DOWN = 2;
@@ -75,6 +76,11 @@ public class Zombie extends Entity {
 
   }
 
+  /**
+   * Method to tell if the zombie is on fire.
+   *
+   * @return    True if zombie on fire.
+   */
   public boolean isOnFire() {
     return this.state;
   }
@@ -104,8 +110,6 @@ public class Zombie extends Entity {
 
     float xDiff = playerX - this.x;
     float yDiff = playerY - this.y;
-
-
 
     double h = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 

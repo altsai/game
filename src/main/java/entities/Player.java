@@ -114,6 +114,11 @@ public class Player extends Entity implements PlayerAction {
 
     // move the player according to input and delta.
     move(input, delta);
+
+    // use powerup on press of action key
+    if (input.isKeyPressed(Input.KEY_SPACE)) {
+      usePowerup();
+    }
   }
 
   @Override

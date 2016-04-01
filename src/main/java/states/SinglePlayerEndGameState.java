@@ -7,13 +7,22 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/**
+ * Defines the state when the single player game has ended.
+ *
+ * This state is reached when the single player dies.
+ *
+ * @author bl48
+ *
+ */
 public class SinglePlayerEndGameState extends BasicGameState {
-  SinglePlayerGameState spgs;
+  // takes in the SinglePlayerGameState just played
+  private SinglePlayerGameState spgs;
 
-  public SinglePlayerEndGameState() {
-
-  }
-
+  /**
+   * Constructor for a SinglePlayerEndGameState
+   * @param singlePlayerGameState     single player state that just finished
+   */
   public SinglePlayerEndGameState(SinglePlayerGameState singlePlayerGameState) {
     this.spgs = singlePlayerGameState;
   }
