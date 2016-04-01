@@ -12,13 +12,12 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.Bomb;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
-import game_objects.Circle;
 import game_objects.Powerup;
+import powerups.Bomb;
 
 /**
  * Defines the Single Player game state.
@@ -141,8 +140,7 @@ public class SinglePlayerGameState extends BasicGameState {
 
     // check for player collision with every powerup
     for (int i = 0; i < this.powerups.size(); i++) {
-      // check player's lives and mark invincible as necessary
-      if (player1.isCollision((Circle) powerups.get(i))) {
+      if (player1.isCollision(powerups.get(i))) {
         player1.collectPowerup(powerups.get(i));
       }
     }

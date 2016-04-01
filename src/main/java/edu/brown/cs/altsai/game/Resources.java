@@ -36,6 +36,7 @@ public class Resources {
       images.put("player", loadImage("img/Player.png"));
       images.put("zombie", loadImage("img/zombie.png"));
       images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
+      images.put("bomb", loadImage("img/bomb30.png"));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }

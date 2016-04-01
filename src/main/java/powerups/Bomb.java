@@ -36,7 +36,7 @@ public class Bomb extends Powerup {
     this.radius = 20;
 
     // load bomb image and animation
-    this.image = Resources.getImage("invinciblePlayer");
+    this.image = Resources.getImage("bomb");
     this.explosionRadius = 50;
     this.powerups = power;
     this.entities = ent;
