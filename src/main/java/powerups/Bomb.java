@@ -62,6 +62,15 @@ public class Bomb extends Powerup {
    * @return       True if entity within explosion radius.
    */
   private boolean withinRadius(Entity e) {
+
+    // if entity is an invincible player, player is not in radius of bomb ever.
+    if (e instanceof Player) {
+      Player other = (Player) e;
+      if (other.isInvincible()) {
+        return false;
+      }
+    }
+
     if (Math.abs(this.x - e.getX()) > (e.getRadius() + this.explosionRadius)
         || Math.abs(this.y - e.getY()) > (e.getRadius() + this.explosionRadius)) {
       return false;
