@@ -9,8 +9,8 @@ import org.newdawn.slick.Image;
 
 import com.google.common.collect.Lists;
 
-import entities.Entity;
 import entities.Player;
+
 
 /**
  * Interface that all Powerup objects must implement.
@@ -25,33 +25,6 @@ public abstract class Powerup extends Circle {
   protected long spawnStartTime;
   protected Player effectedPlayer;
 
-  /**
-   * Constructor for an entity calls init() method of subclass.
-   *
-   * Used to initialize the fields specific to a subclass.
-   */
-  public Powerup(Entity other) {
-    init(other);
-  }
-
-  /**
-   * Method to initialize the Entity object with specific traits.
-   *
-   * Every powerup sets the initial spawn time and an effected player.
-   * All subclasses of powerup will override this supermethod and add
-   * to it unique images, colors, and other attributes needed.
-   *
-   * @param other      Entity, another entity object to be related with
-   */
-  public void init(Entity other) {
-
-    // every powerup must set the initial spawn time and a player to effect
-    this.spawnStartTime = System.currentTimeMillis();
-    this.effectedPlayer = (Player) other;
-
-    //TODO: Set the image and color for all the unique powerups as subclasses
-
-  }
 
   /**
    * Method to render the Entity object and draw it in to the game window.
@@ -95,8 +68,9 @@ public abstract class Powerup extends Circle {
   /**
    * Method to remove the powerup from the map.
    *
-   * Different from deactivate in that kill() can
-   * be called without using the powerup.
+   * Different from deactivate in that kill() can be called without using the
+   * powerup.
    */
   public abstract void kill();
+
 }
