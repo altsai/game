@@ -49,7 +49,25 @@ public class Bomb extends Powerup {
     }
   }
 
+  /**
+   * Method to check if an entity is within the explosion radius.
+   *
+   * First checks if the x and y coordinates are even worth considering
+   * by seeing if difference between them is less than the explosionRadius.
+   * If it is possibly within range, then the euclidean distance between
+   * the powerup and the entity is found and we check if that distance is
+   * less than the explosionRadius.
+   *
+   * @param e      Entity, entity that is possibly affected by the explosion.
+   * @return       True if entity within explosion radius.
+   */
   private boolean withinRadius(Entity e) {
+    if (Math.abs(this.x - e.getX()) > (e.getRadius() + this.explosionRadius)
+        || Math.abs(this.y - e.getY()) > (e.getRadius() + this.explosionRadius)) {
+      return false;
+    } else {
+      return distTo(e) <= this.explosionRadius;
+    }
 
   }
 
