@@ -22,6 +22,7 @@ import entities.Player;
 public abstract class Powerup extends Circle {
 
   public static final int POWERUP_RADIUS = 20;
+  public static final int EXPIRATION_DURATION = 10000;
 
   protected Image image;
   protected Color color;
@@ -98,7 +99,7 @@ public abstract class Powerup extends Circle {
    */
   public void update(GameContainer gc, int delta) {
     if (!this.isPickedUp &&
-        System.currentTimeMillis() - this.spawnStartTime > 10000) {
+        System.currentTimeMillis() - this.spawnStartTime > EXPIRATION_DURATION) {
       this.kill();
     }
 

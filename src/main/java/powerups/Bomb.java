@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SpriteSheet;
+
 import edu.brown.cs.altsai.game.Resources;
 import entities.Entity;
 import entities.Player;
@@ -12,8 +17,18 @@ import game_objects.Powerup;
 public class Bomb extends Powerup {
 
   private static final int EXPLOSION_RADIUS = 200;
+
+  public static final int ANIMATION_WIDTH = (int) (EXPLOSION_RADIUS * 4);
+  public static final int ANIMATION_HEIGHT = (int) (ANIMATION_WIDTH / 1.0315);
+  public static final int ANIMATION_FRAME_TIME = 50;
+
   private List<Entity> entities;
   private List<Player> players;
+
+  private SpriteSheet spriteSheet;
+  private Animation animation;
+  private float explosionX;
+  private float explosionY;
 
   // TODO: animation field
 
@@ -23,6 +38,9 @@ public class Bomb extends Powerup {
 
     // load bomb image and animation
     this.image = Resources.getImage("bomb");
+    this.spriteSheet = Resources.getSprite("bomb_explosion");
+    this.animation = new Animation(this.spriteSheet, 500);
+    this.animation.setLooping(false);
     this.entities = e;
 
     players = new ArrayList<>();
@@ -34,9 +52,36 @@ public class Bomb extends Powerup {
 
     // load bomb image and animation
     this.image = Resources.getImage("bomb");
+    this.spriteSheet = Resources.getSprite("bomb_explosion");
+    this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
+    this.animation.setLooping(false);
     this.entities = e;
 
     this.players = pl;
+  }
+
+
+  @Override
+  public void render(GameContainer gc, Graphics g) {
+    super.render(gc, g);
+    if (this.isUsed) {
+
+      this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2)
+          , this.explosionY - (ANIMATION_HEIGHT / 2)
+          , ANIMATION_WIDTH
+          , ANIMATION_HEIGHT);
+    }
+
+  }
+
+  @Override
+  public void update(GameContainer gc, int delta) {
+    super.update(gc, delta);
+
+    this.animation.update(delta);
+
+    // also call deactivate for the specific powerup. Deactivate checks if
+    // the effects should wear off.
   }
 
   @Override
@@ -44,6 +89,9 @@ public class Bomb extends Powerup {
     super.activate();
 
     // TODO: if in jail
+
+    this.explosionX = this.affectedPlayer.getX();
+    this.explosionY = this.affectedPlayer.getY();
 
     Iterator<Entity> iter = this.entities.iterator();
     while (iter.hasNext()) {

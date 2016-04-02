@@ -12,11 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import entities.Entity;
 import entities.Player;
-import entities.Zombie;
 import game_objects.Powerup;
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 
 /**
  * Provides a template for gameplay state objects.
@@ -51,7 +47,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected long lastDifficultyIncreaseTime;
 
   // boolean to tell if game should be spawning
-  private boolean spawnOn;
+  protected boolean spawnOn;
 
   @Override
   public void init(GameContainer gc, StateBasedGame s)
@@ -174,70 +170,19 @@ public abstract class GamePlayState extends BasicGameState {
   /**
    * Method that spawns in zombies.
    *
+   * Unique to each gamestate
+   *
    * Zombies spawn every second, but quantity depends on difficulty level.
    */
-  private void spawnZombie() {
+  protected abstract void spawnZombie();
 
-    // check if the game should be spawning zombies (time stop may have stopped spawns)
-    if (this.spawnOn) {
 
-      if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
-
-        // have a random player to target
-        Player target = this.players.get(random.nextInt(this.players.size()));
-
-        // at any given time there is a 30% chance of multiple spawns
-        if (random.nextInt(9) < 3) {
-          for (int i = 0; i < this.difficultyLevel; i++) {
-            // spawn targeting a random player
-
-            Zombie newZombie = new Zombie(target);
-
-            newZombie.setSpeed(ZOMBIE_BASE_SPEED
-                + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-                * ZOMBIE_BASE_SPEED);
-            this.entities.add(newZombie);
-          }
-        }
-
-        Zombie newZombie = new Zombie(target);
-
-        newZombie.setSpeed(ZOMBIE_BASE_SPEED + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-            * ZOMBIE_BASE_SPEED);
-        this.entities.add(newZombie);
-
-        this.lastZombieSpawnTime = System.currentTimeMillis();
-      }
-
-      if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
-        if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > 10000) {
-
-          this.difficultyLevel++;
-          this.lastDifficultyIncreaseTime = System.currentTimeMillis();
-        }
-      }
-    }
-  }
-
-  private void spawnPowerup() {
-
-    if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
-
-      double randomNum = random.nextDouble();
-      if (randomNum < 0.3) {
-        Bomb bomb = new Bomb(powerups, entities);
-        this.powerups.add(bomb);
-      } else if (randomNum < 0.6 && randomNum >= 0.33) {
-        Speed speed = new Speed(powerups);
-        this.powerups.add(speed);
-      } else if (randomNum < 0.9 && randomNum >= 0.6) {
-        TimeStop timestop = new TimeStop(powerups, entities, this);
-        this.powerups.add(timestop);
-      }
-
-      this.lastPowerupSpawnTime = System.currentTimeMillis();
-    }
-  }
+  /**
+   * Method that spawns powerups.
+   *
+   * Unique to each gamestate
+   */
+  protected abstract void spawnPowerup();
 
   /**
    * method to end a game.

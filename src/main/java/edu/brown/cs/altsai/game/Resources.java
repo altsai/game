@@ -39,6 +39,8 @@ public class Resources {
       images.put("bomb", loadImage("img/bomb30.png"));
       images.put("speed", loadImage("img/speed.png"));
       images.put("timestop", loadImage("img/timestop.png"));
+      sprites.put("bomb_explosion", loadSprite("img/bomb_explosion.png"
+          , 196, 190));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
@@ -72,7 +74,7 @@ public class Resources {
    */
   public static SpriteSheet loadSprite(String path, int tw, int th)
       throws SlickException {
-    return new SpriteSheet(loadImage(path), tw, th);
+    return new SpriteSheet(path, tw, th);
   }
 
   /**

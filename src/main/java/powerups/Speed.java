@@ -15,6 +15,9 @@ import game_objects.Powerup;
  */
 public class Speed extends Powerup {
 
+  private static final int EFFECT_DURATION = 8000;
+  private static final double SPEED_MULTIPLIER = 1.2;
+
 
   /**
    * Constructor for a Speed Powerup.
@@ -62,14 +65,14 @@ public class Speed extends Powerup {
     super.activate();
 
     // Speed specific method to increase player speed
-    this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed() * 1.2);
+    this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed() * SPEED_MULTIPLIER);
   }
 
   @Override
   public void deactivate() {
     if (this.isUsed) {
-      if (System.currentTimeMillis() - this.activationStartTime > 8000) {
-        this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed() / 1.2);
+      if (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION) {
+        this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed() / SPEED_MULTIPLIER);
         kill();
       }
     }

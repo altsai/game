@@ -32,7 +32,7 @@ public class TimeStop extends Powerup {
     this.entities = e;
     this.game = gps;
 
-    players = new ArrayList<>();
+    this.players = new ArrayList<>();
   }
 
   public TimeStop(List<Powerup> p, List<Entity> e, List<Player> pl) {
@@ -43,7 +43,7 @@ public class TimeStop extends Powerup {
     this.image = Resources.getImage("timestop");
     this.entities = e;
 
-    players = pl;
+    this.players = pl;
   }
 
   @Override
@@ -84,6 +84,7 @@ public class TimeStop extends Powerup {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= FREEZE_TIME) {
 
+      // tell the game to start spawning again
       this.game.setSpawnOn(true);
 
       for (Entity e : entities) {
@@ -98,6 +99,7 @@ public class TimeStop extends Powerup {
         }
       }
 
+      // kill the powerup
       kill();
     }
   }
