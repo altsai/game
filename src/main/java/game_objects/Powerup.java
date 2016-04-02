@@ -21,6 +21,8 @@ import entities.Player;
  */
 public abstract class Powerup extends Circle {
 
+  public static final int POWERUP_RADIUS = 20;
+
   protected Image image;
   protected Color color;
   protected long spawnStartTime;
@@ -47,7 +49,7 @@ public abstract class Powerup extends Circle {
     Random r = new Random();
     this.x = r.nextFloat() * Window.width;
     this.y = r.nextFloat() * Window.height;
-    this.radius = 20;
+    this.radius = POWERUP_RADIUS;
   }
 
   /**

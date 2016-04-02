@@ -11,7 +11,7 @@ import game_objects.Powerup;
 
 public class Bomb extends Powerup {
 
-  private final int EXPLOSION_RADIUS = 200;
+  private static final int EXPLOSION_RADIUS = 200;
   private List<Entity> entities;
   private List<Player> players;
 
@@ -71,10 +71,8 @@ public class Bomb extends Powerup {
   /**
    * Method to check if an entity is within the explosion radius.
    *
-   * First checks if the x and y coordinates are even worth considering by
-   * seeing if difference between them is less than the explosionRadius. If it
-   * is possibly within range, then the euclidean distance between the powerup
-   * and the entity is found and we check if that distance is less than the
+   * Checks euclidean distance between the powerup
+   * and the entity. Then checks if that distance is less than the
    * explosionRadius.
    *
    * @param e

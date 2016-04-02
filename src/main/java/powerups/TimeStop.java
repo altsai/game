@@ -1,16 +1,17 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Entity;
-import entities.Player;
-import game_objects.Powerup;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
+
+import edu.brown.cs.altsai.game.Resources;
+import entities.Entity;
+import entities.Player;
+import game_objects.Powerup;
+import states.GamePlayState;
 
 public class TimeStop extends Powerup {
 
@@ -20,14 +21,16 @@ public class TimeStop extends Powerup {
 
   private Map<Entity, Double> zombieSpeeds;
   private double playerSpeed;
+  private GamePlayState game;
 
-  public TimeStop(List<Powerup> p, List<Entity> e) {
+  public TimeStop(List<Powerup> p, List<Entity> e, GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 
     // load bomb image and animation
     this.image = Resources.getImage("timestop");
     this.entities = e;
+    this.game = gps;
 
     players = new ArrayList<>();
   }
@@ -48,19 +51,19 @@ public class TimeStop extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    if (isUsed
-        && (System.currentTimeMillis() - activationStartTime) >= FREEZE_TIME) {
-      deactivate();
-    }
+    // check if timestop should be deactivated
+    deactivate();
   }
 
   @Override
   public void activate() {
-    // TODO: set to prevent spawning of new zombie
     super.activate();
 
     zombieSpeeds = new HashMap<>();
     playerSpeed = 0;
+
+    // prevent spawning of new zombies
+    this.game.setSpawnOn(false);
 
     for (Entity e : entities) {
       zombieSpeeds.put(e, e.getSpeed());
@@ -77,16 +80,25 @@ public class TimeStop extends Powerup {
 
   @Override
   public void deactivate() {
-    for (Entity e : entities) {
-      if (zombieSpeeds.get(e) != null) {
-        e.setSpeed(zombieSpeeds.get(e));
-      }
-    }
 
-    for (Player p : players) {
-      if (affectedPlayer != p) {
-        p.setSpeed(playerSpeed);
+    if (this.isUsed
+        && System.currentTimeMillis() - this.activationStartTime >= FREEZE_TIME) {
+
+      this.game.setSpawnOn(true);
+
+      for (Entity e : entities) {
+        if (zombieSpeeds.get(e) != null) {
+          e.setSpeed(zombieSpeeds.get(e));
+        }
       }
+
+      for (Player p : players) {
+        if (affectedPlayer != p) {
+          p.setSpeed(playerSpeed);
+        }
+      }
+
+      kill();
     }
   }
 }
