@@ -20,7 +20,6 @@ public class TimeStop extends Powerup {
 
   private Map<Entity, Double> zombieSpeeds;
   private double playerSpeed;
-  private int entSize;
 
   public TimeStop(List<Powerup> p, List<Entity> e) {
     // call the superconstructor to start timing
@@ -49,18 +48,17 @@ public class TimeStop extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    entities = entities.subList(0, entSize);
-
-    if ((System.currentTimeMillis() - activationStartTime) >= FREEZE_TIME) {
+    if (isUsed
+        && (System.currentTimeMillis() - activationStartTime) >= FREEZE_TIME) {
       deactivate();
     }
   }
 
   @Override
   public void activate() {
+    // TODO: set to prevent spawning of new zombie
     super.activate();
 
-    entSize = entities.size();
     zombieSpeeds = new HashMap<>();
     playerSpeed = 0;
 
@@ -80,7 +78,9 @@ public class TimeStop extends Powerup {
   @Override
   public void deactivate() {
     for (Entity e : entities) {
-      e.setSpeed(zombieSpeeds.get(e));
+      if (zombieSpeeds.get(e) != null) {
+        e.setSpeed(zombieSpeeds.get(e));
+      }
     }
 
     for (Player p : players) {
