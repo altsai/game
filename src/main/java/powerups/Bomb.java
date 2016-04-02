@@ -1,18 +1,16 @@
 package powerups;
 
 import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import game_objects.Powerup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Bomb extends Powerup {
 
-  private int explosionRadius;
+  private final int EXPLOSION_RADIUS = 200;
   private List<Entity> entities;
   private List<Player> players;
 
@@ -21,30 +19,23 @@ public class Bomb extends Powerup {
   public Bomb(List<Powerup> p, List<Entity> e) {
     // call the superconstructor to start timing
     super(p);
-    constructerParams(p, e);
+
+    // load bomb image and animation
+    this.image = Resources.getImage("bomb");
+    this.entities = e;
+
     players = new ArrayList<>();
   }
 
   public Bomb(List<Powerup> p, List<Entity> e, List<Player> pl) {
     // call the superconstructor to start timing
     super(p);
-    constructerParams(p, e);
-    players = pl;
-  }
-
-  private void constructerParams(List<Powerup> p, List<Entity> e) {
-    Random r = new Random();
-
-    this.x = r.nextFloat() * Window.width;
-
-    this.y = r.nextFloat() * Window.height;
-
-    this.radius = 20;
 
     // load bomb image and animation
     this.image = Resources.getImage("bomb");
-    this.explosionRadius = 200;
     this.entities = e;
+
+    players = pl;
   }
 
   @Override
@@ -87,7 +78,7 @@ public class Bomb extends Powerup {
     double distance = Math.sqrt(Math.pow(x - e.getX(), 2)
         + Math.pow(y - e.getY(), 2));
 
-    return distance <= explosionRadius;
+    return distance <= EXPLOSION_RADIUS;
   }
 
   @Override

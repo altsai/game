@@ -1,6 +1,7 @@
 package game_objects;
 
 import java.util.List;
+import java.util.Random;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -9,6 +10,7 @@ import org.newdawn.slick.Image;
 
 import com.google.common.collect.Lists;
 
+import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 
 /**
@@ -41,6 +43,11 @@ public abstract class Powerup extends Circle {
     this.spawnInTime = System.currentTimeMillis();
     this.isPickedUp = false;
     this.powerups = p;
+
+    Random r = new Random();
+    this.x = r.nextFloat() * Window.width;
+    this.y = r.nextFloat() * Window.height;
+    this.radius = 20;
   }
 
   /**

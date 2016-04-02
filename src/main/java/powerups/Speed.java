@@ -1,11 +1,9 @@
 package powerups;
 
 import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
 import game_objects.Powerup;
 
 import java.util.List;
-import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 
@@ -34,10 +32,6 @@ public class Speed extends Powerup {
     // call the super constructor first to start timers
     super(p);
 
-    Random r = new Random();
-    this.x = r.nextFloat() * Window.width;
-    this.y = r.nextFloat() * Window.height;
-    this.radius = 20;
     this.image = Resources.getImage("speed");
   }
 

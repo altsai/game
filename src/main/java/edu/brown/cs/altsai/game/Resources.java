@@ -11,8 +11,8 @@ import org.newdawn.slick.SpriteSheet;
 /**
  * Groups together graphics and sounds that the game uses.
  *
- * Resources is initialized as the beginning of the game with
- * static fields that provide easy access to specific files.
+ * Resources is initialized as the beginning of the game with static fields that
+ * provide easy access to specific files.
  *
  * @author bl48
  *
@@ -38,6 +38,7 @@ public class Resources {
       images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
       images.put("bomb", loadImage("img/bomb30.png"));
       images.put("speed", loadImage("img/speed.png"));
+      images.put("timestop", loadImage("img/timestop.png"));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
@@ -46,9 +47,11 @@ public class Resources {
   /**
    * Method to load in a new image to be used.
    *
-   * @param path                 String, filepath to the image
-   * @return                     Image object
-   * @throws SlickException      On error accessing file
+   * @param path
+   *          String, filepath to the image
+   * @return Image object
+   * @throws SlickException
+   *           On error accessing file
    */
   public static Image loadImage(String path) throws SlickException {
     return new Image(path, false, Image.FILTER_NEAREST);
@@ -57,21 +60,27 @@ public class Resources {
   /**
    * Method to load a sprite sheet into resources.
    *
-   * @param path               String filepath
-   * @param tw                 Int, tile width
-   * @param th                 Int, tile height
-   * @return                   SpriteSheet
-   * @throws SlickException    On error accessing file
+   * @param path
+   *          String filepath
+   * @param tw
+   *          Int, tile width
+   * @param th
+   *          Int, tile height
+   * @return SpriteSheet
+   * @throws SlickException
+   *           On error accessing file
    */
-  public static SpriteSheet loadSprite(String path, int tw, int th) throws SlickException {
+  public static SpriteSheet loadSprite(String path, int tw, int th)
+      throws SlickException {
     return new SpriteSheet(loadImage(path), tw, th);
   }
 
   /**
    * Method to get a specific spritesheet from Resources.
    *
-   * @param sprite      String, identifier of a spritesheet
-   * @return            SpriteSheet
+   * @param sprite
+   *          String, identifier of a spritesheet
+   * @return SpriteSheet
    */
   public static SpriteSheet getSprite(String sprite) {
     return sprites.get(sprite);
@@ -80,10 +89,13 @@ public class Resources {
   /**
    * Method to get a specific spritesheet tile from resources.
    *
-   * @param sprite      String, identifier of a spritesheet
-   * @param x           int, the tile column number
-   * @param y           int, the tile row number
-   * @return            Image, the specified tile of the spriteSheet
+   * @param sprite
+   *          String, identifier of a spritesheet
+   * @param x
+   *          int, the tile column number
+   * @param y
+   *          int, the tile row number
+   * @return Image, the specified tile of the spriteSheet
    */
   public static Image getSpriteImage(String sprite, int x, int y) {
     return sprites.get(sprite).getSubImage(x, y);
@@ -92,8 +104,9 @@ public class Resources {
   /**
    * Returns a specific image from the Resources.
    *
-   * @param name      String, identifier for an Image
-   * @return          Image
+   * @param name
+   *          String, identifier for an Image
+   * @return Image
    */
   public static Image getImage(String name) {
     return images.get(name);
@@ -102,8 +115,9 @@ public class Resources {
   /**
    * Returns a specific sound from Resources.
    *
-   * @param name      String, name identifier of the sound
-   * @return          Sound
+   * @param name
+   *          String, name identifier of the sound
+   * @return Sound
    */
   public static Sound getSound(String name) {
     return sounds.get(name);
