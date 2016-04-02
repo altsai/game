@@ -73,7 +73,6 @@ public class Speed extends Powerup {
     if (this.isUsed) {
       if (System.currentTimeMillis() - this.speedIncreaseStartTime > 8000) {
         this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed() / 1.2);
-        kill();
       }
     }
   }

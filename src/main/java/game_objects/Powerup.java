@@ -25,7 +25,7 @@ public abstract class Powerup extends Circle {
   protected Color color;
   protected long spawnStartTime;
   protected Player affectedPlayer;
-  protected long spawnInTime;
+  protected long activationStartTime;
   protected boolean isPickedUp;
   protected boolean isUsed;
   protected List<Powerup> powerups;
@@ -40,7 +40,7 @@ public abstract class Powerup extends Circle {
    *
    */
   public Powerup(List<Powerup> p) {
-    this.spawnInTime = System.currentTimeMillis();
+    this.spawnStartTime = System.currentTimeMillis();
     this.isPickedUp = false;
     this.powerups = p;
 
@@ -95,8 +95,7 @@ public abstract class Powerup extends Circle {
    *          Integer, change in time since last update
    */
   public void update(GameContainer gc, int delta) {
-    if (!this.isPickedUp
-        && System.currentTimeMillis() - this.spawnInTime > 10000) {
+    if (System.currentTimeMillis() - this.spawnStartTime > 10000) {
       this.kill();
     }
 
@@ -120,6 +119,7 @@ public abstract class Powerup extends Circle {
    */
   public void activate() {
     this.isUsed = true;
+    activationStartTime = System.currentTimeMillis();
   }
 
   /**

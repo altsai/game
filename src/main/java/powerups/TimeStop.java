@@ -6,13 +6,21 @@ import entities.Player;
 import game_objects.Powerup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.newdawn.slick.GameContainer;
 
 public class TimeStop extends Powerup {
 
   private final int FREEZE_TIME = 3000;
   private List<Entity> entities;
   private List<Player> players;
+
+  private Map<Entity, Double> zombieSpeeds;
+  private double playerSpeed;
+  private int entSize;
 
   public TimeStop(List<Powerup> p, List<Entity> e) {
     // call the superconstructor to start timing
@@ -37,12 +45,48 @@ public class TimeStop extends Powerup {
   }
 
   @Override
+  public void update(GameContainer gc, int delta) {
+    // call super.update() to check expiration time
+    super.update(gc, delta);
+
+    entities = entities.subList(0, entSize);
+
+    if ((System.currentTimeMillis() - activationStartTime) >= FREEZE_TIME) {
+      deactivate();
+    }
+  }
+
+  @Override
   public void activate() {
     super.activate();
+
+    entSize = entities.size();
+    zombieSpeeds = new HashMap<>();
+    playerSpeed = 0;
+
+    for (Entity e : entities) {
+      zombieSpeeds.put(e, e.getSpeed());
+      e.setSpeed(0);
+    }
+
+    for (Player p : players) {
+      if (affectedPlayer != p) {
+        playerSpeed = p.getSpeed();
+        p.setSpeed(0);
+      }
+    }
   }
 
   @Override
   public void deactivate() {
-    // TODO Auto-generated method stub
+    for (Entity e : entities) {
+      e.setSpeed(zombieSpeeds.get(e));
+    }
+
+    for (Player p : players) {
+      if (affectedPlayer != p) {
+        p.setSpeed(playerSpeed);
+      }
+    }
   }
 }
