@@ -15,4 +15,6 @@ public interface PlayerAction {
   void incrementScore();
 
   void usePowerup();
+
+  void clearPowerupStorage();
 }
