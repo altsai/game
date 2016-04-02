@@ -95,7 +95,8 @@ public abstract class Powerup extends Circle {
    *          Integer, change in time since last update
    */
   public void update(GameContainer gc, int delta) {
-    if (System.currentTimeMillis() - this.spawnStartTime > 10000) {
+    if (!this.isPickedUp &&
+        System.currentTimeMillis() - this.spawnStartTime > 10000) {
       this.kill();
     }
 
@@ -119,7 +120,7 @@ public abstract class Powerup extends Circle {
    */
   public void activate() {
     this.isUsed = true;
-    activationStartTime = System.currentTimeMillis();
+    this.activationStartTime = System.currentTimeMillis();
   }
 
   /**
