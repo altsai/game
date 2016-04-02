@@ -1,12 +1,13 @@
 package powerups;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import edu.brown.cs.altsai.game.Resources;
 import entities.Entity;
 import entities.Player;
 import game_objects.Powerup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Bomb extends Powerup {
 
@@ -35,7 +36,7 @@ public class Bomb extends Powerup {
     this.image = Resources.getImage("bomb");
     this.entities = e;
 
-    players = pl;
+    this.players = pl;
   }
 
   @Override
@@ -44,11 +45,11 @@ public class Bomb extends Powerup {
 
     // TODO: if in jail
 
-    for (int i = 0; i < entities.size(); i++) {
-      if (withinRadius(entities.get(i))) {
-        entities.remove(i);
-        affectedPlayer.incrementScore();
-        i--;
+    Iterator<Entity> iter = this.entities.iterator();
+    while (iter.hasNext()) {
+      if (withinRadius(iter.next())) {
+        iter.remove();
+        this.affectedPlayer.incrementScore();
       }
     }
 
@@ -59,6 +60,8 @@ public class Bomb extends Powerup {
         }
       }
     }
+
+    deactivate();
   }
 
   /**
@@ -75,15 +78,14 @@ public class Bomb extends Powerup {
    * @return True if entity within explosion radius.
    */
   private boolean withinRadius(Entity e) {
-    double distance = Math.sqrt(Math.pow(x - e.getX(), 2)
-        + Math.pow(y - e.getY(), 2));
+    double distance = this.distTo(e);
 
     return distance <= EXPLOSION_RADIUS;
   }
 
   @Override
   public void deactivate() {
-    // TODO Auto-generated method stub
+    kill();
   }
 
 }

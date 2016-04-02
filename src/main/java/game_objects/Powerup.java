@@ -121,6 +121,9 @@ public abstract class Powerup extends Circle {
   public void activate() {
     this.isUsed = true;
     this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
   }
 
   /**

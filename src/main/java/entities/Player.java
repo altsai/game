@@ -1,11 +1,11 @@
 package entities;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
+
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import game_objects.Powerup;
-
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
 
 /**
  * Defines the Player object.
@@ -69,6 +69,11 @@ public class Player extends Entity implements PlayerAction {
     this.powerup = p;
     this.powerup.setPlayer(this);
     p.pickUp();
+  }
+
+  @Override
+  public void clearPowerupStorage() {
+    this.powerup = null;
   }
 
   @Override

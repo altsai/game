@@ -12,13 +12,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.Bomb;
-import powerups.Speed;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import powerups.Bomb;
+import powerups.Speed;
 
 /**
  * Defines the Single Player game state.
@@ -39,7 +39,7 @@ public class SinglePlayerGameState extends BasicGameState {
   private static final int POWERUP_SPAWN_DELAY = 5000;
   private static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
   private static final int MAX_DIFFICULTY_LEVEL = 15;
-  private static final double SPEED_MULTIPLIER = 0.3;
+  private static final double SPEED_MULTIPLIER = 0.1;
 
   private Random random;
   private int difficultyLevel;
@@ -185,7 +185,7 @@ public class SinglePlayerGameState extends BasicGameState {
 
       Zombie newZombie = new Zombie(this.player1);
 
-      newZombie.setSpeed(ZOMBIE_BASE_SPEED + ((this.difficultyLevel - 1) * 0.1)
+      newZombie.setSpeed(ZOMBIE_BASE_SPEED + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
           * ZOMBIE_BASE_SPEED);
       this.entities.add(newZombie);
 
