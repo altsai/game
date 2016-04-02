@@ -53,14 +53,18 @@ public class Bomb extends Powerup {
       }
     }
 
+    // check if any other players have been hit for multiplayer
     for (Player p : players) {
       if (p != affectedPlayer) {
-        if (!p.isInvincible()) {
-          // TODO: reduce speed of other player
+        // if the other player isn't invincible and is in blast radius
+        if (!p.isInvincible() && withinRadius(p)) {
+          // other player's speed is -10%
+          p.setSpeed(p.getSpeed() * 0.9);
         }
       }
     }
 
+    // always check for deactivation of speed decrease on each update
     deactivate();
   }
 
@@ -78,14 +82,19 @@ public class Bomb extends Powerup {
    * @return True if entity within explosion radius.
    */
   private boolean withinRadius(Entity e) {
-    double distance = this.distTo(e);
-
-    return distance <= EXPLOSION_RADIUS;
+    return this.distTo(e) <= EXPLOSION_RADIUS;
   }
 
   @Override
   public void deactivate() {
-    kill();
+
+    // reset all other player's speeds back after 5 seconds
+    if (System.currentTimeMillis() - this.activationStartTime > 5000) {
+      for (Player p : this.players) {
+        p.setSpeed(p.getSpeed() / 0.9);
+      }
+      kill();
+    }
   }
 
 }
