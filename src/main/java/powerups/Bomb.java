@@ -6,6 +6,7 @@ import entities.Entity;
 import entities.Player;
 import game_objects.Powerup;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,13 +14,25 @@ public class Bomb extends Powerup {
 
   private int explosionRadius;
   private List<Entity> entities;
+  private List<Player> players;
 
-  // animation field
+  // TODO: animation field
 
   public Bomb(List<Powerup> p, List<Entity> e) {
     // call the superconstructor to start timing
     super(p);
+    constructerParams(p, e);
+    players = new ArrayList<>();
+  }
 
+  public Bomb(List<Powerup> p, List<Entity> e, List<Player> pl) {
+    // call the superconstructor to start timing
+    super(p);
+    constructerParams(p, e);
+    players = pl;
+  }
+
+  private void constructerParams(List<Powerup> p, List<Entity> e) {
     Random r = new Random();
 
     this.x = r.nextFloat() * Window.width;
@@ -37,11 +50,22 @@ public class Bomb extends Powerup {
   @Override
   public void activate() {
     super.activate();
+
+    // TODO: if in jail
+
     for (int i = 0; i < entities.size(); i++) {
       if (withinRadius(entities.get(i))) {
         entities.remove(i);
         affectedPlayer.incrementScore();
         i--;
+      }
+    }
+
+    for (Player p : players) {
+      if (p != affectedPlayer) {
+        if (!p.isInvincible()) {
+          // TODO: reduce speed of other player
+        }
       }
     }
   }
@@ -60,20 +84,6 @@ public class Bomb extends Powerup {
    * @return True if entity within explosion radius.
    */
   private boolean withinRadius(Entity e) {
-
-    // if entity is an invincible player, player is not in radius of bomb ever.
-    if (e instanceof Player) {
-      Player other = (Player) e;
-      if (other.isInvincible()) {
-        return false;
-      }
-    }
-
-    // player who activated bomb
-    if (e == affectedPlayer) {
-      return false;
-    }
-
     double distance = Math.sqrt(Math.pow(x - e.getX(), 2)
         + Math.pow(y - e.getY(), 2));
 
