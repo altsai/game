@@ -1,6 +1,5 @@
 package powerups;
 
-import entities.BlackHolePlayer;
 import entities.Entity;
 import entities.Player;
 import game_objects.Powerup;
@@ -13,9 +12,8 @@ import org.newdawn.slick.GameContainer;
 public class BlackHole extends Powerup {
 
   private final int SUCK_TIME = 3000;
-  private BlackHolePlayer blackhole;
-  private List<Player> players;
   private List<Entity> entities;
+  private List<Player> players;
 
   public BlackHole(List<Powerup> p, List<Entity> e) {
     super(p);
@@ -45,7 +43,7 @@ public class BlackHole extends Powerup {
     super.activate();
 
     for (Entity e : entities) {
-
+      // make black hole the target
     }
   }
 
@@ -53,8 +51,7 @@ public class BlackHole extends Powerup {
   public void deactivate() {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= SUCK_TIME) {
-
-      players.remove(blackhole);
+      // TODO: kill black hole and reassign target players
 
       // kill the powerup
       kill();
