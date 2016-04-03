@@ -58,7 +58,11 @@ public class Player extends Entity implements PlayerAction {
 
   public void setPlayer1(boolean flag) {
     this.isPlayer1 = flag;
+    if (flag == false) {
+      this.isSingle = false;
+    }
   }
+
 
   public boolean isPlayer1() {
     return this.isPlayer1;
