@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 
+import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 
@@ -64,8 +65,12 @@ public class Zombie extends Entity {
     this.target = r.nextInt(LEFT + 1);
   }
 
-  public void setTarget(Entity other) {
+  public void setTargetPlayer(Entity other) {
     this.player = (Player) other;
+  }
+
+  public void setBlackHole(BlackHole b) {
+    // TODO
   }
 
   @Override
