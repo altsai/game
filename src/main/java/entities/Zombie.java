@@ -18,7 +18,8 @@ public class Zombie extends Entity {
   /**
    * Constructor for a zombie object.
    *
-   * @param other     Entity, an entity to follow
+   * @param other
+   *          Entity, an entity to follow
    */
   public Zombie(Entity other) {
     super(other);
@@ -30,7 +31,6 @@ public class Zombie extends Entity {
   private static final int DOWN = 2;
   private static final int LEFT = 3;
   private static final int CUSHION = 5;
-
 
   // zombies keep track of a player and a specific target area of the player.
   private Player player;
@@ -64,6 +64,10 @@ public class Zombie extends Entity {
     this.target = r.nextInt(LEFT + 1);
   }
 
+  public void setTarget(Entity other) {
+    this.player = (Player) other;
+  }
+
   @Override
   public void update(GameContainer gc, int delta) {
     followPlayer(delta);
@@ -79,17 +83,17 @@ public class Zombie extends Entity {
   /**
    * Method to tell if the zombie is on fire.
    *
-   * @return    True if zombie on fire.
+   * @return True if zombie on fire.
    */
   public boolean isOnFire() {
     return this.state;
   }
 
-
   /**
    * Method that calculates the coordinates to follow when chasing player.
    *
-   * @param delta     Int, difference between last update time and now
+   * @param delta
+   *          Int, difference between last update time and now
    */
   private void followPlayer(int delta) {
 
@@ -97,24 +101,23 @@ public class Zombie extends Entity {
     float playerY = this.player.getY();
 
     switch (this.target) {
-      case UP:
-        playerY -= CUSHION;
-      case DOWN:
-        playerY += CUSHION;
-      case LEFT:
-        playerX -= CUSHION;
-      case RIGHT:
-        playerX += CUSHION;
+    case UP:
+      playerY -= CUSHION;
+    case DOWN:
+      playerY += CUSHION;
+    case LEFT:
+      playerX -= CUSHION;
+    case RIGHT:
+      playerX += CUSHION;
     }
-
 
     float xDiff = playerX - this.x;
     float yDiff = playerY - this.y;
 
     double h = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 
-    float xMove = (float) (xDiff / h  * this.speed);
-    float yMove = (float) (yDiff / h  * this.speed);
+    float xMove = (float) (xDiff / h * this.speed);
+    float yMove = (float) (yDiff / h * this.speed);
 
     this.moveTo(this.x + xMove, this.y + yMove);
   }
