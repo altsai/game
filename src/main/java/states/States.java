@@ -16,5 +16,6 @@ public class States {
   public static final int HIGH_SCORES = 2;
   public static final int TWO_PLAYER = 3;
   public static final int SINGLE_PLAYER_END_GAME = 4;
+  public static final int TWO_PLAYER_END_GAME = 5;
 
 }

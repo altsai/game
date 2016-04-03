@@ -34,6 +34,7 @@ public class Resources {
     // load in all the files that are initially needed
     try {
       images.put("player", loadImage("img/Player.png"));
+      images.put("player2", loadImage("img/player2.png"));
       images.put("zombie", loadImage("img/zombie.png"));
       images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
       images.put("bomb", loadImage("img/bomb30.png"));

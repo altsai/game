@@ -27,7 +27,8 @@ public class SinglePlayerGameState extends GamePlayState {
     super.init(gc, s);
 
     // add players to the player list from the superclass
-    Player player1 = new Player(null);
+    Player player1 = new Player(null, "player1");
+    player1.setPlayer1(true);
     this.players.add(player1);
   }
 
@@ -73,7 +74,7 @@ public class SinglePlayerGameState extends GamePlayState {
 
   @Override
   protected void spawnZombie() {
- // check if the game should be spawning zombies (time stop may have stopped spawns)
+    // check if the game should be spawning zombies (time stop may have stopped spawns)
     if (this.spawnOn) {
 
       if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {

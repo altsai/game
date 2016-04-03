@@ -17,16 +17,23 @@ import game_objects.Powerup;
  *
  */
 public class Player extends Entity implements PlayerAction {
+  private String name;
 
-  public Player(Entity other) {
+  public Player(Entity other, String name) {
     super(other);
+    this.name = name;
   }
+
+  private final static int[] PLAYER1_CONTROLS = {Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D};
+  private final static int[] PLAYER2_CONTROLS = {Input.KEY_UP, Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT};
 
   // specific fields that players have
   private int lives;
   private Powerup powerup;
   private int score;
   private long invincibleTime;
+  private boolean isPlayer1;
+  private boolean isSingle;
 
   @Override
   /**
@@ -45,6 +52,16 @@ public class Player extends Entity implements PlayerAction {
     this.left = 0;
     this.bottom = Window.height;
     this.right = Window.width;
+    this.isSingle = true;
+    this.isPlayer1 = true;
+  }
+
+  public void setPlayer1(boolean flag) {
+    this.isPlayer1 = flag;
+  }
+
+  public boolean isPlayer1() {
+    return this.isPlayer1;
   }
 
   @Override
@@ -90,6 +107,7 @@ public class Player extends Entity implements PlayerAction {
   public void usePowerup() {
     if (this.powerup != null) {
       this.powerup.activate();
+      this.powerup = null;
     }
   }
 
@@ -109,12 +127,34 @@ public class Player extends Entity implements PlayerAction {
     }
 
     // move the player according to input and delta.
-    move(input, delta);
+    if (this.isPlayer1) {
+      move(input, delta, PLAYER1_CONTROLS);
+    } else {
+      move(input, delta, PLAYER2_CONTROLS);
+    }
 
-    // use powerup on press of action key
-    if (input.isKeyPressed(Input.KEY_SPACE)) {
-      usePowerup();
-      this.powerup = null;
+    checkActionKey(input);
+  }
+
+  /**
+   * Method that checks if the user has pressed an action key
+   * @param input
+   */
+  private void checkActionKey(Input input) {
+    if (this.isSingle) {
+      if (input.isKeyPressed(Input.KEY_SPACE)) {
+        usePowerup();
+      }
+    } else {
+      if (this.isPlayer1) {
+        if (input.isKeyPressed(Input.KEY_LSHIFT)) {
+          usePowerup();
+        }
+      } else {
+        if (input.isKeyPressed(Input.KEY_RCONTROL)) {
+          usePowerup();
+        }
+      }
     }
   }
 
@@ -147,31 +187,38 @@ public class Player extends Entity implements PlayerAction {
    *          Input, the key pressed
    * @param delta
    *          Integer, amount fo time since last update
+   * @param keys
+   *          Controls. Index 1 is up, 2 down, 3 left 4 right.
    */
-  private void move(Input input, int delta) {
-    if (input.isKeyDown(Input.KEY_W)) {
+  private void move(Input input, int delta, int[] keys) {
+    if (input.isKeyDown(keys[0])) {
       double newY = this.y - speed * delta;
 
       if (newY >= this.top) {
         this.y -= speed * delta;
       }
-    } else if (input.isKeyDown(Input.KEY_S)) {
+    } else if (input.isKeyDown(keys[1])) {
       double newY = this.y + speed * delta;
       if (newY <= this.bottom - this.image.getHeight()) {
         this.y += speed * delta;
       }
     }
-    if (input.isKeyDown(Input.KEY_A)) {
+    if (input.isKeyDown(keys[2])) {
       double newX = this.x - speed * delta;
       if (newX >= this.left) {
         this.x -= speed * delta;
       }
-    } else if (input.isKeyDown(Input.KEY_D)) {
+    } else if (input.isKeyDown(keys[3])) {
       double newX = this.x + speed * delta;
       if (newX <= this.right - this.image.getWidth()) {
         this.x += speed * delta;
       }
     }
+  }
+
+  @Override
+  public String toString() {
+    return this.name;
   }
 
 }

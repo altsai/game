@@ -28,6 +28,8 @@ public class MenuState extends BasicGameState {
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
     g.drawString("Hit 1 to go to single player", Window.width / 2, Window.height / 2);
+    g.drawString("Hit 2 to go to double player", Window.width / 2, Window.height / 2 + 20);
+    g.drawString("Hit 3 to go to high scores", Window.width / 2, Window.height / 2 + 40);
 
   }
 
@@ -37,9 +39,13 @@ public class MenuState extends BasicGameState {
 
     // go to the singleplayer game when user presses 1
     if (gc.getInput().isKeyPressed(Input.KEY_1)) {
+      // restart a new game everytime we enter a game state from menu
       s.getState(States.SINGLE_PLAYER).init(gc, s);
       s.enterState(States.SINGLE_PLAYER);
-    } else if (gc.getInput().isKeyPressed(Input.KEY_3)) {
+    } else if (gc.getInput().isKeyPressed(Input.KEY_2)) {
+      s.getState(States.TWO_PLAYER).init(gc, s);
+      s.enterState(States.TWO_PLAYER);
+    } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
       s.enterState(States.HIGH_SCORES);
     }
   }

@@ -9,6 +9,7 @@ import states.HighScoreState;
 import states.MenuState;
 import states.SinglePlayerEndGameState;
 import states.SinglePlayerGameState;
+import states.TwoPlayerEndGame;
 import states.TwoPlayerGameState;
 
 /**
@@ -43,11 +44,13 @@ public class Main extends StateBasedGame {
     new Resources();
 
     SinglePlayerGameState singlePlayer = new SinglePlayerGameState();
+    TwoPlayerGameState twoPlayer = new TwoPlayerGameState();
 
     this.addState(singlePlayer);
     this.addState(new MenuState());
     this.addState(new SinglePlayerEndGameState(singlePlayer));
     this.addState(new HighScoreState());
-    this.addState(new TwoPlayerGameState());
+    this.addState(twoPlayer);
+    this.addState(new TwoPlayerEndGame(twoPlayer));
   }
 }

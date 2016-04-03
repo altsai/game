@@ -40,6 +40,7 @@ public abstract class GamePlayState extends BasicGameState {
 
   protected Random random;
   protected int difficultyLevel;
+  protected Player loser;
 
   // timers
   protected long lastZombieSpawnTime;
@@ -61,6 +62,7 @@ public abstract class GamePlayState extends BasicGameState {
     this.random = new Random();
     this.difficultyLevel = 1;
     this.spawnOn = true;
+    this.loser = null;
   }
 
   @Override
@@ -126,6 +128,7 @@ public abstract class GamePlayState extends BasicGameState {
           }
 
           if (p.getLives() == 0) {
+            this.loser = p;
             endGame(s);
           } else {
             p.loseLife();
@@ -142,6 +145,10 @@ public abstract class GamePlayState extends BasicGameState {
         }
       }
     }
+  }
+
+  public Player getLoser() {
+    return this.loser;
   }
 
   /**

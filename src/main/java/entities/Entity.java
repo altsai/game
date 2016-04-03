@@ -56,6 +56,15 @@ public abstract class Entity extends Circle {
   }
 
   /**
+   * Method to set the image graphic of this entity.
+   *
+   * @param image   Image object.
+   */
+  public void setImage(Image image) {
+    this.image = image;
+  }
+
+  /**
    * Method that loops and updates new information about entity objects.
    *
    * @param gc        GameContainer, window of the game
