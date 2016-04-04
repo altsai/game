@@ -63,6 +63,7 @@ public class Zombie extends Entity {
 
     // give the zombie a random target of the player to track
     this.target = r.nextInt(LEFT + 1);
+    this.state = false;
   }
 
   public void setTarget(Circle other) {
