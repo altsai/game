@@ -14,16 +14,50 @@ import org.newdawn.slick.GameContainer;
 
 import states.GamePlayState;
 
+/**
+ * TimeStop Powerup freezes the game for three seconds, also halting new Powerup
+ * and Zombie generation.
+ *
+ * @author Alison
+ *
+ */
 public class TimeStop extends Powerup {
 
+  /**
+   * TimeStop's lifetime in milliseconds.
+   */
   private final int FREEZE_TIME = 3000;
+
+  /**
+   * Reference to the list of Zombies in the game.
+   */
   private List<Zombie> zombies;
+
+  /**
+   * Reference to the list of Players in the game.
+   */
   private List<Player> players;
 
+  /**
+   * Maps frozen Zombies to their pre-frozen speeds.
+   */
   private Map<Zombie, Double> zombieSpeeds;
-  private double playerSpeed;
+
+  /**
+   * The GamePlayState.
+   */
   private GamePlayState game;
 
+  /**
+   * Constructor for TimeStop.
+   *
+   * @param p
+   *          the list of Powerups in the game
+   * @param z
+   *          the list of Zombies in the game
+   * @param gps
+   *          the GamePlayState
+   */
   public TimeStop(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
@@ -36,6 +70,18 @@ public class TimeStop extends Powerup {
     this.players = new ArrayList<>();
   }
 
+  /**
+   * Constructor for TimeStop.
+   *
+   * @param p
+   *          the list of Powerups in the game
+   * @param z
+   *          the list of Zombies in the game
+   * @param pl
+   *          the list of Players in the game
+   * @param gps
+   *          the GamePlayState
+   */
   public TimeStop(List<Powerup> p, List<Zombie> z, List<Player> pl,
       GamePlayState gps) {
     // call the superconstructor to start timing
@@ -54,7 +100,7 @@ public class TimeStop extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    // check if timestop should be deactivated
+    // check if TimeStop should be deactivated
     deactivate();
   }
 
@@ -63,7 +109,6 @@ public class TimeStop extends Powerup {
     super.activate();
 
     zombieSpeeds = new HashMap<>();
-    playerSpeed = 0;
 
     // prevent spawning of new zombies
     this.game.setSpawnOn(false);
@@ -75,7 +120,6 @@ public class TimeStop extends Powerup {
 
     for (Player p : players) {
       if (affectedPlayer != p) {
-        playerSpeed = p.getSpeed();
         p.setSpeed(0);
       }
     }
@@ -90,19 +134,14 @@ public class TimeStop extends Powerup {
       // tell the game to start spawning again
       this.game.setSpawnOn(true);
 
+      // reset Zombie speeds
       for (Zombie z : zombies) {
         if (zombieSpeeds.get(z) != null) {
           z.setSpeed(zombieSpeeds.get(z));
         }
       }
 
-      for (Player p : players) {
-        if (affectedPlayer != p) {
-          p.setSpeed(playerSpeed);
-        }
-      }
-
-      // kill the powerup
+      // kill the Powerup
       kill();
     }
   }
