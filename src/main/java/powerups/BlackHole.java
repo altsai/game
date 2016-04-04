@@ -63,6 +63,7 @@ public class BlackHole extends Powerup {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= SUCK_TIME) {
       for (Entity e : entities) {
+        // TODO: assign based on distance rather than random?
         Player target = players.get(random.nextInt(this.players.size()));
         ((Zombie) e).setTarget(target);
       }
