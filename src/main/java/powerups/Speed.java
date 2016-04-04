@@ -1,11 +1,11 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import game_objects.Powerup;
+
 import java.util.List;
 
 import org.newdawn.slick.GameContainer;
-
-import edu.brown.cs.altsai.game.Resources;
-import game_objects.Powerup;
 
 /**
  * Defines the speed powerup that boosts a Players speed by +20%.
@@ -17,7 +17,6 @@ public class Speed extends Powerup {
 
   private static final int EFFECT_DURATION = 8000;
   private static final double SPEED_MULTIPLIER = 1.2;
-
 
   /**
    * Constructor for a Speed Powerup.
@@ -65,14 +64,16 @@ public class Speed extends Powerup {
     super.activate();
 
     // Speed specific method to increase player speed
-    this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed() * SPEED_MULTIPLIER);
+    this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed()
+        * SPEED_MULTIPLIER);
   }
 
   @Override
   public void deactivate() {
     if (this.isUsed) {
       if (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION) {
-        this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed() / SPEED_MULTIPLIER);
+        this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed()
+            / SPEED_MULTIPLIER);
         kill();
       }
     }

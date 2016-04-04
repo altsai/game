@@ -7,12 +7,12 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import edu.brown.cs.altsai.game.Window;
-import entities.Player;
-import entities.Zombie;
 import powerups.Bomb;
 import powerups.Speed;
 import powerups.TimeStop;
+import edu.brown.cs.altsai.game.Window;
+import entities.Player;
+import entities.Zombie;
 
 /**
  * Defines the Single Player game state.
@@ -38,12 +38,12 @@ public class SinglePlayerGameState extends GamePlayState {
 
     super.render(gc, s, g);
 
-    g.drawString("Player has " + this.players.get(0).getLives() + " lives", 100, 100);
+    g.drawString("Player has " + this.players.get(0).getLives() + " lives",
+        100, 100);
     g.drawString("Player speed: " + this.players.get(0).getSpeed(), 50, 50);
 
     g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
   }
-
 
   @Override
   public int getID() {
@@ -59,7 +59,6 @@ public class SinglePlayerGameState extends GamePlayState {
     return this.players.get(0).getScore();
   }
 
-
   @Override
   /**
    * Method that ends the single player game.
@@ -74,7 +73,8 @@ public class SinglePlayerGameState extends GamePlayState {
 
   @Override
   protected void spawnZombie() {
-    // check if the game should be spawning zombies (time stop may have stopped spawns)
+    // check if the game should be spawning zombies (time stop may have stopped
+    // spawns)
     if (this.spawnOn) {
 
       if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
@@ -92,15 +92,16 @@ public class SinglePlayerGameState extends GamePlayState {
             newZombie.setSpeed(ZOMBIE_BASE_SPEED
                 + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
                 * ZOMBIE_BASE_SPEED);
-            this.entities.add(newZombie);
+            this.zombies.add(newZombie);
           }
         }
 
         Zombie newZombie = new Zombie(target);
 
-        newZombie.setSpeed(ZOMBIE_BASE_SPEED + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+        newZombie.setSpeed(ZOMBIE_BASE_SPEED
+            + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
             * ZOMBIE_BASE_SPEED);
-        this.entities.add(newZombie);
+        this.zombies.add(newZombie);
 
         this.lastZombieSpawnTime = System.currentTimeMillis();
       }
@@ -121,13 +122,13 @@ public class SinglePlayerGameState extends GamePlayState {
 
       double randomNum = random.nextDouble();
       if (randomNum < 0.33) {
-        Bomb bomb = new Bomb(powerups, entities);
+        Bomb bomb = new Bomb(powerups, zombies);
         this.powerups.add(bomb);
       } else if (randomNum < 0.6 && randomNum >= 0.33) {
         Speed speed = new Speed(powerups);
         this.powerups.add(speed);
       } else if (randomNum < 0.9 && randomNum >= 0.6) {
-        TimeStop timestop = new TimeStop(powerups, entities, this);
+        TimeStop timestop = new TimeStop(powerups, zombies, this);
         this.powerups.add(timestop);
       }
 

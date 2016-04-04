@@ -1,15 +1,18 @@
 package powerups;
 
 import entities.Entity;
+import entities.Zombie;
 import game_objects.Powerup;
 
 import java.util.List;
+import java.util.Map;
 
 public class OnFire extends Powerup {
 
   private final int FIRE_TIME = 8000;
   private final int INDIV_FIRE = 2000;
-  private List<Entity> entities;
+  private List<Zombie> zombies;
+  private Map<Entity, Integer> onFireTimes;
 
   /*
    * The player will not be damaged, but will kill any zombies that he runs into
@@ -22,9 +25,10 @@ public class OnFire extends Powerup {
    * player will be added to the score count
    */
 
-  public OnFire(List<Powerup> p) {
+  public OnFire(List<Powerup> p, List<Zombie> z) {
     super(p);
     // TODO Auto-generated constructor stub
+    zombies = z;
   }
 
   @Override

@@ -1,6 +1,5 @@
 package powerups;
 
-import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -16,25 +15,25 @@ import states.GamePlayState;
 public class BlackHole extends Powerup {
 
   private final int SUCK_TIME = 3000;
-  private List<Entity> entities;
+  private List<Zombie> zombies;
   private List<Player> players;
   private Random random;
   private GamePlayState game;
 
-  public BlackHole(List<Powerup> p, List<Entity> e, GamePlayState gps) {
+  public BlackHole(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
     super(p);
     // TODO set image and animation
-    entities = e;
+    zombies = z;
     players = new ArrayList<>();
     players.add(affectedPlayer);
     game = gps;
   }
 
-  public BlackHole(List<Powerup> p, List<Entity> e, List<Player> pl,
+  public BlackHole(List<Powerup> p, List<Zombie> z, List<Player> pl,
       GamePlayState gps) {
     super(p);
     // TODO set image and animation
-    entities = e;
+    zombies = z;
     players = pl;
     game = gps;
   }
@@ -45,12 +44,12 @@ public class BlackHole extends Powerup {
     super.update(gc, delta);
 
     // check for player collision with every entity
-    for (Entity e : this.entities) {
-      if (e.isCollision(this)) {
-        entities.remove(e);
+    for (Zombie z : this.zombies) {
+      if (z.isCollision(this)) {
+        zombies.remove(z);
         affectedPlayer.incrementScore();
       }
-      e.update(gc, delta);
+      z.update(gc, delta);
     }
 
     // check if black hole should be deactivated
@@ -68,8 +67,8 @@ public class BlackHole extends Powerup {
 
     this.game.setSpawnOn(false);
 
-    for (Entity e : entities) {
-      ((Zombie) e).setTarget(this);
+    for (Zombie z : zombies) {
+      z.setTarget(this);
     }
   }
 
@@ -77,10 +76,10 @@ public class BlackHole extends Powerup {
   public void deactivate() {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= SUCK_TIME) {
-      for (Entity e : entities) {
+      for (Zombie z : zombies) {
         // TODO: assign based on distance rather than random?
         Player target = players.get(random.nextInt(this.players.size()));
-        ((Zombie) e).setTarget(target);
+        z.setTarget(target);
       }
 
       this.game.setSpawnOn(true);

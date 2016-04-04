@@ -10,22 +10,22 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import entities.Entity;
 import entities.Player;
+import entities.Zombie;
 import game_objects.Powerup;
 
 /**
  * Provides a template for gameplay state objects.
  *
- * The single player and double player game play states
- * both extend the GamePlayState.
+ * The single player and double player game play states both extend the
+ * GamePlayState.
  *
  * @author bl48
  *
  */
 public abstract class GamePlayState extends BasicGameState {
-  //list of all entities in the game
-  protected ArrayList<Entity> entities;
+  // list of all entities in the game
+  protected ArrayList<Zombie> zombies;
   protected ArrayList<Powerup> powerups;
 
   // players in the game
@@ -51,9 +51,8 @@ public abstract class GamePlayState extends BasicGameState {
   protected boolean spawnOn;
 
   @Override
-  public void init(GameContainer gc, StateBasedGame s)
-      throws SlickException {
-    this.entities = new ArrayList<>();
+  public void init(GameContainer gc, StateBasedGame s) throws SlickException {
+    this.zombies = new ArrayList<>();
     this.powerups = new ArrayList<>();
 
     this.players = new ArrayList<>();
@@ -72,8 +71,8 @@ public abstract class GamePlayState extends BasicGameState {
     for (Player p : this.players) {
       p.render(gc, g);
     }
-    for (Entity e : this.entities) {
-      e.render(gc, g);
+    for (Zombie z : this.zombies) {
+      z.render(gc, g);
     }
     for (Powerup p : this.powerups) {
       p.render(gc, g);
@@ -116,12 +115,12 @@ public abstract class GamePlayState extends BasicGameState {
       int delta) {
 
     // check for player collision with every entity
-    for (Entity e : this.entities) {
-      e.update(gc, delta);
+    for (Zombie z : this.zombies) {
+      z.update(gc, delta);
 
       // check player's lives and mark invincible as necessary
       for (Player p : this.players) {
-        if (p.isCollision(e)) {
+        if (p.isCollision(z)) {
 
           if (p.isInvincible()) {
             continue;
@@ -168,6 +167,7 @@ public abstract class GamePlayState extends BasicGameState {
 
   /**
    * Method to set whether or not the game should be spawning any zombies.
+   *
    * @param flag
    */
   public void setSpawnOn(boolean flag) {
@@ -183,7 +183,6 @@ public abstract class GamePlayState extends BasicGameState {
    */
   protected abstract void spawnZombie();
 
-
   /**
    * Method that spawns powerups.
    *
@@ -194,7 +193,8 @@ public abstract class GamePlayState extends BasicGameState {
   /**
    * method to end a game.
    *
-   * @param s     StateBasedGame s
+   * @param s
+   *          StateBasedGame s
    */
   protected abstract void endGame(StateBasedGame s);
 

@@ -1,8 +1,8 @@
 package powerups;
 
 import edu.brown.cs.altsai.game.Resources;
-import entities.Entity;
 import entities.Player;
+import entities.Zombie;
 import game_objects.Powerup;
 
 import java.util.ArrayList;
@@ -17,33 +17,33 @@ import states.GamePlayState;
 public class TimeStop extends Powerup {
 
   private final int FREEZE_TIME = 3000;
-  private List<Entity> entities;
+  private List<Zombie> zombies;
   private List<Player> players;
 
-  private Map<Entity, Double> zombieSpeeds;
+  private Map<Zombie, Double> zombieSpeeds;
   private double playerSpeed;
   private GamePlayState game;
 
-  public TimeStop(List<Powerup> p, List<Entity> e, GamePlayState gps) {
+  public TimeStop(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 
     // load bomb image and animation
     this.image = Resources.getImage("timestop");
-    this.entities = e;
+    this.zombies = z;
     this.game = gps;
 
     this.players = new ArrayList<>();
   }
 
-  public TimeStop(List<Powerup> p, List<Entity> e, List<Player> pl,
+  public TimeStop(List<Powerup> p, List<Zombie> z, List<Player> pl,
       GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 
     // load bomb image and animation
     this.image = Resources.getImage("timestop");
-    this.entities = e;
+    this.zombies = z;
     this.game = gps;
 
     this.players = pl;
@@ -68,9 +68,9 @@ public class TimeStop extends Powerup {
     // prevent spawning of new zombies
     this.game.setSpawnOn(false);
 
-    for (Entity e : entities) {
-      zombieSpeeds.put(e, e.getSpeed());
-      e.setSpeed(0);
+    for (Zombie z : zombies) {
+      zombieSpeeds.put(z, z.getSpeed());
+      z.setSpeed(0);
     }
 
     for (Player p : players) {
@@ -90,9 +90,9 @@ public class TimeStop extends Powerup {
       // tell the game to start spawning again
       this.game.setSpawnOn(true);
 
-      for (Entity e : entities) {
-        if (zombieSpeeds.get(e) != null) {
-          e.setSpeed(zombieSpeeds.get(e));
+      for (Zombie z : zombies) {
+        if (zombieSpeeds.get(z) != null) {
+          z.setSpeed(zombieSpeeds.get(z));
         }
       }
 

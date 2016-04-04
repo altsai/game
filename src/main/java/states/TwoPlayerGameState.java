@@ -7,13 +7,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.Bomb;
+import powerups.Speed;
+import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 
 /**
  * Defines the two player game state.
@@ -44,15 +44,16 @@ public class TwoPlayerGameState extends GamePlayState {
     return this.winner;
   }
 
-
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
 
     super.render(gc, s, g);
 
-    g.drawString("Player1 has " + this.players.get(0).getLives() + " lives", 100, 100);
-    g.drawString("Player2 has " + this.players.get(1).getLives() + " lives", 300, 100);
+    g.drawString("Player1 has " + this.players.get(0).getLives() + " lives",
+        100, 100);
+    g.drawString("Player2 has " + this.players.get(1).getLives() + " lives",
+        300, 100);
     g.drawString("Player1 speed: " + this.players.get(0).getSpeed(), 100, 50);
     g.drawString("Player2 speed: " + this.players.get(1).getSpeed(), 300, 50);
 
@@ -66,7 +67,8 @@ public class TwoPlayerGameState extends GamePlayState {
 
   @Override
   protected void spawnZombie() {
-    // check if the game should be spawning zombies (time stop may have stopped spawns)
+    // check if the game should be spawning zombies (time stop may have stopped
+    // spawns)
     if (this.spawnOn) {
 
       if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
@@ -84,15 +86,16 @@ public class TwoPlayerGameState extends GamePlayState {
             newZombie.setSpeed(ZOMBIE_BASE_SPEED
                 + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
                 * ZOMBIE_BASE_SPEED);
-            this.entities.add(newZombie);
+            this.zombies.add(newZombie);
           }
         }
 
         Zombie newZombie = new Zombie(target);
 
-        newZombie.setSpeed(ZOMBIE_BASE_SPEED + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+        newZombie.setSpeed(ZOMBIE_BASE_SPEED
+            + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
             * ZOMBIE_BASE_SPEED);
-        this.entities.add(newZombie);
+        this.zombies.add(newZombie);
 
         this.lastZombieSpawnTime = System.currentTimeMillis();
       }
@@ -113,24 +116,24 @@ public class TwoPlayerGameState extends GamePlayState {
 
       double randomNum = random.nextDouble();
       if (randomNum < 0.33) {
-        Bomb bomb = new Bomb(powerups, entities);
+        Bomb bomb = new Bomb(powerups, zombies);
         this.powerups.add(bomb);
       } else if (randomNum < 0.6 && randomNum >= 0.33) {
         Speed speed = new Speed(powerups);
         this.powerups.add(speed);
       } else if (randomNum < 0.9 && randomNum >= 0.6) {
-        TimeStop timestop = new TimeStop(powerups, entities, this);
+        TimeStop timestop = new TimeStop(powerups, zombies, this);
         this.powerups.add(timestop);
       }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
 
-
   }
 
   @Override
   protected void endGame(StateBasedGame s) {
-    s.enterState(States.TWO_PLAYER_END_GAME, new FadeOutTransition(), new FadeInTransition());
+    s.enterState(States.TWO_PLAYER_END_GAME, new FadeOutTransition(),
+        new FadeInTransition());
   }
 }

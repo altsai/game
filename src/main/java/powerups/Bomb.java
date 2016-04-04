@@ -1,5 +1,11 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,20 +15,15 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Entity;
-import entities.Player;
-import game_objects.Powerup;
-
 public class Bomb extends Powerup {
 
   private static final int EXPLOSION_RADIUS = 200;
 
-  public static final int ANIMATION_WIDTH = (int) (EXPLOSION_RADIUS * 4);
+  public static final int ANIMATION_WIDTH = EXPLOSION_RADIUS * 4;
   public static final int ANIMATION_HEIGHT = (int) (ANIMATION_WIDTH / 1.0315);
   public static final int ANIMATION_FRAME_TIME = 50;
 
-  private List<Entity> entities;
+  private List<Zombie> zombies;
   private List<Player> players;
 
   private SpriteSheet spriteSheet;
@@ -32,7 +33,7 @@ public class Bomb extends Powerup {
 
   // TODO: animation field
 
-  public Bomb(List<Powerup> p, List<Entity> e) {
+  public Bomb(List<Powerup> p, List<Zombie> z) {
     // call the superconstructor to start timing
     super(p);
 
@@ -41,12 +42,12 @@ public class Bomb extends Powerup {
     this.spriteSheet = Resources.getSprite("bomb_explosion");
     this.animation = new Animation(this.spriteSheet, 500);
     this.animation.setLooping(false);
-    this.entities = e;
+    this.zombies = z;
 
     players = new ArrayList<>();
   }
 
-  public Bomb(List<Powerup> p, List<Entity> e, List<Player> pl) {
+  public Bomb(List<Powerup> p, List<Zombie> z, List<Player> pl) {
     // call the superconstructor to start timing
     super(p);
 
@@ -55,21 +56,19 @@ public class Bomb extends Powerup {
     this.spriteSheet = Resources.getSprite("bomb_explosion");
     this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
     this.animation.setLooping(false);
-    this.entities = e;
+    this.zombies = z;
 
     this.players = pl;
   }
-
 
   @Override
   public void render(GameContainer gc, Graphics g) {
     super.render(gc, g);
     if (this.isUsed) {
 
-      this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2)
-          , this.explosionY - (ANIMATION_HEIGHT / 2)
-          , ANIMATION_WIDTH
-          , ANIMATION_HEIGHT);
+      this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2),
+          this.explosionY - (ANIMATION_HEIGHT / 2), ANIMATION_WIDTH,
+          ANIMATION_HEIGHT);
     }
 
   }
@@ -93,7 +92,7 @@ public class Bomb extends Powerup {
     this.explosionX = this.affectedPlayer.getX();
     this.explosionY = this.affectedPlayer.getY();
 
-    Iterator<Entity> iter = this.entities.iterator();
+    Iterator<Zombie> iter = this.zombies.iterator();
     while (iter.hasNext()) {
       if (withinRadius(iter.next())) {
         iter.remove();
@@ -119,9 +118,8 @@ public class Bomb extends Powerup {
   /**
    * Method to check if an entity is within the explosion radius.
    *
-   * Checks euclidean distance between the powerup
-   * and the entity. Then checks if that distance is less than the
-   * explosionRadius.
+   * Checks euclidean distance between the powerup and the entity. Then checks
+   * if that distance is less than the explosionRadius.
    *
    * @param e
    *          Entity, entity that is possibly affected by the explosion.
