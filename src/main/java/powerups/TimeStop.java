@@ -1,5 +1,10 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Entity;
+import entities.Player;
+import game_objects.Powerup;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +12,6 @@ import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Entity;
-import entities.Player;
-import game_objects.Powerup;
 import states.GamePlayState;
 
 public class TimeStop extends Powerup {
@@ -35,13 +36,15 @@ public class TimeStop extends Powerup {
     this.players = new ArrayList<>();
   }
 
-  public TimeStop(List<Powerup> p, List<Entity> e, List<Player> pl) {
+  public TimeStop(List<Powerup> p, List<Entity> e, List<Player> pl,
+      GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 
     // load bomb image and animation
     this.image = Resources.getImage("timestop");
     this.entities = e;
+    this.game = gps;
 
     this.players = pl;
   }

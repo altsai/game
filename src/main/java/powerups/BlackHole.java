@@ -11,26 +11,32 @@ import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 
+import states.GamePlayState;
+
 public class BlackHole extends Powerup {
 
   private final int SUCK_TIME = 3000;
   private List<Entity> entities;
   private List<Player> players;
   private Random random;
+  private GamePlayState game;
 
-  public BlackHole(List<Powerup> p, List<Entity> e) {
+  public BlackHole(List<Powerup> p, List<Entity> e, GamePlayState gps) {
     super(p);
     // TODO set image and animation
     entities = e;
     players = new ArrayList<>();
     players.add(affectedPlayer);
+    game = gps;
   }
 
-  public BlackHole(List<Powerup> p, List<Entity> e, List<Player> pl) {
+  public BlackHole(List<Powerup> p, List<Entity> e, List<Player> pl,
+      GamePlayState gps) {
     super(p);
     // TODO set image and animation
     entities = e;
     players = pl;
+    game = gps;
   }
 
   @Override
@@ -45,6 +51,7 @@ public class BlackHole extends Powerup {
   @Override
   public void activate() {
     super.activate();
+    this.game.setSpawnOn(false);
 
     for (Entity e : entities) {
       ((Zombie) e).setTarget(this);
@@ -59,6 +66,8 @@ public class BlackHole extends Powerup {
         Player target = players.get(random.nextInt(this.players.size()));
         ((Zombie) e).setTarget(target);
       }
+
+      this.game.setSpawnOn(true);
 
       // kill the powerup
       kill();
