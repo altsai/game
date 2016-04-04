@@ -44,6 +44,15 @@ public class BlackHole extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
+    // check for player collision with every entity
+    for (Entity e : this.entities) {
+      if (e.isCollision(this)) {
+        entities.remove(e);
+        affectedPlayer.incrementScore();
+      }
+      e.update(gc, delta);
+    }
+
     // check if black hole should be deactivated
     deactivate();
   }
@@ -51,6 +60,12 @@ public class BlackHole extends Powerup {
   @Override
   public void activate() {
     super.activate();
+
+    this.setX(affectedPlayer.getX());
+    this.setY(affectedPlayer.getY());
+
+    // TODO: reset image/animation
+
     this.game.setSpawnOn(false);
 
     for (Entity e : entities) {
