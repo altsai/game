@@ -9,13 +9,43 @@ import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
+/**
+ * OnFire Powerup that gives the player a temporary capability of lighting
+ * Zombies on fire, which can then in turn light others on fire.
+ *
+ * @author Alison
+ *
+ */
 public class OnFire extends Powerup {
 
+  /**
+   * The lifetime of the Powerup.
+   */
   private final int FIRE_TIME = 8000;
+
+  /**
+   * The lifetime of individual fires.
+   */
   private final int INDIV_FIRE = 2000;
+
+  /**
+   * Reference to the list of Zombies in the game.
+   */
   private List<Zombie> zombies;
+
+  /**
+   * Map of Zombies to the time they were lit on fire.
+   */
   private Map<Zombie, Long> onFireTimes;
 
+  /**
+   * Constructor for OnFire.
+   *
+   * @param p
+   *          the list of Powerups
+   * @param z
+   *          the list of Zombies
+   */
   public OnFire(List<Powerup> p, List<Zombie> z) {
     super(p);
     // TODO set image
@@ -54,7 +84,6 @@ public class OnFire extends Powerup {
           }
         }
       }
-
     }
 
     // check if black hole should be deactivated
@@ -75,6 +104,7 @@ public class OnFire extends Powerup {
         && System.currentTimeMillis() - this.activationStartTime >= FIRE_TIME) {
       // TODO reset player's image
 
+      // kill all lit Zombies who have not been removed yet
       for (Zombie z : onFireTimes.keySet()) {
         zombies.remove(z);
         affectedPlayer.incrementScore();
