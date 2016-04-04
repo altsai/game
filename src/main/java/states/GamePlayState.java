@@ -118,9 +118,11 @@ public abstract class GamePlayState extends BasicGameState {
     for (Zombie z : this.zombies) {
       z.update(gc, delta);
 
+      boolean onFire = z.isOnFire();
+
       // check player's lives and mark invincible as necessary
       for (Player p : this.players) {
-        if (p.isCollision(z)) {
+        if (p.isCollision(z) && !onFire) {
 
           if (p.isInvincible()) {
             continue;
