@@ -2,10 +2,12 @@ package powerups;
 
 import entities.Entity;
 import entities.Player;
+import entities.Zombie;
 import game_objects.Powerup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 
@@ -14,19 +16,21 @@ public class BlackHole extends Powerup {
   private final int SUCK_TIME = 3000;
   private List<Entity> entities;
   private List<Player> players;
+  private Random random;
 
   public BlackHole(List<Powerup> p, List<Entity> e) {
     super(p);
     // TODO set image and animation
-    players = new ArrayList<Player>();
     entities = e;
+    players = new ArrayList<>();
+    players.add(affectedPlayer);
   }
 
   public BlackHole(List<Powerup> p, List<Entity> e, List<Player> pl) {
     super(p);
     // TODO set image and animation
-    players = pl;
     entities = e;
+    players = pl;
   }
 
   @Override
@@ -43,7 +47,7 @@ public class BlackHole extends Powerup {
     super.activate();
 
     for (Entity e : entities) {
-      // make black hole the target
+      ((Zombie) e).setTarget(this);
     }
   }
 
@@ -51,7 +55,10 @@ public class BlackHole extends Powerup {
   public void deactivate() {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= SUCK_TIME) {
-      // TODO: kill black hole and reassign target players
+      for (Entity e : entities) {
+        Player target = players.get(random.nextInt(this.players.size()));
+        ((Zombie) e).setTarget(target);
+      }
 
       // kill the powerup
       kill();

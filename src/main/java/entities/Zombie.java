@@ -1,12 +1,12 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import game_objects.Circle;
+
 import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
-
-import powerups.BlackHole;
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
 
 /**
  * Defines the zombie object.
@@ -34,13 +34,13 @@ public class Zombie extends Entity {
   private static final int CUSHION = 5;
 
   // zombies keep track of a player and a specific target area of the player.
-  private Player player;
+  private Circle player;
   private Integer target;
 
   @Override
   public void init(Entity other) {
 
-    this.player = (Player) other;
+    this.player = other;
 
     Random r = new Random();
 
@@ -59,18 +59,14 @@ public class Zombie extends Entity {
 
     this.radius = 20;
     this.image = Resources.getImage("zombie");
-    this.speed = player.getSpeed() * 3;
+    this.speed = ((Player) player).getSpeed() * 3;
 
     // give the zombie a random target of the player to track
     this.target = r.nextInt(LEFT + 1);
   }
 
-  public void setTargetPlayer(Entity other) {
-    this.player = (Player) other;
-  }
-
-  public void setBlackHole(BlackHole b) {
-    // TODO
+  public void setTarget(Circle other) {
+    this.player = other;
   }
 
   @Override
