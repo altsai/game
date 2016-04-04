@@ -6,20 +6,45 @@ import game_objects.Powerup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 
 import states.GamePlayState;
 
+/**
+ * Black Hole Powerup that sucks all Zombies currently on the board to its
+ * location and then kills them.
+ *
+ * @author Alison
+ *
+ */
 public class BlackHole extends Powerup {
 
-  private final int SUCK_TIME = 3000;
+  /**
+   * Reference to the list of zombies in the game.
+   */
   private List<Zombie> zombies;
+
+  /**
+   * Reference to the list of players in the game.
+   */
   private List<Player> players;
-  private Random random;
+
+  /**
+   * Reference to the game.
+   */
   private GamePlayState game;
 
+  /**
+   * Constructor for the BlackHole.
+   *
+   * @param p
+   *          the list of Powerups in the game
+   * @param z
+   *          the list of Zombies in the game
+   * @param gps
+   *          the GamePlayState
+   */
   public BlackHole(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
     super(p);
     // TODO set image and animation
@@ -29,6 +54,18 @@ public class BlackHole extends Powerup {
     game = gps;
   }
 
+  /**
+   * Constructor for the BlackHole.
+   *
+   * @param p
+   *          the list of Powerups in the game
+   * @param z
+   *          the list of Zombies in the game
+   * @param pl
+   *          the list of players in the game
+   * @param gps
+   *          the GamePlayState
+   */
   public BlackHole(List<Powerup> p, List<Zombie> z, List<Player> pl,
       GamePlayState gps) {
     super(p);
@@ -52,7 +89,7 @@ public class BlackHole extends Powerup {
       z.update(gc, delta);
     }
 
-    // check if black hole should be deactivated
+    // check if BlackHole should be deactivated
     deactivate();
   }
 
@@ -60,13 +97,16 @@ public class BlackHole extends Powerup {
   public void activate() {
     super.activate();
 
+    // reset location to player location
     this.setX(affectedPlayer.getX());
     this.setY(affectedPlayer.getY());
 
     // TODO: reset image/animation
 
+    // turn off spawning of new Zombies
     this.game.setSpawnOn(false);
 
+    // set target of all Zombies to the BlackHole
     for (Zombie z : zombies) {
       z.setTarget(this);
     }
@@ -74,17 +114,10 @@ public class BlackHole extends Powerup {
 
   @Override
   public void deactivate() {
-    if (this.isUsed
-        && System.currentTimeMillis() - this.activationStartTime >= SUCK_TIME) {
-      for (Zombie z : zombies) {
-        // TODO: assign based on distance rather than random?
-        Player target = players.get(random.nextInt(this.players.size()));
-        z.setTarget(target);
-      }
-
+    if (this.isUsed && zombies.size() == 0) {
       this.game.setSpawnOn(true);
 
-      // kill the powerup
+      // kill the Powerup
       kill();
     }
   }
