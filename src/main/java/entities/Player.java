@@ -234,4 +234,7 @@ public class Player extends Entity implements PlayerAction {
     return this.name;
   }
 
+  public long getLastBombFired() {
+    return lastBombFired;
+  }
 }
