@@ -1,11 +1,13 @@
 package entities;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import game_objects.Powerup;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
+
+import powerups.Bomb;
 
 /**
  * Defines the Player object.
@@ -24,8 +26,10 @@ public class Player extends Entity implements PlayerAction {
     this.name = name;
   }
 
-  private final static int[] PLAYER1_CONTROLS = {Input.KEY_W, Input.KEY_S, Input.KEY_A, Input.KEY_D};
-  private final static int[] PLAYER2_CONTROLS = {Input.KEY_UP, Input.KEY_DOWN, Input.KEY_LEFT, Input.KEY_RIGHT};
+  private final static int[] PLAYER1_CONTROLS = { Input.KEY_W, Input.KEY_S,
+      Input.KEY_A, Input.KEY_D };
+  private final static int[] PLAYER2_CONTROLS = { Input.KEY_UP, Input.KEY_DOWN,
+      Input.KEY_LEFT, Input.KEY_RIGHT };
 
   // specific fields that players have
   private int lives;
@@ -34,6 +38,7 @@ public class Player extends Entity implements PlayerAction {
   private long invincibleTime;
   private boolean isPlayer1;
   private boolean isSingle;
+  private long lastBombFired;
 
   @Override
   /**
@@ -54,6 +59,7 @@ public class Player extends Entity implements PlayerAction {
     this.right = Window.width;
     this.isSingle = true;
     this.isPlayer1 = true;
+    this.lastBombFired = 0;
   }
 
   public void setPlayer1(boolean flag) {
@@ -62,7 +68,6 @@ public class Player extends Entity implements PlayerAction {
       this.isSingle = false;
     }
   }
-
 
   public boolean isPlayer1() {
     return this.isPlayer1;
@@ -112,6 +117,9 @@ public class Player extends Entity implements PlayerAction {
     if (this.powerup != null) {
       this.powerup.activate();
       this.powerup = null;
+      if (this.powerup instanceof Bomb) {
+        this.lastBombFired = System.currentTimeMillis();
+      }
     }
   }
 
@@ -142,6 +150,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Method that checks if the user has pressed an action key
+   *
    * @param input
    */
   private void checkActionKey(Input input) {

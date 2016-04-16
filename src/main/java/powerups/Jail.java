@@ -1,14 +1,19 @@
 package powerups;
 
+import entities.Player;
+import entities.Zombie;
 import game_objects.Powerup;
 
 import java.util.List;
 
 public class Jail extends Powerup {
 
-  public Jail(List<Powerup> p) {
+  private final int JAIL_RADIUS = 150;
+  private final int JAIL_LIFETIME = 5000;
+
+  public Jail(List<Powerup> p, List<Zombie> z, List<Player> pl) {
     super(p);
-    // TODO Auto-generated constructor stub
+    // TODO set image
   }
 
   @Override
