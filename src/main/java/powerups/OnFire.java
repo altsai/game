@@ -1,13 +1,12 @@
 package powerups;
 
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
+
+import entities.Zombie;
+import game_objects.Powerup;
 
 /**
  * OnFire Powerup that gives the player a temporary capability of lighting
@@ -31,7 +30,7 @@ public class OnFire extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private List<Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   /**
    * Map of Zombies to the time they were lit on fire.
@@ -46,7 +45,7 @@ public class OnFire extends Powerup {
    * @param z
    *          the list of Zombies
    */
-  public OnFire(List<Powerup> p, List<Zombie> z) {
+  public OnFire(Map<String, Powerup> p, Map<String, Zombie> z) {
     super(p);
     // TODO set image
     zombies = z;
@@ -57,11 +56,12 @@ public class OnFire extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    for (Zombie z : zombies) {
+    for (String key : this.zombies.keySet()) {
       // if has been on fire for two seconds
+      Zombie z = this.zombies.get(key);
       if (z.isOnFire()
           && ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE)) {
-        zombies.remove(z);
+        zombies.remove(key);
         onFireTimes.remove(z);
         affectedPlayer.incrementScore();
         continue;
@@ -76,8 +76,9 @@ public class OnFire extends Powerup {
 
       // if on fire and collides with another zombie
       if (z.isOnFire()) {
-        for (Zombie other : zombies) {
-          if ((other != z) && z.isCollision(other)) {
+        for (String otherKey : zombies.keySet()) {
+          Zombie other = this.zombies.get(otherKey);
+          if ((otherKey != key) && z.isCollision(other)) {
             // TODO replace zombie image
             other.setState(true);
             onFireTimes.put(other, System.currentTimeMillis());

@@ -1,19 +1,19 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Entity;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
+
+import edu.brown.cs.altsai.game.Resources;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 
 /**
  * Bomb Powerup that destroys any Zombies within a certain radius. In two-player
@@ -47,7 +47,7 @@ public class Bomb extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private List<Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   /**
    * Reference to the list of players in the game.
@@ -82,7 +82,7 @@ public class Bomb extends Powerup {
    * @param z
    *          the list of Zombies in the game
    */
-  public Bomb(List<Powerup> p, List<Zombie> z) {
+  public Bomb(Map<String, Powerup> p, Map<String, Zombie> z) {
     // call the superconstructor to start timing
     super(p);
 
@@ -106,7 +106,7 @@ public class Bomb extends Powerup {
    * @param pl
    *          the list of Players in the game
    */
-  public Bomb(List<Powerup> p, List<Zombie> z, List<Player> pl) {
+  public Bomb(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl) {
     // call the superconstructor to start timing
     super(p);
 
@@ -150,11 +150,11 @@ public class Bomb extends Powerup {
     this.explosionX = this.affectedPlayer.getX();
     this.explosionY = this.affectedPlayer.getY();
 
-    // check to see which Zombies are within the radius
-    Iterator<Zombie> iter = this.zombies.iterator();
-    while (iter.hasNext()) {
-      if (withinRadius(iter.next())) {
-        iter.remove();
+
+    for (String key : this.zombies.keySet()) {
+      Zombie curr = this.zombies.get(key);
+      if (withinRadius(curr)) {
+        this.zombies.remove(key);
         this.affectedPlayer.incrementScore();
       }
     }

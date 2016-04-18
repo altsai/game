@@ -33,5 +33,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Boning/Desktop/native"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/kryonet-2.21/jars/production/onejar/kryonet-2.21-all.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

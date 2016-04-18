@@ -1,14 +1,14 @@
 package powerups;
 
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 import states.GamePlayState;
 
 /**
@@ -23,7 +23,7 @@ public class BlackHole extends Powerup {
   /**
    * Reference to the list of zombies in the game.
    */
-  private List<Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   /**
    * Reference to the list of players in the game.
@@ -45,7 +45,7 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
+  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, GamePlayState gps) {
     super(p);
     // TODO set image and animation
     zombies = z;
@@ -66,7 +66,7 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(List<Powerup> p, List<Zombie> z, List<Player> pl,
+  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl,
       GamePlayState gps) {
     super(p);
     // TODO set image and animation
@@ -81,12 +81,12 @@ public class BlackHole extends Powerup {
     super.update(gc, delta);
 
     // check for player collision with every entity
-    for (Zombie z : this.zombies) {
-      if (z.isCollision(this)) {
-        zombies.remove(z);
+    for (String key : this.zombies.keySet()) {
+      if (this.zombies.get(key).isCollision(this)) {
+        zombies.remove(key);
         affectedPlayer.incrementScore();
       }
-      z.update(gc, delta);
+      this.zombies.get(key).update(gc, delta);
     }
 
     // check if BlackHole should be deactivated
@@ -107,8 +107,8 @@ public class BlackHole extends Powerup {
     this.game.setSpawnOn(false);
 
     // set target of all Zombies to the BlackHole
-    for (Zombie z : zombies) {
-      z.setTarget(this);
+    for (String key : zombies.keySet()) {
+      zombies.get(key).setTarget(this);
     }
   }
 

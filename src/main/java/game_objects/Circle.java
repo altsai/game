@@ -11,6 +11,7 @@ package game_objects;
  */
 public class Circle {
   // fields of the circle
+  protected String id;
   protected float x;
   protected float y;
   protected float radius;
@@ -39,7 +40,7 @@ public class Circle {
 
   /**
    * Gets the x coordinate of the circle object center.
-   * 
+   *
    * @return float, x coordinate of center
    */
   public float getX() {
@@ -48,7 +49,7 @@ public class Circle {
 
   /**
    * Gets the y coordinate of the circle object center.
-   * 
+   *
    * @return float, y coordinate of center
    */
   public float getY() {
@@ -65,7 +66,7 @@ public class Circle {
 
   /**
    * Getter for radius of circle.
-   * 
+   *
    * @return float, radius of circle
    */
   public float getRadius() {
@@ -110,6 +111,14 @@ public class Circle {
     } else {
       return distTo(other) <= this.radius;
     }
+  }
+
+  /**
+   * Gets the unique ID for this object
+   * @return
+   */
+  public String getID() {
+    return this.id;
   }
 
 }

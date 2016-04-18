@@ -2,6 +2,7 @@ package states;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,8 +26,8 @@ import game_objects.Powerup;
  */
 public abstract class GamePlayState extends BasicGameState {
   // list of all entities in the game
-  protected ArrayList<Zombie> zombies;
-  protected ArrayList<Powerup> powerups;
+  protected ConcurrentHashMap<String, Zombie> zombies;
+  protected ConcurrentHashMap<String, Powerup> powerups;
 
   // players in the game
   protected ArrayList<Player> players;
@@ -52,8 +53,8 @@ public abstract class GamePlayState extends BasicGameState {
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
-    this.zombies = new ArrayList<>();
-    this.powerups = new ArrayList<>();
+    this.zombies = new ConcurrentHashMap<>();
+    this.powerups = new ConcurrentHashMap<>();
 
     this.players = new ArrayList<>();
     this.lastZombieSpawnTime = System.currentTimeMillis();
@@ -71,10 +72,10 @@ public abstract class GamePlayState extends BasicGameState {
     for (Player p : this.players) {
       p.render(gc, g);
     }
-    for (Zombie z : this.zombies) {
+    for (Zombie z : this.zombies.values()) {
       z.render(gc, g);
     }
-    for (Powerup p : this.powerups) {
+    for (Powerup p : this.powerups.values()) {
       p.render(gc, g);
     }
 
@@ -115,7 +116,7 @@ public abstract class GamePlayState extends BasicGameState {
       int delta) {
 
     // check for player collision with every entity
-    for (Zombie z : this.zombies) {
+    for (Zombie z : this.zombies.values()) {
       z.update(gc, delta);
 
       boolean onFire = z.isOnFire();
@@ -139,7 +140,7 @@ public abstract class GamePlayState extends BasicGameState {
     }
 
     // check for player collision with every powerup
-    for (Powerup powerup : this.powerups) {
+    for (Powerup powerup : this.powerups.values()) {
       for (Player p : this.players) {
         if (p.isCollision(powerup)) {
           p.collectPowerup(powerup);
@@ -162,8 +163,8 @@ public abstract class GamePlayState extends BasicGameState {
 
     // DO NOT USE ENHANCED FOR LOOP HERE. IDK WHY BUT THERES A THREADING ISSUE
     // PLS DO NOT CHANGE...
-    for (int i = 0; i < this.powerups.size(); i++) {
-      this.powerups.get(i).update(gc, delta);
+    for (String key : this.powerups.keySet()) {
+      this.powerups.get(key).update(gc, delta);
     }
   }
 

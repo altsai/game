@@ -1,12 +1,12 @@
 package powerups;
 
-import game_objects.Powerup;
+import java.util.Map;
 
-import java.util.List;
+import game_objects.Powerup;
 
 public class Jail extends Powerup {
 
-  public Jail(List<Powerup> p) {
+  public Jail(Map<String, Powerup> p) {
     super(p);
     // TODO Auto-generated constructor stub
   }

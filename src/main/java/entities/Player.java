@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.UUID;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 
@@ -54,6 +56,7 @@ public class Player extends Entity implements PlayerAction {
     this.right = Window.width;
     this.isSingle = true;
     this.isPlayer1 = true;
+    this.id = UUID.randomUUID().toString();
   }
 
   public void setPlayer1(boolean flag) {

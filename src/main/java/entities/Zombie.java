@@ -1,12 +1,13 @@
 package entities;
 
+import java.util.Random;
+import java.util.UUID;
+
+import org.newdawn.slick.GameContainer;
+
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import game_objects.Circle;
-
-import java.util.Random;
-
-import org.newdawn.slick.GameContainer;
 
 /**
  * Defines the zombie object.
@@ -64,6 +65,7 @@ public class Zombie extends Entity {
     // give the zombie a random target of the player to track
     this.target = r.nextInt(LEFT + 1);
     this.state = false;
+    this.id = UUID.randomUUID().toString();
   }
 
   public void setTarget(Circle other) {

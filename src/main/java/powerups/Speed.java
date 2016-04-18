@@ -1,11 +1,11 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import game_objects.Powerup;
-
-import java.util.List;
+import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
+
+import edu.brown.cs.altsai.game.Resources;
+import game_objects.Powerup;
 
 /**
  * Defines the speed powerup that boosts a Players speed by +20%.
@@ -28,7 +28,7 @@ public class Speed extends Powerup {
    * @param powerups
    *          List of powerups in the game currently
    */
-  public Speed(List<Powerup> p) {
+  public Speed(Map<String, Powerup> p) {
     // call the super constructor first to start timers
     super(p);
 
