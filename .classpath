@@ -19,7 +19,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Alison/Documents/slick"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
@@ -30,8 +29,13 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Slick2D">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Boning/Desktop/native"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Benjamin/Documents/Java External Libraries/slick"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/slick.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
