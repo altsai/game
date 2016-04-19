@@ -44,6 +44,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
       throws SlickException {
     // TODO Auto-generated method stub
     nameField = new TextField(gc, gc.getDefaultFont(), 100, 200, 300, 25);
+    nameField.setAcceptingInput(false);
 
   }
 
@@ -64,6 +65,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
 
     if (bestHighscore) {
       g.drawString("New best score! Enter the name you would like to be associated\nwith this score on the global highscores board below:", 100, 150);
+      nameField.setAcceptingInput(true);
       nameField.render(gc, g);
     }
 
