@@ -27,8 +27,9 @@ public class SinglePlayerEndGameState extends BasicGameState {
   private SinglePlayerGameState spgs;
   private HighscoreSystem highscoreSystem;
   private TextField nameField;
-  private boolean checkedHighscore = false;
-  private boolean bestHighscore = false;
+  private boolean checkedHighscore;
+  private boolean bestHighscore;
+  private boolean instantiatedTextField = false;
 
   /**
    * Constructor for a SinglePlayerEndGameState
@@ -42,10 +43,18 @@ public class SinglePlayerEndGameState extends BasicGameState {
   @Override
   public void init(GameContainer gc, StateBasedGame s)
       throws SlickException {
-    // TODO Auto-generated method stub
-    nameField = new TextField(gc, gc.getDefaultFont(), 100, 200, 300, 25);
+    if (!instantiatedTextField) {
+      instantiateTextField(gc);
+      instantiatedTextField = true;
+    }
+    nameField.setText("");
     nameField.setAcceptingInput(false);
+    this.checkedHighscore = false;
+    this.bestHighscore = false;
+  }
 
+  private void instantiateTextField(GameContainer gc) {
+    nameField = new TextField(gc, gc.getDefaultFont(), 100, 200, 300, 25);
   }
 
   @Override
@@ -83,7 +92,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
     }
 
     // Add the entered name to the global highscores
-    if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && nameField.hasFocus()) {
+    if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && nameField.hasFocus() && bestHighscore) {
       try {
         if (highscoreSystem.addGlobalScore(nameField.getText(), spgs.getScore())) {
           s.enterState(States.MENU);

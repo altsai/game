@@ -7,13 +7,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
+import powerups.Bomb;
+import powerups.Speed;
+import powerups.TimeStop;
 
 /**
  * Defines the two player game state.
@@ -132,7 +132,7 @@ public class TwoPlayerGameState extends GamePlayState {
   }
 
   @Override
-  protected void endGame(StateBasedGame s) {
+  protected void endGame(GameContainer gc, StateBasedGame s) {
     s.enterState(States.TWO_PLAYER_END_GAME, new FadeOutTransition(),
         new FadeInTransition());
   }

@@ -110,9 +110,10 @@ public abstract class GamePlayState extends BasicGameState {
    *          GameContainer, window of the game
    * @param delta
    *          Int, change in time since last update
+   * @throws SlickException
    */
   private void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
-      int delta) {
+      int delta) throws SlickException {
 
     // check for player collision with every entity
     for (Zombie z : this.zombies) {
@@ -130,7 +131,7 @@ public abstract class GamePlayState extends BasicGameState {
 
           if (p.getLives() == 0) {
             this.loser = p;
-            endGame(s);
+            endGame(gc, s);
           } else {
             p.loseLife();
           }
@@ -197,7 +198,8 @@ public abstract class GamePlayState extends BasicGameState {
    *
    * @param s
    *          StateBasedGame s
+   * @throws SlickException
    */
-  protected abstract void endGame(StateBasedGame s);
+  protected abstract void endGame(GameContainer gc, StateBasedGame s) throws SlickException;
 
 }

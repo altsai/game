@@ -7,12 +7,12 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
+import powerups.Bomb;
+import powerups.Speed;
+import powerups.TimeStop;
 
 /**
  * Defines the Single Player game state.
@@ -66,7 +66,8 @@ public class SinglePlayerGameState extends GamePlayState {
    * @param s
    *          StateBasedGame
    */
-  protected void endGame(StateBasedGame s) {
+  protected void endGame(GameContainer gc, StateBasedGame s) throws SlickException {
+    s.getState(States.SINGLE_PLAYER_END_GAME).init(gc, s);
     s.enterState(States.SINGLE_PLAYER_END_GAME, new FadeOutTransition(),
         new FadeInTransition());
   }
