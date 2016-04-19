@@ -48,10 +48,12 @@ public class GlobalHandler {
   protected List<Score> getScoresOfDay() {
     List<Score> toReturn = new ArrayList<>();
     Date currentDate = getCurrentDate();
+    int currPlace = 1;
 
     for (Score score : highscores) {
       if (score.getDate().getYear() == currentDate.getYear() && score.getDate().getMonth() == currentDate.getMonth() && score.getDate().getDay() == currentDate.getDay()) {
-        toReturn.add(score);
+        toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
+        currPlace++;
       }
     }
 
@@ -66,10 +68,12 @@ public class GlobalHandler {
   protected List<Score> getScoresOfMonth() {
     List<Score> toReturn = new ArrayList<>();
     Date currentDate = getCurrentDate();
+    int currPlace = 1;
 
     for (Score score : highscores) {
       if (score.getDate().getYear() == currentDate.getYear() && score.getDate().getMonth() == currentDate.getMonth()) {
-        toReturn.add(score);
+        toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
+        currPlace++;
       }
     }
 
@@ -84,10 +88,12 @@ public class GlobalHandler {
   protected List<Score> getScoresOfYear() {
     List<Score> toReturn = new ArrayList<>();
     Date currentDate = getCurrentDate();
+    int currPlace = 1;
 
     for (Score score : highscores) {
       if (score.getDate().getYear() == currentDate.getYear()) {
-        toReturn.add(score);
+        toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
+        currPlace++;
       }
     }
 
