@@ -59,30 +59,32 @@ public class OnFire extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    for (Zombie z : zombies) {
-      // if has been on fire for two seconds
-      if (z.isOnFire()
-          && ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE)) {
-        zombies.remove(z);
-        onFireTimes.remove(z);
-        affectedPlayer.incrementScore();
-        continue;
-      }
+    if (this.isUsed) {
+      for (Zombie z : zombies) {
+        // if has been on fire for two seconds
+        if (z.isOnFire()
+            && ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE)) {
+          zombies.remove(z);
+          onFireTimes.remove(z);
+          affectedPlayer.incrementScore();
+          continue;
+        }
 
-      // if collides with the player
-      if (z.isCollision(affectedPlayer) && !z.isOnFire()) {
-        // TODO replace zombie image
-        z.setState(true);
-        onFireTimes.put(z, System.currentTimeMillis());
-      }
+        // if collides with the player
+        if (z.isCollision(affectedPlayer) && !z.isOnFire()) {
+          // TODO replace zombie image
+          z.setState(true);
+          onFireTimes.put(z, System.currentTimeMillis());
+        }
 
-      // if on fire and collides with another zombie
-      if (z.isOnFire()) {
-        for (Zombie other : zombies) {
-          if ((other != z) && z.isCollision(other)) {
-            // TODO replace zombie image
-            other.setState(true);
-            onFireTimes.put(other, System.currentTimeMillis());
+        // if on fire and collides with another zombie
+        if (z.isOnFire()) {
+          for (Zombie other : zombies) {
+            if ((other != z) && z.isCollision(other)) {
+              // TODO replace zombie image
+              other.setState(true);
+              onFireTimes.put(other, System.currentTimeMillis());
+            }
           }
         }
       }

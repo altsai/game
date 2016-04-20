@@ -7,8 +7,8 @@ import entities.Zombie;
 import game_objects.Powerup;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -47,7 +47,7 @@ public class Bomb extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private List<Zombie> zombies;
+  private ConcurrentHashMap<String, Zombie> zombies;
 
   /**
    * Reference to the list of players in the game.
@@ -82,7 +82,8 @@ public class Bomb extends Powerup {
    * @param z
    *          the list of Zombies in the game
    */
-  public Bomb(List<Powerup> p, List<Zombie> z) {
+  public Bomb(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z) {
     // call the superconstructor to start timing
     super(p);
 
@@ -106,7 +107,8 @@ public class Bomb extends Powerup {
    * @param pl
    *          the list of Players in the game
    */
-  public Bomb(List<Powerup> p, List<Zombie> z, List<Player> pl) {
+  public Bomb(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z, List<Player> pl) {
     // call the superconstructor to start timing
     super(p);
 
@@ -151,11 +153,10 @@ public class Bomb extends Powerup {
     this.explosionY = this.affectedPlayer.getY();
 
     // check to see which Zombies are within the radius
-    Iterator<Zombie> iter = this.zombies.iterator();
-    while (iter.hasNext()) {
-      if (withinRadius(iter.next())) {
-        iter.remove();
-        this.affectedPlayer.incrementScore();
+    for (String zid : zombies.keySet()) {
+      if (withinRadius(zombies.get(zid))) {
+        zombies.remove(zid);
+        affectedPlayer.incrementScore();
       }
     }
 

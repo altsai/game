@@ -2,6 +2,7 @@ package game_objects;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -31,7 +32,7 @@ public abstract class Powerup extends Circle {
   protected long activationStartTime;
   protected boolean isPickedUp;
   protected boolean isUsed;
-  protected List<Powerup> powerups;
+  protected ConcurrentHashMap<String, Powerup> powerups;
 
   /**
    * Constructor for a powerup.
@@ -42,7 +43,7 @@ public abstract class Powerup extends Circle {
    * This constructor must be called by the subclass.
    *
    */
-  public Powerup(List<Powerup> p) {
+  public Powerup(ConcurrentHashMap<String, Powerup> p) {
     this.spawnStartTime = System.currentTimeMillis();
     this.isPickedUp = false;
     this.powerups = p;
@@ -98,8 +99,8 @@ public abstract class Powerup extends Circle {
    *          Integer, change in time since last update
    */
   public void update(GameContainer gc, int delta) {
-    if (!this.isPickedUp &&
-        System.currentTimeMillis() - this.spawnStartTime > EXPIRATION_DURATION) {
+    if (!this.isPickedUp
+        && System.currentTimeMillis() - this.spawnStartTime > EXPIRATION_DURATION) {
       this.kill();
     }
 

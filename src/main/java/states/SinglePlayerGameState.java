@@ -7,7 +7,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.BlackHole;
+import powerups.Bomb;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
@@ -92,7 +92,7 @@ public class SinglePlayerGameState extends GamePlayState {
             newZombie.setSpeed(ZOMBIE_BASE_SPEED
                 + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
                 * ZOMBIE_BASE_SPEED);
-            this.zombies.add(newZombie);
+            this.zombies.put(generateID(), newZombie);
           }
         }
 
@@ -101,7 +101,7 @@ public class SinglePlayerGameState extends GamePlayState {
         newZombie.setSpeed(ZOMBIE_BASE_SPEED
             + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
             * ZOMBIE_BASE_SPEED);
-        this.zombies.add(newZombie);
+        this.zombies.put(generateID(), newZombie);
 
         this.lastZombieSpawnTime = System.currentTimeMillis();
       }
@@ -122,8 +122,8 @@ public class SinglePlayerGameState extends GamePlayState {
 
       // double randomNum = random.nextDouble();
       // if (randomNum < 0.2) {
-      // Bomb bomb = new Bomb(powerups, zombies);
-      // this.powerups.add(bomb);
+      Bomb bomb = new Bomb(powerups, zombies);
+      this.powerups.put(generateID(), bomb);
       // } else if (randomNum < 0.4 && randomNum >= 0.2) {
       // Speed speed = new Speed(powerups);
       // this.powerups.add(speed);
@@ -134,8 +134,8 @@ public class SinglePlayerGameState extends GamePlayState {
       // OnFire onfire = new OnFire(powerups, zombies);
       // this.powerups.add(onfire);
       // } else {
-      BlackHole blackhole = new BlackHole(powerups, zombies, this);
-      this.powerups.add(blackhole);
+      // BlackHole blackhole = new BlackHole(powerups, zombies, this);
+      // this.powerups.put(generateID(), blackhole);
       // }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();

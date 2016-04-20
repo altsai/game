@@ -7,6 +7,7 @@ import game_objects.Powerup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -24,7 +25,7 @@ public class BlackHole extends Powerup {
   /**
    * Reference to the list of zombies in the game.
    */
-  private List<Zombie> zombies;
+  private ConcurrentHashMap<String, Zombie> zombies;
 
   /**
    * Reference to the list of players in the game.
@@ -46,7 +47,8 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
+  public BlackHole(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z, GamePlayState gps) {
     super(p);
     // TODO animation
     zombies = z;
@@ -68,8 +70,8 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(List<Powerup> p, List<Zombie> z, List<Player> pl,
-      GamePlayState gps) {
+  public BlackHole(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z, List<Player> pl, GamePlayState gps) {
     super(p);
     // TODO animation
     zombies = z;
@@ -82,14 +84,16 @@ public class BlackHole extends Powerup {
   public void update(GameContainer gc, int delta) {
     // call super.update() to check expiration time
     super.update(gc, delta);
-
-    // check for player collision with every entity
-    for (Zombie z : this.zombies) {
-      if (z.isCollision(this)) {
-        zombies.remove(z);
-        affectedPlayer.incrementScore();
+    if (this.isUsed) {
+      // check for player collision with every entity
+      for (String zid : zombies.keySet()) {
+        Zombie z = zombies.get(zid);
+        if (z.isCollision(this)) {
+          zombies.remove(zid);
+          affectedPlayer.incrementScore();
+        }
+        z.update(gc, delta);
       }
-      z.update(gc, delta);
     }
 
     // check if BlackHole should be deactivated
@@ -110,8 +114,8 @@ public class BlackHole extends Powerup {
     this.game.setSpawnOn(false);
 
     // set target of all Zombies to the BlackHole
-    for (Zombie z : zombies) {
-      z.setTarget(this);
+    for (String zid : zombies.keySet()) {
+      zombies.get(zid).setTarget(this);
     }
   }
 
