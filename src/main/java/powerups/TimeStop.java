@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -31,7 +32,7 @@ public class TimeStop extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private List<Zombie> zombies;
+  private ConcurrentHashMap<String, Zombie> zombies;
 
   /**
    * Reference to the list of Players in the game.
@@ -58,7 +59,8 @@ public class TimeStop extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public TimeStop(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
+  public TimeStop(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z, GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 
@@ -82,8 +84,8 @@ public class TimeStop extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public TimeStop(List<Powerup> p, List<Zombie> z, List<Player> pl,
-      GamePlayState gps) {
+  public TimeStop(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z, List<Player> pl, GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 
@@ -113,7 +115,8 @@ public class TimeStop extends Powerup {
     // prevent spawning of new zombies
     this.game.setSpawnOn(false);
 
-    for (Zombie z : zombies) {
+    for (String zid : zombies.keySet()) {
+      Zombie z = zombies.get(zid);
       if (z.getSpeed() != 0) {
         zombieSpeeds.put(z, z.getSpeed());
         z.setSpeed(0);
@@ -137,7 +140,8 @@ public class TimeStop extends Powerup {
       this.game.setSpawnOn(true);
 
       // reset Zombie speeds
-      for (Zombie z : zombies) {
+      for (String zid : zombies.keySet()) {
+        Zombie z = zombies.get(zid);
         if (zombieSpeeds.get(z) != null) {
           z.setSpeed(zombieSpeeds.get(z));
         }

@@ -5,8 +5,8 @@ import entities.Zombie;
 import game_objects.Powerup;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -32,7 +32,7 @@ public class OnFire extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private List<Zombie> zombies;
+  private ConcurrentHashMap<String, Zombie> zombies;
 
   /**
    * Map of Zombies to the time they were lit on fire.
@@ -47,7 +47,8 @@ public class OnFire extends Powerup {
    * @param z
    *          the list of Zombies
    */
-  public OnFire(List<Powerup> p, List<Zombie> z) {
+  public OnFire(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z) {
     super(p);
     // TODO set animation
     zombies = z;
@@ -60,11 +61,17 @@ public class OnFire extends Powerup {
     super.update(gc, delta);
 
     if (this.isUsed) {
-      for (Zombie z : zombies) {
+      for (String zid : zombies.keySet()) {
+        Zombie z = zombies.get(zid);
+
+        if (z == null) {
+          continue;
+        }
+
         // if has been on fire for two seconds
         if (z.isOnFire()
             && ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE)) {
-          zombies.remove(z);
+          zombies.remove(zid);
           onFireTimes.remove(z);
           affectedPlayer.incrementScore();
           continue;
@@ -79,7 +86,8 @@ public class OnFire extends Powerup {
 
         // if on fire and collides with another zombie
         if (z.isOnFire()) {
-          for (Zombie other : zombies) {
+          for (String ozid : zombies.keySet()) {
+            Zombie other = zombies.get(ozid);
             if ((other != z) && z.isCollision(other)) {
               // TODO replace zombie image
               other.setState(true);
