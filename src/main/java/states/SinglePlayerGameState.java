@@ -136,7 +136,7 @@ public class SinglePlayerGameState extends GamePlayState {
         TimeStop timestop = new TimeStop(powerups, zombies, this);
         this.powerups.put(generateID(), timestop);
       } else if (randomNum < 0.8 && randomNum >= 0.6) {
-        // // TODO fix this shit
+        // TODO figure out what the fuck is wrong with this
         // OnFire onfire = new OnFire(powerups, zombies);
         // this.powerups.put(generateID(), onfire);
       } else {
