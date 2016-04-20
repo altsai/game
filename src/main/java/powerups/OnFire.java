@@ -64,10 +64,6 @@ public class OnFire extends Powerup {
       for (String zid : zombies.keySet()) {
         Zombie z = zombies.get(zid);
 
-        if (z == null) {
-          continue;
-        }
-
         // if has been on fire for two seconds
         if (z.isOnFire()
             && ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE)) {
@@ -79,6 +75,7 @@ public class OnFire extends Powerup {
 
         // if collides with the player
         if (z.isCollision(affectedPlayer) && !z.isOnFire()) {
+          System.out.println("here");
           // TODO replace zombie image
           z.setState(true);
           onFireTimes.put(z, System.currentTimeMillis());
@@ -95,6 +92,7 @@ public class OnFire extends Powerup {
             }
           }
         }
+        z.update(gc, delta);
       }
     }
 
