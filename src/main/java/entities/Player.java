@@ -39,6 +39,7 @@ public class Player extends Entity implements PlayerAction {
   private boolean isPlayer1;
   private boolean isSingle;
   private long lastBombFired;
+  private boolean canMove;
 
   @Override
   /**
@@ -60,6 +61,7 @@ public class Player extends Entity implements PlayerAction {
     this.isSingle = true;
     this.isPlayer1 = true;
     this.lastBombFired = 0;
+    this.canMove = true;
   }
 
   public void setPlayer1(boolean flag) {
@@ -204,6 +206,10 @@ public class Player extends Entity implements PlayerAction {
    *          Controls. Index 1 is up, 2 down, 3 left 4 right.
    */
   private void move(Input input, int delta, int[] keys) {
+    if (!canMove) {
+      return;
+    }
+
     if (input.isKeyDown(keys[0])) {
       double newY = this.y - speed * delta;
 
@@ -236,5 +242,9 @@ public class Player extends Entity implements PlayerAction {
 
   public long getLastBombFired() {
     return lastBombFired;
+  }
+
+  public void setCanMove(boolean b) {
+    canMove = b;
   }
 }

@@ -120,10 +120,9 @@ public class TimeStop extends Powerup {
       }
     }
 
-    // TODO make canMove(boolean) function
     for (Player p : players) {
       if (affectedPlayer != p) {
-        p.setSpeed(0);
+        p.setCanMove(false);
       }
     }
   }
@@ -141,6 +140,12 @@ public class TimeStop extends Powerup {
       for (Zombie z : zombies) {
         if (zombieSpeeds.get(z) != null) {
           z.setSpeed(zombieSpeeds.get(z));
+        }
+      }
+
+      for (Player p : players) {
+        if (affectedPlayer != p) {
+          p.setCanMove(true);
         }
       }
 
