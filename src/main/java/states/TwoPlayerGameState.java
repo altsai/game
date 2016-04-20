@@ -7,13 +7,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.Bomb;
+import powerups.Speed;
+import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 
 /**
  * Defines the two player game state.
@@ -86,7 +86,7 @@ public class TwoPlayerGameState extends GamePlayState {
             newZombie.setSpeed(ZOMBIE_BASE_SPEED
                 + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
                 * ZOMBIE_BASE_SPEED);
-            this.zombies.add(newZombie);
+            this.zombies.put(generateID(), newZombie);
           }
         }
 
@@ -95,7 +95,7 @@ public class TwoPlayerGameState extends GamePlayState {
         newZombie.setSpeed(ZOMBIE_BASE_SPEED
             + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
             * ZOMBIE_BASE_SPEED);
-        this.zombies.add(newZombie);
+        this.zombies.put(generateID(), newZombie);
 
         this.lastZombieSpawnTime = System.currentTimeMillis();
       }
@@ -117,13 +117,13 @@ public class TwoPlayerGameState extends GamePlayState {
       double randomNum = random.nextDouble();
       if (randomNum < 0.33) {
         Bomb bomb = new Bomb(powerups, zombies);
-        this.powerups.add(bomb);
+        this.powerups.put(generateID(), bomb);
       } else if (randomNum < 0.6 && randomNum >= 0.33) {
         Speed speed = new Speed(powerups);
-        this.powerups.add(speed);
+        this.powerups.put(generateID(), speed);
       } else if (randomNum < 0.9 && randomNum >= 0.6) {
         TimeStop timestop = new TimeStop(powerups, zombies, this);
-        this.powerups.add(timestop);
+        this.powerups.put(generateID(), timestop);
       }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();

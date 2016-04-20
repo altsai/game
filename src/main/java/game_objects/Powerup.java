@@ -142,7 +142,11 @@ public abstract class Powerup extends Circle {
    * powerup.
    */
   public void kill() {
-    powerups.remove(this);
+    for (String pid : powerups.keySet()) {
+      if (powerups.get(pid) == this) {
+        powerups.remove(pid);
+      }
+    }
   }
 
 }

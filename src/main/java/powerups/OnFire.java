@@ -65,17 +65,19 @@ public class OnFire extends Powerup {
         Zombie z = zombies.get(zid);
 
         // if has been on fire for two seconds
-        if (z.isOnFire()
-            && ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE)) {
-          zombies.remove(zid);
-          onFireTimes.remove(z);
-          affectedPlayer.incrementScore();
-          continue;
+        if (z.isOnFire()) {
+          if (onFireTimes.get(z) != null) {
+            if ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE) {
+              zombies.remove(zid);
+              onFireTimes.remove(z);
+              affectedPlayer.incrementScore();
+              continue;
+            }
+          }
         }
 
         // if collides with the player
         if (z.isCollision(affectedPlayer) && !z.isOnFire()) {
-          System.out.println("here");
           // TODO replace zombie image
           z.setState(true);
           onFireTimes.put(z, System.currentTimeMillis());
@@ -96,7 +98,7 @@ public class OnFire extends Powerup {
       }
     }
 
-    // check if black hole should be deactivated
+    // check if powerup should be deactivated
     deactivate();
   }
 

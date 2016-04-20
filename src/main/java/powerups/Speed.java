@@ -72,6 +72,7 @@ public class Speed extends Powerup {
   public void deactivate() {
     if (this.isUsed) {
       if (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION) {
+        System.out.println(this.affectedPlayer.getSpeed() / SPEED_MULTIPLIER);
         this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed()
             / SPEED_MULTIPLIER);
         kill();
