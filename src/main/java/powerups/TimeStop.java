@@ -114,10 +114,13 @@ public class TimeStop extends Powerup {
     this.game.setSpawnOn(false);
 
     for (Zombie z : zombies) {
-      zombieSpeeds.put(z, z.getSpeed());
-      z.setSpeed(0);
+      if (z.getSpeed() != 0) {
+        zombieSpeeds.put(z, z.getSpeed());
+        z.setSpeed(0);
+      }
     }
 
+    // TODO make canMove(boolean) function
     for (Player p : players) {
       if (affectedPlayer != p) {
         p.setSpeed(0);

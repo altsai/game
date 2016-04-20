@@ -1,5 +1,6 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
 import entities.Zombie;
 import game_objects.Powerup;
 
@@ -48,8 +49,9 @@ public class OnFire extends Powerup {
    */
   public OnFire(List<Powerup> p, List<Zombie> z) {
     super(p);
-    // TODO set image
+    // TODO set animation
     zombies = z;
+    image = Resources.getImage("fire");
   }
 
   @Override

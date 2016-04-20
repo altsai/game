@@ -1,5 +1,6 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -47,11 +48,12 @@ public class BlackHole extends Powerup {
    */
   public BlackHole(List<Powerup> p, List<Zombie> z, GamePlayState gps) {
     super(p);
-    // TODO set image and animation
+    // TODO animation
     zombies = z;
     players = new ArrayList<>();
     players.add(affectedPlayer);
     game = gps;
+    image = Resources.getImage("blackhole");
   }
 
   /**
@@ -69,10 +71,11 @@ public class BlackHole extends Powerup {
   public BlackHole(List<Powerup> p, List<Zombie> z, List<Player> pl,
       GamePlayState gps) {
     super(p);
-    // TODO set image and animation
+    // TODO animation
     zombies = z;
     players = pl;
     game = gps;
+    image = Resources.getImage("blackhole");
   }
 
   @Override

@@ -7,12 +7,10 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.Bomb;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 
 /**
  * Defines the Single Player game state.
@@ -66,7 +64,8 @@ public class SinglePlayerGameState extends GamePlayState {
    * @param s
    *          StateBasedGame
    */
-  protected void endGame(GameContainer gc, StateBasedGame s) throws SlickException {
+  protected void endGame(GameContainer gc, StateBasedGame s)
+      throws SlickException {
     s.getState(States.SINGLE_PLAYER_END_GAME).init(gc, s);
     s.enterState(States.SINGLE_PLAYER_END_GAME, new FadeOutTransition(),
         new FadeInTransition());
@@ -121,17 +120,23 @@ public class SinglePlayerGameState extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      double randomNum = random.nextDouble();
-      if (randomNum < 0.33) {
-        Bomb bomb = new Bomb(powerups, zombies);
-        this.powerups.add(bomb);
-      } else if (randomNum < 0.6 && randomNum >= 0.33) {
-        Speed speed = new Speed(powerups);
-        this.powerups.add(speed);
-      } else if (randomNum < 0.9 && randomNum >= 0.6) {
-        TimeStop timestop = new TimeStop(powerups, zombies, this);
-        this.powerups.add(timestop);
-      }
+      // double randomNum = random.nextDouble();
+      // if (randomNum < 0.2) {
+      Bomb bomb = new Bomb(powerups, zombies);
+      this.powerups.add(bomb);
+      // } else if (randomNum < 0.4 && randomNum >= 0.2) {
+      // Speed speed = new Speed(powerups);
+      // this.powerups.add(speed);
+      // } else if (randomNum < 0.6 && randomNum >= 0.4) {
+      // TimeStop timestop = new TimeStop(powerups, zombies, this);
+      // this.powerups.add(timestop);
+      // } else if (randomNum < 0.8 && randomNum >= 0.6) {
+      // OnFire onfire = new OnFire(powerups, zombies);
+      // this.powerups.add(onfire);
+      // } else {
+      // BlackHole blackhole = new BlackHole(powerups, zombies, this);
+      // this.powerups.add(blackhole);
+      // }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }

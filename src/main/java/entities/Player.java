@@ -1,11 +1,12 @@
 package entities;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import game_objects.Powerup;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
+
 import powerups.Bomb;
 
 /**
@@ -47,7 +48,7 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 20;
-    this.lives = 1;
+    this.lives = 10;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");

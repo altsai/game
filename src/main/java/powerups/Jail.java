@@ -1,5 +1,6 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -17,6 +18,7 @@ public class Jail extends Powerup {
   public Jail(List<Powerup> p, List<Zombie> z, List<Player> pl) {
     super(p);
     bombFired = false;
+    image = Resources.getImage("jail");
     // TODO set image
   }
 
