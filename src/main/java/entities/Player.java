@@ -1,14 +1,15 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import game_objects.Powerup;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Powerup;
 import powerups.Bomb;
 
 /**
@@ -49,6 +50,8 @@ public class Player extends Entity implements PlayerAction {
   private SpriteSheet spriteSheet;
   private Animation animation;
 
+  private float lastDir;
+
   @Override
   /**
    * Initializes a player and set's starting attributes.
@@ -75,6 +78,7 @@ public class Player extends Entity implements PlayerAction {
     this.animation.setPingPong(true);
     this.canMove = true;
     this.immune = false;
+    this.lastDir = 0;
   }
 
   public void setPlayer1(boolean flag) {
@@ -99,7 +103,7 @@ public class Player extends Entity implements PlayerAction {
       return;
     } else {
       this.lives--;
-      //      this.image = Resources.getImage("invinciblePlayer");
+      // this.image = Resources.getImage("invinciblePlayer");
       this.setState(true);
       this.invincibleTime = System.currentTimeMillis();
     }
@@ -288,5 +292,9 @@ public class Player extends Entity implements PlayerAction {
 
   public void setCanMove(boolean b) {
     canMove = b;
+  }
+
+  public float getLastDir() {
+    return lastDir;
   }
 }
