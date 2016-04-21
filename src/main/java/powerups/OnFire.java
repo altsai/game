@@ -27,6 +27,8 @@ public class OnFire extends Powerup {
    */
   private final int INDIV_FIRE = 2000;
 
+  private final int FIRE_RADIUS = 25;
+
   /**
    * Reference to the list of Zombies in the game.
    */
@@ -82,7 +84,7 @@ public class OnFire extends Powerup {
         if (onFireTimes.get(zid) != null) {
           for (String ozid : zombies.keySet()) {
             Zombie other = zombies.get(ozid);
-            if ((!ozid.equals(zid)) && z.isCollision(other)) {
+            if ((!ozid.equals(zid)) && (z.distTo(other) <= FIRE_RADIUS)) {
               other.setImage(Resources.getImage("firezombie"));
               onFireTimes.put(ozid, System.currentTimeMillis());
             }
