@@ -186,7 +186,7 @@ public class Bomb extends Powerup {
    * @return True if entity within explosion radius.
    */
   private boolean withinRadius(Entity e) {
-    return this.distTo(e) <= EXPLOSION_RADIUS;
+    return affectedPlayer.distTo(e) <= EXPLOSION_RADIUS;
   }
 
   @Override

@@ -40,6 +40,7 @@ public class Player extends Entity implements PlayerAction {
   private boolean isSingle;
   private long lastBombFired;
   private boolean canMove;
+  private boolean immune;
 
   @Override
   /**
@@ -49,7 +50,7 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 20;
-    this.lives = 10;
+    this.lives = 100;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
@@ -62,6 +63,7 @@ public class Player extends Entity implements PlayerAction {
     this.isPlayer1 = true;
     this.lastBombFired = 0;
     this.canMove = true;
+    this.immune = false;
   }
 
   public void setPlayer1(boolean flag) {
@@ -135,7 +137,8 @@ public class Player extends Entity implements PlayerAction {
   public void update(GameContainer gc, int delta) {
     Input input = gc.getInput();
 
-    if (System.currentTimeMillis() - this.invincibleTime > 5000) {
+    if (!immune && state
+        && (System.currentTimeMillis() - this.invincibleTime > 5000)) {
       this.setState(false);
       this.image = Resources.getImage("player");
     }
@@ -188,6 +191,20 @@ public class Player extends Entity implements PlayerAction {
    */
   public boolean isInvincible() {
     return this.state;
+  }
+
+  public void setImmune() {
+    setImage(Resources.getImage("player2"));
+    immune = true;
+  }
+
+  public void revert() {
+    setImage(Resources.getImage("player"));
+    immune = false;
+  }
+
+  public boolean isImmune() {
+    return immune;
   }
 
   @Override

@@ -4,8 +4,6 @@ import edu.brown.cs.altsai.game.Resources;
 import entities.Zombie;
 import game_objects.Powerup;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
@@ -37,7 +35,7 @@ public class OnFire extends Powerup {
   /**
    * Map of Zombies to the time they were lit on fire.
    */
-  private Map<Zombie, Long> onFireTimes;
+  private ConcurrentHashMap<String, Long> onFireTimes;
 
   /**
    * Constructor for OnFire.
@@ -53,6 +51,7 @@ public class OnFire extends Powerup {
     // TODO set animation
     zombies = z;
     image = Resources.getImage("fire");
+    onFireTimes = new ConcurrentHashMap<>();
   }
 
   @Override
@@ -65,38 +64,30 @@ public class OnFire extends Powerup {
         Zombie z = zombies.get(zid);
 
         // if has been on fire for two seconds
-        if (z.isOnFire()) {
-          if (onFireTimes.get(z) != null) {
-            if ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE) {
-              zombies.remove(zid);
-              onFireTimes.remove(z);
-              affectedPlayer.incrementScore();
-              continue;
-            }
-          } else {
-            System.out.println("here");
-          }
+        if ((onFireTimes.get(zid) != null)
+            && ((System.currentTimeMillis() - onFireTimes.get(zid)) >= INDIV_FIRE)) {
+          zombies.remove(zid);
+          onFireTimes.remove(zid);
+          affectedPlayer.incrementScore();
+          continue;
         }
 
         // if collides with the player
-        if (z.isCollision(affectedPlayer) && !z.isOnFire()) {
-          // TODO replace zombie image
-          z.setState(true);
-          onFireTimes.put(z, System.currentTimeMillis());
+        if (z.isCollision(affectedPlayer) && (onFireTimes.get(zid) == null)) {
+          z.setImage(Resources.getImage("firezombie"));
+          onFireTimes.put(zid, System.currentTimeMillis());
         }
 
         // if on fire and collides with another zombie
-        if (z.isOnFire()) {
+        if (onFireTimes.get(zid) != null) {
           for (String ozid : zombies.keySet()) {
             Zombie other = zombies.get(ozid);
-            if ((other != z) && z.isCollision(other)) {
-              // TODO replace zombie image
-              other.setState(true);
-              onFireTimes.put(other, System.currentTimeMillis());
+            if ((!ozid.equals(zid)) && z.isCollision(other)) {
+              other.setImage(Resources.getImage("firezombie"));
+              onFireTimes.put(ozid, System.currentTimeMillis());
             }
           }
         }
-        z.update(gc, delta);
       }
     }
 
@@ -107,21 +98,18 @@ public class OnFire extends Powerup {
   @Override
   public void activate() {
     super.activate();
-    onFireTimes = new HashMap<>();
-    affectedPlayer.setState(true);
-    // TODO reset player's image
+    affectedPlayer.setImmune();
   }
 
   @Override
   public void deactivate() {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= FIRE_TIME) {
-      // TODO reset player's image
+      affectedPlayer.revert();
 
-      affectedPlayer.setState(false);
       // kill all lit Zombies who have not been removed yet
-      for (Zombie z : onFireTimes.keySet()) {
-        zombies.remove(z);
+      for (String zid : onFireTimes.keySet()) {
+        zombies.remove(zid);
         affectedPlayer.incrementScore();
       }
 

@@ -43,6 +43,7 @@ public class Resources {
       images.put("blackhole", loadImage("img/blackhole.png"));
       images.put("fire", loadImage("img/fire.png"));
       images.put("jail", loadImage("img/jail.png"));
+      images.put("firezombie", loadImage("img/firezombie.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
     } catch (SlickException e) {
