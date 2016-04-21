@@ -10,6 +10,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Resources;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -67,6 +68,8 @@ public abstract class GamePlayState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
+
+    g.drawImage(Resources.getImage("background"), 0, 0);
 
     for (Player p : this.players) {
       p.render(gc, g);

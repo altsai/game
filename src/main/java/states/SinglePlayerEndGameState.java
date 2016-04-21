@@ -13,6 +13,7 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Resources;
 import highscore.HighscoreSystem;
 
 /**
@@ -60,6 +61,8 @@ public class SinglePlayerEndGameState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
+    g.drawImage(Resources.getImage("background"), 0, 0);
+
     // Add local score, and global score if applicable
     if (!checkedHighscore) {
       checkedHighscore = true;

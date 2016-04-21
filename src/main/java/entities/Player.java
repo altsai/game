@@ -1,7 +1,10 @@
 package entities;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SpriteSheet;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
@@ -39,6 +42,11 @@ public class Player extends Entity implements PlayerAction {
   private boolean isSingle;
   private long lastBombFired;
 
+  private static final int ANIMATION_FRAME_TIME = 100;
+
+  private SpriteSheet spriteSheet;
+  private Animation animation;
+
   @Override
   /**
    * Initializes a player and set's starting attributes.
@@ -46,7 +54,7 @@ public class Player extends Entity implements PlayerAction {
   public void init(Entity other) {
     this.x = 500;
     this.y = 500;
-    this.radius = 20;
+    this.radius = 30;
     this.lives = 1;
     this.powerup = null;
     this.score = 0;
@@ -59,6 +67,9 @@ public class Player extends Entity implements PlayerAction {
     this.isSingle = true;
     this.isPlayer1 = true;
     this.lastBombFired = 0;
+    this.spriteSheet = Resources.getSprite("injuredAnimation");
+    this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
+    this.animation.setPingPong(true);
   }
 
   public void setPlayer1(boolean flag) {
@@ -83,7 +94,7 @@ public class Player extends Entity implements PlayerAction {
       return;
     } else {
       this.lives--;
-      this.image = Resources.getImage("invinciblePlayer");
+      //      this.image = Resources.getImage("invinciblePlayer");
       this.setState(true);
       this.invincibleTime = System.currentTimeMillis();
     }
@@ -123,6 +134,15 @@ public class Player extends Entity implements PlayerAction {
   }
 
   @Override
+  public void render(GameContainer gc, Graphics g) {
+    super.render(gc, g);
+
+    if (this.isInvincible()) {
+      this.animation.draw(this.x, this.y, 30, 30);
+    }
+  }
+
+  @Override
   /**
    * Update method to fetch new information about the player.
    *
@@ -131,6 +151,11 @@ public class Player extends Entity implements PlayerAction {
    */
   public void update(GameContainer gc, int delta) {
     Input input = gc.getInput();
+
+    // Update animation
+    if (this.isInvincible()) {
+      this.animation.update(delta);
+    }
 
     if (System.currentTimeMillis() - this.invincibleTime > 5000) {
       this.setState(false);

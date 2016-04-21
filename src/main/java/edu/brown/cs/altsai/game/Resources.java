@@ -33,15 +33,19 @@ public class Resources {
 
     // load in all the files that are initially needed
     try {
-      images.put("player", loadImage("img/Player.png"));
+      images.put("player", loadImage("img/wasd_to_live_hero_small.png"));
       images.put("player2", loadImage("img/player2.png"));
-      images.put("zombie", loadImage("img/zombie.png"));
+      images.put("zombie", loadImage("img/wasd_zombie_v3_small.png"));
       images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
       images.put("bomb", loadImage("img/bomb30.png"));
       images.put("speed", loadImage("img/speed.png"));
       images.put("timestop", loadImage("img/timestop.png"));
-      sprites.put("bomb_explosion", loadSprite("img/bomb_explosion.png"
-          , 196, 190));
+      images.put("background", loadImage("img/light_blue_gradient.jpg"));
+      images.put("key", loadImage("img/blank_key.png"));
+      images.put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
+      images.put("button", loadImage("img/wasd_button.png"));
+      sprites.put("bomb_explosion", loadSprite("img/bomb_explosion.png", 196, 190));
+      sprites.put("injuredAnimation", loadSprite("img/wasd_injured_sprite.png", 30, 30));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
