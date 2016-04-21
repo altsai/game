@@ -73,6 +73,8 @@ public class OnFire extends Powerup {
               affectedPlayer.incrementScore();
               continue;
             }
+          } else {
+            System.out.println("here");
           }
         }
 
@@ -106,7 +108,7 @@ public class OnFire extends Powerup {
   public void activate() {
     super.activate();
     onFireTimes = new HashMap<>();
-
+    affectedPlayer.setState(true);
     // TODO reset player's image
   }
 
@@ -116,6 +118,7 @@ public class OnFire extends Powerup {
         && System.currentTimeMillis() - this.activationStartTime >= FIRE_TIME) {
       // TODO reset player's image
 
+      affectedPlayer.setState(false);
       // kill all lit Zombies who have not been removed yet
       for (Zombie z : onFireTimes.keySet()) {
         zombies.remove(z);

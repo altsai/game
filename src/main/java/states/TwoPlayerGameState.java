@@ -122,7 +122,7 @@ public class TwoPlayerGameState extends GamePlayState {
         Speed speed = new Speed(powerups);
         this.powerups.put(generateID(), speed);
       } else if (randomNum < 0.9 && randomNum >= 0.6) {
-        TimeStop timestop = new TimeStop(powerups, zombies, this);
+        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
         this.powerups.put(generateID(), timestop);
       }
 
