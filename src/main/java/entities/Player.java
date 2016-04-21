@@ -41,6 +41,8 @@ public class Player extends Entity implements PlayerAction {
   private boolean isPlayer1;
   private boolean isSingle;
   private long lastBombFired;
+  private boolean canMove;
+  private boolean immune;
 
   private static final int ANIMATION_FRAME_TIME = 100;
 
@@ -55,7 +57,8 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 30;
-    this.lives = 1;
+    this.lives = 2;
+    this.radius = 20;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
@@ -70,6 +73,8 @@ public class Player extends Entity implements PlayerAction {
     this.spriteSheet = Resources.getSprite("injuredAnimation");
     this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
     this.animation.setPingPong(true);
+    this.canMove = true;
+    this.immune = false;
   }
 
   public void setPlayer1(boolean flag) {
@@ -157,7 +162,8 @@ public class Player extends Entity implements PlayerAction {
       this.animation.update(delta);
     }
 
-    if (System.currentTimeMillis() - this.invincibleTime > 5000) {
+    if (!immune && state
+        && (System.currentTimeMillis() - this.invincibleTime > 5000)) {
       this.setState(false);
       this.image = Resources.getImage("player");
     }
@@ -212,6 +218,20 @@ public class Player extends Entity implements PlayerAction {
     return this.state;
   }
 
+  public void setImmune() {
+    setImage(Resources.getImage("player2"));
+    immune = true;
+  }
+
+  public void revert() {
+    setImage(Resources.getImage("player"));
+    immune = false;
+  }
+
+  public boolean isImmune() {
+    return immune;
+  }
+
   @Override
   public double getSpeed() {
     return this.speed;
@@ -228,6 +248,10 @@ public class Player extends Entity implements PlayerAction {
    *          Controls. Index 1 is up, 2 down, 3 left 4 right.
    */
   private void move(Input input, int delta, int[] keys) {
+    if (!canMove) {
+      return;
+    }
+
     if (input.isKeyDown(keys[0])) {
       double newY = this.y - speed * delta;
 
@@ -260,5 +284,9 @@ public class Player extends Entity implements PlayerAction {
 
   public long getLastBombFired() {
     return lastBombFired;
+  }
+
+  public void setCanMove(boolean b) {
+    canMove = b;
   }
 }

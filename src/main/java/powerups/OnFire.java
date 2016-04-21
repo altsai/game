@@ -1,11 +1,10 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
 import entities.Zombie;
 import game_objects.Powerup;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -31,12 +30,12 @@ public class OnFire extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private List<Zombie> zombies;
+  private ConcurrentHashMap<String, Zombie> zombies;
 
   /**
    * Map of Zombies to the time they were lit on fire.
    */
-  private Map<Zombie, Long> onFireTimes;
+  private ConcurrentHashMap<String, Long> onFireTimes;
 
   /**
    * Constructor for OnFire.
@@ -46,10 +45,13 @@ public class OnFire extends Powerup {
    * @param z
    *          the list of Zombies
    */
-  public OnFire(List<Powerup> p, List<Zombie> z) {
+  public OnFire(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z) {
     super(p);
-    // TODO set image
+    // TODO set animation
     zombies = z;
+    image = Resources.getImage("fire");
+    onFireTimes = new ConcurrentHashMap<>();
   }
 
   @Override
@@ -57,56 +59,57 @@ public class OnFire extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    for (Zombie z : zombies) {
-      // if has been on fire for two seconds
-      if (z.isOnFire()
-          && ((System.currentTimeMillis() - onFireTimes.get(z)) >= INDIV_FIRE)) {
-        zombies.remove(z);
-        onFireTimes.remove(z);
-        affectedPlayer.incrementScore();
-        continue;
-      }
+    if (this.isUsed) {
+      for (String zid : zombies.keySet()) {
+        Zombie z = zombies.get(zid);
 
-      // if collides with the player
-      if (z.isCollision(affectedPlayer) && !z.isOnFire()) {
-        // TODO replace zombie image
-        z.setState(true);
-        onFireTimes.put(z, System.currentTimeMillis());
-      }
+        // if has been on fire for two seconds
+        if ((onFireTimes.get(zid) != null)
+            && ((System.currentTimeMillis() - onFireTimes.get(zid)) >= INDIV_FIRE)) {
+          zombies.remove(zid);
+          onFireTimes.remove(zid);
+          affectedPlayer.incrementScore();
+          continue;
+        }
 
-      // if on fire and collides with another zombie
-      if (z.isOnFire()) {
-        for (Zombie other : zombies) {
-          if ((other != z) && z.isCollision(other)) {
-            // TODO replace zombie image
-            other.setState(true);
-            onFireTimes.put(other, System.currentTimeMillis());
+        // if collides with the player
+        if (z.isCollision(affectedPlayer) && (onFireTimes.get(zid) == null)) {
+          z.setImage(Resources.getImage("firezombie"));
+          onFireTimes.put(zid, System.currentTimeMillis());
+        }
+
+        // if on fire and collides with another zombie
+        if (onFireTimes.get(zid) != null) {
+          for (String ozid : zombies.keySet()) {
+            Zombie other = zombies.get(ozid);
+            if ((!ozid.equals(zid)) && z.isCollision(other)) {
+              other.setImage(Resources.getImage("firezombie"));
+              onFireTimes.put(ozid, System.currentTimeMillis());
+            }
           }
         }
       }
     }
 
-    // check if black hole should be deactivated
+    // check if powerup should be deactivated
     deactivate();
   }
 
   @Override
   public void activate() {
     super.activate();
-    onFireTimes = new HashMap<>();
-
-    // TODO reset player's image
+    affectedPlayer.setImmune();
   }
 
   @Override
   public void deactivate() {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= FIRE_TIME) {
-      // TODO reset player's image
+      affectedPlayer.revert();
 
       // kill all lit Zombies who have not been removed yet
-      for (Zombie z : onFireTimes.keySet()) {
-        zombies.remove(z);
+      for (String zid : onFireTimes.keySet()) {
+        zombies.remove(zid);
         affectedPlayer.incrementScore();
       }
 

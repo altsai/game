@@ -1,10 +1,12 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -14,9 +16,11 @@ public class Jail extends Powerup {
   private final int JAIL_LIFETIME = 5000;
   private boolean bombFired;
 
-  public Jail(List<Powerup> p, List<Zombie> z, List<Player> pl) {
+  public Jail(ConcurrentHashMap<String, Powerup> p,
+      ConcurrentHashMap<String, Zombie> z, List<Player> pl) {
     super(p);
     bombFired = false;
+    image = Resources.getImage("jail");
     // TODO set image
   }
 

@@ -3,7 +3,7 @@ package powerups;
 import edu.brown.cs.altsai.game.Resources;
 import game_objects.Powerup;
 
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -28,7 +28,7 @@ public class Speed extends Powerup {
    * @param powerups
    *          List of powerups in the game currently
    */
-  public Speed(List<Powerup> p) {
+  public Speed(ConcurrentHashMap<String, Powerup> p) {
     // call the super constructor first to start timers
     super(p);
 
@@ -72,6 +72,7 @@ public class Speed extends Powerup {
   public void deactivate() {
     if (this.isUsed) {
       if (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION) {
+        System.out.println(this.affectedPlayer.getSpeed() / SPEED_MULTIPLIER);
         this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed()
             / SPEED_MULTIPLIER);
         kill();

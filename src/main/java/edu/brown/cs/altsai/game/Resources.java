@@ -46,6 +46,13 @@ public class Resources {
       images.put("button", loadImage("img/wasd_button.png"));
       sprites.put("bomb_explosion", loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("injuredAnimation", loadSprite("img/wasd_injured_sprite.png", 30, 30));
+      images.put("blackhole", loadImage("img/blackhole.png"));
+      images.put("fire", loadImage("img/fire.png"));
+      images.put("jail", loadImage("img/jail.png"));
+      images.put("firezombie", loadImage("img/firezombie.png"));
+      images.put("laserbeam", loadImage("img/laserbeam.png"));
+      sprites.put("bomb_explosion",
+          loadSprite("img/bomb_explosion.png", 196, 190));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }

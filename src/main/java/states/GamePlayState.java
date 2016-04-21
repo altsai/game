@@ -2,6 +2,8 @@ package states;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -26,8 +28,8 @@ import game_objects.Powerup;
  */
 public abstract class GamePlayState extends BasicGameState {
   // list of all entities in the game
-  protected ArrayList<Zombie> zombies;
-  protected ArrayList<Powerup> powerups;
+  protected ConcurrentHashMap<String, Zombie> zombies;
+  protected ConcurrentHashMap<String, Powerup> powerups;
 
   // players in the game
   protected ArrayList<Player> players;
@@ -53,8 +55,8 @@ public abstract class GamePlayState extends BasicGameState {
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
-    this.zombies = new ArrayList<>();
-    this.powerups = new ArrayList<>();
+    this.zombies = new ConcurrentHashMap<>();
+    this.powerups = new ConcurrentHashMap<>();
 
     this.players = new ArrayList<>();
     this.lastZombieSpawnTime = System.currentTimeMillis();
@@ -74,11 +76,11 @@ public abstract class GamePlayState extends BasicGameState {
     for (Player p : this.players) {
       p.render(gc, g);
     }
-    for (Zombie z : this.zombies) {
-      z.render(gc, g);
+    for (String zid : zombies.keySet()) {
+      zombies.get(zid).render(gc, g);
     }
-    for (Powerup p : this.powerups) {
-      p.render(gc, g);
+    for (String pid : powerups.keySet()) {
+      powerups.get(pid).render(gc, g);
     }
 
   }
@@ -119,19 +121,13 @@ public abstract class GamePlayState extends BasicGameState {
       int delta) throws SlickException {
 
     // check for player collision with every entity
-    for (Zombie z : this.zombies) {
+    for (String zid : zombies.keySet()) {
+      Zombie z = zombies.get(zid);
       z.update(gc, delta);
-
-      boolean onFire = z.isOnFire();
 
       // check player's lives and mark invincible as necessary
       for (Player p : this.players) {
-        if (p.isCollision(z) && !onFire) {
-
-          if (p.isInvincible()) {
-            continue;
-          }
-
+        if (p.isCollision(z) && !p.isInvincible() && !p.isImmune()) {
           if (p.getLives() == 0) {
             this.loser = p;
             endGame(gc, s);
@@ -143,7 +139,8 @@ public abstract class GamePlayState extends BasicGameState {
     }
 
     // check for player collision with every powerup
-    for (Powerup powerup : this.powerups) {
+    for (String pid : powerups.keySet()) {
+      Powerup powerup = powerups.get(pid);
       for (Player p : this.players) {
         if (p.isCollision(powerup)) {
           p.collectPowerup(powerup);
@@ -166,8 +163,11 @@ public abstract class GamePlayState extends BasicGameState {
 
     // DO NOT USE ENHANCED FOR LOOP HERE. IDK WHY BUT THERES A THREADING ISSUE
     // PLS DO NOT CHANGE...
-    for (int i = 0; i < this.powerups.size(); i++) {
-      this.powerups.get(i).update(gc, delta);
+    // for (int i = 0; i < this.powerups.size(); i++) {
+    // this.powerups.get(i).update(gc, delta);
+    // }
+    for (String pid : powerups.keySet()) {
+      powerups.get(pid).update(gc, delta);
     }
   }
 
@@ -203,6 +203,11 @@ public abstract class GamePlayState extends BasicGameState {
    *          StateBasedGame s
    * @throws SlickException
    */
-  protected abstract void endGame(GameContainer gc, StateBasedGame s) throws SlickException;
+  protected abstract void endGame(GameContainer gc, StateBasedGame s)
+      throws SlickException;
+
+  public String generateID() {
+    return UUID.randomUUID().toString();
+  }
 
 }
