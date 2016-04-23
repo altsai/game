@@ -1,7 +1,7 @@
 package powerups;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +35,7 @@ public class TimeStop extends Powerup {
   /**
    * Reference to the list of Players in the game.
    */
-  private List<Player> players;
+  private Map<String, Player> players;
 
   /**
    * Maps frozen Zombies to their pre-frozen speeds.
@@ -65,8 +65,9 @@ public class TimeStop extends Powerup {
     this.image = Resources.getImage("timestop");
     this.zombies = z;
     this.game = gps;
+    this.powerupIndex = Powerup.TIMESTOP;
 
-    this.players = new ArrayList<>();
+    this.players = new HashMap<>();
   }
 
   /**
@@ -81,7 +82,7 @@ public class TimeStop extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public TimeStop(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl,
+  public TimeStop(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> pl,
       GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
@@ -90,9 +91,11 @@ public class TimeStop extends Powerup {
     this.image = Resources.getImage("timestop");
     this.zombies = z;
     this.game = gps;
+    this.powerupIndex = Powerup.TIMESTOP;
 
     this.players = pl;
   }
+
 
   @Override
   public void update(GameContainer gc, int delta) {
@@ -104,27 +107,32 @@ public class TimeStop extends Powerup {
   }
 
   @Override
-  public void activate() {
-    super.activate();
+  public List<String> activate() {
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
 
     zombieSpeeds = new HashMap<>();
 
     // prevent spawning of new zombies
     this.game.setSpawnOn(false);
 
-    for (String zid : zombies.keySet()) {
-      Zombie z = zombies.get(zid);
-      if (z.getSpeed() != 0) {
-        zombieSpeeds.put(z, z.getSpeed());
-        z.setSpeed(0);
+
+    for (String key : this.zombies.keySet()) {
+      Zombie z = this.zombies.get(key);
+      zombieSpeeds.put(z, z.getSpeed());
+      z.setSpeed(0);
+    }
+
+    for (Player p : players.values()) {
+      if (!affectedPlayer.getID().equals(p.getID())) {
+        p.setSpeed(0);
       }
     }
 
-    for (Player p : players) {
-      if (affectedPlayer != p) {
-        p.setCanMove(false);
-      }
-    }
+    return new LinkedList<>();
   }
 
   @Override
@@ -144,9 +152,10 @@ public class TimeStop extends Powerup {
         }
       }
 
-      for (Player p : players) {
-        if (affectedPlayer != p) {
-          p.setCanMove(true);
+      // reset player speeds
+      for (Player p : players.values()) {
+        if (!affectedPlayer.getID().equals(p.getID())) {
+          p.setSpeed(Player.PLAYER_SPEED);
         }
       }
 

@@ -7,7 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class TwoPlayerEndGame extends BasicGameState {
+public class HostEndGame extends BasicGameState {
   //takes in the SinglePlayerGameState just played
   private GamePlayState gps;
 
@@ -15,7 +15,7 @@ public class TwoPlayerEndGame extends BasicGameState {
    * Constructor for a SinglePlayerEndGameState
    * @param singlePlayerGameState     single player state that just finished
    */
-  public TwoPlayerEndGame(GamePlayState gps) {
+  public HostEndGame(GamePlayState gps) {
     this.gps = gps;
   }
 
@@ -29,7 +29,12 @@ public class TwoPlayerEndGame extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    g.drawString(this.gps.getLoser(), 100, 300);
+
+    if (this.gps.getLoser() != null) {
+      g.drawString(this.gps.getLoser(), 100, 300);
+    } else {
+      g.drawString("Connetion lost", 100, 300);
+    }
     g.drawString("Hit esc to go back to Menu", 100, 200);
   }
 
@@ -45,6 +50,6 @@ public class TwoPlayerEndGame extends BasicGameState {
 
   @Override
   public int getID() {
-    return States.TWO_PLAYER_END_GAME;
+    return States.HOST_END_GAME;
   }
 }

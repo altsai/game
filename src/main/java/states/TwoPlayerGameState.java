@@ -36,8 +36,8 @@ public class TwoPlayerGameState extends GamePlayState {
     player2.setPlayer1(false);
 
     player2.setImage(Resources.getImage("player2"));
-    this.players.add(player1);
-    this.players.add(player2);
+    this.players.put(player1.getID(), player1);
+    this.players.put(player2.getID(), player2);
   }
 
   public String getWinner() {
@@ -117,13 +117,13 @@ public class TwoPlayerGameState extends GamePlayState {
       double randomNum = random.nextDouble();
       if (randomNum < 0.33) {
         Bomb bomb = new Bomb(powerups, zombies);
-        this.powerups.put(generateID(), bomb);
+        this.powerups.put(bomb.getID(), bomb);
       } else if (randomNum < 0.6 && randomNum >= 0.33) {
         Speed speed = new Speed(powerups);
-        this.powerups.put(generateID(), speed);
+        this.powerups.put(speed.getID(), speed);
       } else if (randomNum < 0.9 && randomNum >= 0.6) {
-        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
-        this.powerups.put(generateID(), timestop);
+        TimeStop timestop = new TimeStop(powerups, zombies, this);
+        this.powerups.put(timestop.getID(), timestop);
       }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();

@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
+import com.google.common.collect.Lists;
+
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
@@ -23,6 +25,7 @@ public class Jail extends Powerup {
     bombFired = false;
     image = Resources.getImage("jail");
     // TODO set image
+    this.powerupIndex = Powerup.JAIL;
   }
 
   @Override
@@ -41,14 +44,20 @@ public class Jail extends Powerup {
   }
 
   @Override
-  public void activate() {
-    super.activate();
+  public List<String> activate() {
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
 
     float x = affectedPlayer.getX();
     float y = affectedPlayer.getY();
 
     affectedPlayer.setBoundary(y - JAIL_RADIUS, y + JAIL_RADIUS, x
         - JAIL_RADIUS, x + JAIL_RADIUS);
+
+    return Lists.newArrayList();
   }
 
   @Override

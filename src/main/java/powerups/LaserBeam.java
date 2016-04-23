@@ -1,12 +1,15 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Window;
-import entities.Zombie;
-import game_objects.Powerup;
-
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
+
+import com.google.common.collect.Lists;
+
+import edu.brown.cs.altsai.game.Window;
+import entities.Zombie;
+import game_objects.Powerup;
 
 public class LaserBeam extends Powerup {
 
@@ -47,11 +50,19 @@ public class LaserBeam extends Powerup {
   }
 
   @Override
-  public void activate() {
-    super.activate();
+  public List<String> activate() {
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
     direction = affectedPlayer.getLastDir();
     // TODO reset radius to larger
     this.image.setRotation(direction);
+
+
+    // TODO return list of zombies hit by laser
+    return Lists.newArrayList();
   }
 
   private boolean hasReachedBoundary() {

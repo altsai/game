@@ -34,7 +34,14 @@ public abstract class Powerup extends Circle {
   protected boolean isPickedUp;
   protected boolean isUsed;
   protected Map<String, Powerup> powerups;
+  protected int powerupIndex;
 
+  public static final int BLACK_HOLE = 0;
+  public static final int BOMB = 1;
+  public static final int JAIL = 2;
+  public static final int ON_FIRE = 3;
+  public static final int SPEED = 4;
+  public static final int TIMESTOP = 5;
   /**
    * Constructor for a powerup.
    *
@@ -128,13 +135,7 @@ public abstract class Powerup extends Circle {
    *
    * Must be called by the subclass on override!
    */
-  public void activate() {
-    this.isUsed = true;
-    this.activationStartTime = System.currentTimeMillis();
-
-    // clear the player's powerup storage after using the powerup
-    this.affectedPlayer.clearPowerupStorage();
-  }
+  public abstract List<String> activate();
 
   /**
    * Method to stop the effects of the powerup.
@@ -149,6 +150,10 @@ public abstract class Powerup extends Circle {
    */
   public void kill() {
     powerups.remove(this.getID());
+  }
+
+  public int getPowerupIndex() {
+    return this.powerupIndex;
   }
 
 }

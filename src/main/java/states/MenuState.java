@@ -88,8 +88,8 @@ public class MenuState extends BasicGameState {
         s.getState(States.SINGLE_PLAYER).init(gc, s);
         s.enterState(States.SINGLE_PLAYER);
       } else if (posY >= Window.height / 8 + 300 && posY <= Window.height / 8 + 300 + BUTTON_HEIGHT / 2) {
-        s.getState(States.TWO_PLAYER).init(gc, s);
-        s.enterState(States.TWO_PLAYER);
+        s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
+        s.enterState(States.TWO_PLAYER_START_SERVER);
       } else if (posY >= Window.height / 8 + 400 && posY <= Window.height / 8 + 400 + BUTTON_HEIGHT / 2) {
         s.enterState(States.HIGH_SCORES);
       }
@@ -100,8 +100,8 @@ public class MenuState extends BasicGameState {
       s.getState(States.SINGLE_PLAYER).init(gc, s);
       s.enterState(States.SINGLE_PLAYER);
     } else if (gc.getInput().isKeyPressed(Input.KEY_2)) {
-      s.getState(States.TWO_PLAYER).init(gc, s);
-      s.enterState(States.TWO_PLAYER);
+      s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
+      s.enterState(States.TWO_PLAYER_START_SERVER);
     } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
       s.enterState(States.HIGH_SCORES);
     }

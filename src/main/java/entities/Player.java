@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.newdawn.slick.Animation;
@@ -7,6 +8,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
+
+import com.google.common.collect.Lists;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
@@ -39,7 +42,7 @@ public class Player extends Entity implements PlayerAction {
   private int lives;
   private Powerup powerup;
   private int score;
-  private long invincibleTime;
+  public long invincibleTime;
   private boolean isPlayer1;
   private boolean isSingle;
   private long lastBombFired;
@@ -52,6 +55,7 @@ public class Player extends Entity implements PlayerAction {
   private Animation animation;
 
   private float lastDir;
+  public static final double PLAYER_SPEED = 0.3;
 
   @Override
   /**
@@ -65,7 +69,7 @@ public class Player extends Entity implements PlayerAction {
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
-    this.speed = 0.3;
+    this.speed = PLAYER_SPEED;
     this.top = 0;
     this.left = 0;
     this.bottom = Window.height;
@@ -88,6 +92,19 @@ public class Player extends Entity implements PlayerAction {
       this.isSingle = false;
     }
   }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public void setScore(int score) {
+    this.score = score;
+  }
+
+  public void setLives(int lives) {
+    this.lives = lives;
+  }
+
 
   public boolean isPlayer1() {
     return this.isPlayer1;
@@ -139,13 +156,16 @@ public class Player extends Entity implements PlayerAction {
   }
 
   @Override
-  public void usePowerup() {
+  public List<String> usePowerup() {
     if (this.powerup != null) {
-      this.powerup.activate();
+      List<String> output =  this.powerup.activate();
       this.powerup = null;
       if (this.powerup instanceof Bomb) {
         this.lastBombFired = System.currentTimeMillis();
       }
+      return output;
+    } else {
+      return Lists.newArrayList();
     }
   }
 
@@ -161,6 +181,9 @@ public class Player extends Entity implements PlayerAction {
   @Override
   /**
    * Update method to fetch new information about the player.
+   *
+   * Does not allow for action key or movement.
+   * Only used for checking invincibility.
    *
    * @param gc         GameContainer, window of the game
    * @param delta      Integer, amount of time since last update
@@ -179,14 +202,48 @@ public class Player extends Entity implements PlayerAction {
       this.image = Resources.getImage("player");
     }
 
-    // move the player according to input and delta.
-    if (this.isPlayer1) {
-      move(input, delta, PLAYER1_CONTROLS);
-    } else {
-      move(input, delta, PLAYER2_CONTROLS);
-    }
 
-    checkActionKey(input);
+//    // move the player according to input and delta.
+//    // both p1 and p2 have same controls since on separate windows
+//    move(input, delta, PLAYER1_CONTROLS);
+//
+////    if (this.isPlayer1) {
+////      move(input, delta, PLAYER1_CONTROLS);
+////    } else {
+////      move(input, delta, PLAYER2_CONTROLS);
+////    }
+//
+//    checkActionKey(input);
+  }
+
+  /**
+   * Method that moves the player in networked mode. Does not check action.
+   *
+   * Doesn't check action key because that should be checked in the game state.
+   *
+   * @param gc      Game Container.
+   * @param delta   int, time since last update
+   */
+  public void updateAndControlNetworked(GameContainer gc, int delta) {
+    update(gc, delta);
+    move(gc.getInput(), delta, PLAYER1_CONTROLS);
+  }
+
+
+  /**
+   * Method that moves the player and checks for action key.
+   *
+   * Used in single player.
+   *
+   * @param gc      GameContainer
+   * @param delta   int time since last update
+   */
+  public void updateAndControl(GameContainer gc, int delta) {
+    update(gc, delta);
+    move(gc.getInput(), delta, PLAYER1_CONTROLS);
+
+    // have the action key be checked for in the host
+    checkActionKey(gc.getInput());
   }
 
   /**
@@ -195,21 +252,25 @@ public class Player extends Entity implements PlayerAction {
    * @param input
    */
   private void checkActionKey(Input input) {
-    if (this.isSingle) {
-      if (input.isKeyPressed(Input.KEY_SPACE)) {
-        usePowerup();
-      }
-    } else {
-      if (this.isPlayer1) {
-        if (input.isKeyPressed(Input.KEY_LSHIFT)) {
-          usePowerup();
-        }
-      } else {
-        if (input.isKeyPressed(Input.KEY_RCONTROL)) {
-          usePowerup();
-        }
-      }
+    if (input.isKeyPressed(Input.KEY_SPACE)) {
+      usePowerup();
     }
+
+//    if (this.isSingle) {
+//      if (input.isKeyPressed(Input.KEY_SPACE)) {
+//        usePowerup();
+//      }
+//    } else {
+//      if (this.isPlayer1) {
+//        if (input.isKeyPressed(Input.KEY_LSHIFT)) {
+//          usePowerup();
+//        }
+//      } else {
+//        if (input.isKeyPressed(Input.KEY_RCONTROL)) {
+//          usePowerup();
+//        }
+//      }
+//    }
   }
 
   @Override

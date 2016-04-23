@@ -40,12 +40,15 @@ public class SinglePlayerGameState extends GamePlayState {
     // add players to the player list from the superclass
     Player player1 = new Player(null, "player1");
     player1.setPlayer1(true);
-    this.players.add(player1);
 
     Font font = new Font("Helvetica", Font.BOLD, 20);
     ttf = new TrueTypeFont(font, true);
     Font font2 = new Font("Helvetica", Font.PLAIN, 20);
     ttf2 = new TrueTypeFont(font2, true);
+
+    player1.setID("0");
+    this.players.put(player1.getID(), player1);
+    this.playerID = player1.getID();
   }
 
   @Override
@@ -54,7 +57,7 @@ public class SinglePlayerGameState extends GamePlayState {
     super.render(gc, s, g);
 
     // Draw lives
-    for (int i = 0; i < this.players.get(0).getLives() + 1; i++) {
+    for (int i = 0; i < this.players.get("0").getLives() + 1; i++) {
       Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20, 20);
     }
 
@@ -66,7 +69,7 @@ public class SinglePlayerGameState extends GamePlayState {
     g.setColor(Color.black);
     g.drawRect(Window.width / 2 - 15, 6, 30, 30);
     g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
-    Powerup currPowerup = this.players.get(0).getCurrPowerup();
+    Powerup currPowerup = this.players.get("0").getCurrPowerup();
     if (currPowerup != null) {
       currPowerup.getImage().draw(Window.width / 2 - 9, 11, 20, 20);
     }
@@ -85,7 +88,7 @@ public class SinglePlayerGameState extends GamePlayState {
    * @return int, score of the player
    */
   public int getScore() {
-    return this.players.get(0).getScore();
+    return this.players.get(this.playerID).getScore();
   }
 
   @Override
@@ -111,7 +114,7 @@ public class SinglePlayerGameState extends GamePlayState {
       if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
 
         // have a random player to target
-        Player target = this.players.get(random.nextInt(this.players.size()));
+        Player target = this.players.get(String.valueOf(random.nextInt(this.players.size())));
 
         // at any given time there is a 30% chance of multiple spawns
         if (random.nextInt(9) < 3) {

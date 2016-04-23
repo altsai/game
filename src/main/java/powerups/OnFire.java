@@ -1,5 +1,7 @@
 package powerups;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,7 +40,7 @@ public class OnFire extends Powerup {
   /**
    * Map of Zombies to the time they were lit on fire.
    */
-  private ConcurrentHashMap<String, Long> onFireTimes;
+  private Map<String, Long> onFireTimes;
 
   /**
    * Constructor for OnFire.
@@ -54,6 +56,7 @@ public class OnFire extends Powerup {
     zombies = z;
     image = Resources.getImage("fire");
     onFireTimes = new ConcurrentHashMap<>();
+    this.powerupIndex = Powerup.ON_FIRE;
   }
 
   @Override
@@ -98,9 +101,19 @@ public class OnFire extends Powerup {
   }
 
   @Override
-  public void activate() {
-    super.activate();
+  public List<String> activate() {
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
     affectedPlayer.setImmune();
+
+    onFireTimes = new ConcurrentHashMap<>();
+
+    // TODO reset player's image
+
+    return new LinkedList<>();
   }
 
   @Override

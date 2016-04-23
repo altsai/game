@@ -1,10 +1,12 @@
 package states;
 
-import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -30,43 +32,54 @@ import game_objects.Powerup;
  */
 public abstract class GamePlayState extends BasicGameState {
   // list of all entities in the game
-  protected ConcurrentHashMap<String, Zombie> zombies;
-  protected ConcurrentHashMap<String, Powerup> powerups;
+  protected Map<String, Zombie> zombies;
+  protected Map<String, Powerup> powerups;
+  protected Set<Powerup> pickedUpPowerups;
 
   // players in the game
-  protected ArrayList<Player> players;
+  protected Map<String, Player> players;
 
   // list of constants
   protected static final int ZOMBIE_SPAWN_DELAY = 1000;
-  protected static final int POWERUP_SPAWN_DELAY = 5000;
+  protected static final int POWERUP_SPAWN_DELAY = 3000;
   protected static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
   protected static final int MAX_DIFFICULTY_LEVEL = 8;
   protected static final double SPEED_MULTIPLIER = 0.1;
 
+  // keep this a little higher than 3 seconds because user needs to see the 3
+  protected static final long GAME_COUNTDOWN = 3800;
+
   protected Random random;
   protected int difficultyLevel;
-  protected Player loser;
+  protected String loser;
 
   // timers
   protected long lastZombieSpawnTime;
   protected long lastPowerupSpawnTime;
   protected long lastDifficultyIncreaseTime;
+  protected long initialDelayTime;
+  protected boolean gameStart;
 
   // boolean to tell if game should be spawning
   protected boolean spawnOn;
+  protected String playerID;
+
+  protected boolean gameEnd;
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     this.zombies = new ConcurrentHashMap<>();
     this.powerups = new ConcurrentHashMap<>();
+    this.players = new ConcurrentHashMap<>();
+    this.pickedUpPowerups = new ConcurrentHashSet<>();
 
-    this.players = new ArrayList<>();
     this.lastZombieSpawnTime = System.currentTimeMillis();
     this.lastDifficultyIncreaseTime = System.currentTimeMillis();
     this.random = new Random();
     this.difficultyLevel = 1;
     this.spawnOn = true;
     this.loser = null;
+    this.initialDelayTime = System.currentTimeMillis();
   }
 
   @Override
@@ -80,14 +93,21 @@ public abstract class GamePlayState extends BasicGameState {
     g.drawRoundRect(10, 40, Window.width - 20, Window.height - 50, 10);
     g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
 
-    for (Player p : this.players) {
-      p.render(gc, g);
-    }
-    for (Zombie z : this.zombies.values()) {
-      z.render(gc, g);
-    }
-    for (Powerup p : this.powerups.values()) {
-      p.render(gc, g);
+    long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
+    if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
+      g.drawString("Game begins in: " + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
+    } else {
+      this.gameStart = true;
+
+      for (Player p : this.players.values()) {
+        p.render(gc, g);
+      }
+      for (Zombie z : this.zombies.values()) {
+        z.render(gc, g);
+      }
+      for (Powerup p : this.powerups.values()) {
+        p.render(gc, g);
+      }
     }
 
   }
@@ -95,19 +115,21 @@ public abstract class GamePlayState extends BasicGameState {
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
-    spawnZombie();
-    spawnPowerup();
+    if (this.gameStart) {
+      spawnZombie();
+      spawnPowerup();
 
-    for (Player p : this.players) {
-      p.update(gc, delta);
-    }
+      for (Player p : this.players.values()) {
+        p.updateAndControl(gc, delta);
+      }
 
-    updateAndCheckCollisions(gc, s, delta);
-    updatePowerups(gc, delta);
+      updateAndCheckCollisions(gc, s, delta);
+      updatePowerups(gc, delta);
 
-    // go to the home menu state when 'esc' is pressed
-    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
-      s.enterState(States.MENU);
+      // go to the home menu state when 'esc' is pressed
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        s.enterState(States.MENU);
+      }
     }
 
   }
@@ -132,10 +154,10 @@ public abstract class GamePlayState extends BasicGameState {
       z.update(gc, delta);
 
       // check player's lives and mark invincible as necessary
-      for (Player p : this.players) {
+      for (Player p : this.players.values()) {
         if (p.isCollision(z) && !p.isInvincible() && !p.isImmune()) {
           if (p.getLives() == 0) {
-            this.loser = p;
+            this.loser = p.getName();
             endGame(gc, s);
           } else {
             p.loseLife();
@@ -146,16 +168,21 @@ public abstract class GamePlayState extends BasicGameState {
 
     // check for player collision with every powerup
     for (Powerup powerup : this.powerups.values()) {
-      for (Player p : this.players) {
-        if (p.isCollision(powerup)) {
+      for (Player p : this.players.values()) {
+        if (p.isCollision(powerup) && !this.pickedUpPowerups.contains(powerup)) {
           p.collectPowerup(powerup);
+          this.pickedUpPowerups.add(powerup);
         }
       }
     }
   }
 
-  public Player getLoser() {
+  public String getLoser() {
     return this.loser;
+  }
+
+  public void setLoser(String loser) {
+    this.loser = loser;
   }
 
   /**
@@ -165,7 +192,6 @@ public abstract class GamePlayState extends BasicGameState {
    * @param delta
    */
   private void updatePowerups(GameContainer gc, int delta) {
-
     for (String pid : powerups.keySet()) {
       powerups.get(pid).update(gc, delta);
     }
@@ -179,6 +205,19 @@ public abstract class GamePlayState extends BasicGameState {
   public void setSpawnOn(boolean flag) {
     this.spawnOn = flag;
   }
+
+  public void setGameEnd(boolean flat) {
+    this.gameEnd = flat;
+  }
+
+  public boolean isGameEnd() {
+    return this.gameEnd;
+  }
+
+  public void setTimeInit(long time) {
+    this.initialDelayTime = time;
+  }
+
 
   /**
    * Method that spawns in zombies.

@@ -11,12 +11,15 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import highscore.HighscoreSystem;
+import states.ClientEndGame;
 import states.HighScoreState;
+import states.HostEndGame;
 import states.MenuState;
 import states.SinglePlayerEndGameState;
 import states.SinglePlayerGameState;
-import states.TwoPlayerEndGame;
-import states.TwoPlayerGameState;
+import states.TwoPlayerClient;
+import states.TwoPlayerHost;
+import states.TwoPlayerStartServer;
 
 /**
  * @author
@@ -65,13 +68,18 @@ public class Main extends StateBasedGame {
     new Resources();
 
     SinglePlayerGameState singlePlayer = new SinglePlayerGameState();
-    TwoPlayerGameState twoPlayer = new TwoPlayerGameState();
+    TwoPlayerHost twoPlayerHost = new TwoPlayerHost();
+    TwoPlayerClient twoPlayerClient = new TwoPlayerClient();
+
 
     this.addState(singlePlayer);
     this.addState(new MenuState());
     this.addState(new SinglePlayerEndGameState(singlePlayer, highscoreSystem));
     this.addState(new HighScoreState(highscoreSystem));
-    this.addState(twoPlayer);
-    this.addState(new TwoPlayerEndGame(twoPlayer));
+    this.addState(twoPlayerHost);
+    this.addState(twoPlayerClient);
+    this.addState(new HostEndGame(twoPlayerHost));
+    this.addState(new ClientEndGame(twoPlayerClient));
+    this.addState(new TwoPlayerStartServer());
   }
 }
