@@ -1,14 +1,15 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import game_objects.Powerup;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Powerup;
 import powerups.Bomb;
 
 /**
@@ -49,6 +50,8 @@ public class Player extends Entity implements PlayerAction {
   private SpriteSheet spriteSheet;
   private Animation animation;
 
+  private float lastDir;
+
   @Override
   /**
    * Initializes a player and set's starting attributes.
@@ -74,6 +77,7 @@ public class Player extends Entity implements PlayerAction {
     this.animation.setPingPong(true);
     this.canMove = true;
     this.immune = false;
+    this.lastDir = 0;
   }
 
   public void setPlayer1(boolean flag) {
@@ -257,28 +261,58 @@ public class Player extends Entity implements PlayerAction {
       return;
     }
 
+    boolean upFlag = false;
+    boolean downFlag = false;
+    boolean leftFlag = false;
+    boolean rightFlag = false;
+
     if (input.isKeyDown(keys[0])) {
       double newY = this.y - speed * delta;
+      upFlag = true;
 
       if (newY >= this.top) {
         this.y -= speed * delta;
       }
     } else if (input.isKeyDown(keys[1])) {
       double newY = this.y + speed * delta;
+      downFlag = true;
+
       if (newY <= this.bottom - this.image.getHeight()) {
         this.y += speed * delta;
       }
     }
     if (input.isKeyDown(keys[2])) {
       double newX = this.x - speed * delta;
+      leftFlag = true;
+
       if (newX >= this.left) {
         this.x -= speed * delta;
       }
     } else if (input.isKeyDown(keys[3])) {
       double newX = this.x + speed * delta;
+      rightFlag = true;
+
       if (newX <= this.right - this.image.getWidth()) {
         this.x += speed * delta;
       }
+    }
+
+    if (upFlag && rightFlag) {
+      lastDir = 45;
+    } else if (upFlag && leftFlag) {
+      lastDir = 135;
+    } else if (upFlag) {
+      lastDir = 90;
+    } else if (downFlag && rightFlag) {
+      lastDir = 315;
+    } else if (downFlag && leftFlag) {
+      lastDir = 225;
+    } else if (downFlag) {
+      lastDir = 270;
+    } else if (rightFlag) {
+      lastDir = 0;
+    } else if (leftFlag) {
+      lastDir = 180;
     }
   }
 
@@ -293,5 +327,9 @@ public class Player extends Entity implements PlayerAction {
 
   public void setCanMove(boolean b) {
     canMove = b;
+  }
+
+  public float getLastDir() {
+    return lastDir;
   }
 }
