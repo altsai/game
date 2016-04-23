@@ -19,7 +19,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Benjamin/Documents/Java External Libraries/slick"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="game/slick"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
@@ -28,10 +28,10 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/jinput.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/lwjgl.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/slick/lib/slick.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Benjamin/Documents/Java External Libraries/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/slick.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/kryonet-2.21/jars/production/onejar/kryonet-2.21-all.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

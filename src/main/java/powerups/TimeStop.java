@@ -1,18 +1,16 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 import states.GamePlayState;
 
 /**
@@ -32,7 +30,7 @@ public class TimeStop extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private ConcurrentHashMap<String, Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   /**
    * Reference to the list of Players in the game.
@@ -59,8 +57,7 @@ public class TimeStop extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public TimeStop(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z, GamePlayState gps) {
+  public TimeStop(Map<String, Powerup> p, Map<String, Zombie> z, GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 
@@ -84,8 +81,8 @@ public class TimeStop extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public TimeStop(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z, List<Player> pl, GamePlayState gps) {
+  public TimeStop(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl,
+      GamePlayState gps) {
     // call the superconstructor to start timing
     super(p);
 

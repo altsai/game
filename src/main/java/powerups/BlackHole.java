@@ -1,16 +1,15 @@
 package powerups;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.newdawn.slick.GameContainer;
+
 import edu.brown.cs.altsai.game.Resources;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.newdawn.slick.GameContainer;
-
 import states.GamePlayState;
 
 /**
@@ -25,7 +24,7 @@ public class BlackHole extends Powerup {
   /**
    * Reference to the list of zombies in the game.
    */
-  private ConcurrentHashMap<String, Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   /**
    * Reference to the list of players in the game.
@@ -47,8 +46,7 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z, GamePlayState gps) {
+  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, GamePlayState gps) {
     super(p);
     // TODO animation
     zombies = z;
@@ -70,8 +68,8 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z, List<Player> pl, GamePlayState gps) {
+  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl,
+      GamePlayState gps) {
     super(p);
     // TODO animation
     zombies = z;

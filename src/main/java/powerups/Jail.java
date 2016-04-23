@@ -1,15 +1,15 @@
 package powerups;
 
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.newdawn.slick.GameContainer;
+
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.newdawn.slick.GameContainer;
 
 public class Jail extends Powerup {
 

@@ -1,12 +1,13 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import game_objects.Powerup;
-
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
+
+import edu.brown.cs.altsai.game.Resources;
+import entities.Zombie;
+import game_objects.Powerup;
 
 /**
  * OnFire Powerup that gives the player a temporary capability of lighting
@@ -32,7 +33,7 @@ public class OnFire extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private ConcurrentHashMap<String, Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   /**
    * Map of Zombies to the time they were lit on fire.
@@ -47,8 +48,7 @@ public class OnFire extends Powerup {
    * @param z
    *          the list of Zombies
    */
-  public OnFire(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z) {
+  public OnFire(Map<String, Powerup> p, Map<String, Zombie> z) {
     super(p);
     // TODO set animation
     zombies = z;

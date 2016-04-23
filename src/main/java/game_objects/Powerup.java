@@ -1,8 +1,9 @@
 package game_objects;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.UUID;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -32,7 +33,7 @@ public abstract class Powerup extends Circle {
   protected long activationStartTime;
   protected boolean isPickedUp;
   protected boolean isUsed;
-  protected ConcurrentHashMap<String, Powerup> powerups;
+  protected Map<String, Powerup> powerups;
 
   /**
    * Constructor for a powerup.
@@ -43,7 +44,7 @@ public abstract class Powerup extends Circle {
    * This constructor must be called by the subclass.
    *
    */
-  public Powerup(ConcurrentHashMap<String, Powerup> p) {
+  public Powerup(Map<String, Powerup> p) {
     this.spawnStartTime = System.currentTimeMillis();
     this.isPickedUp = false;
     this.powerups = p;
@@ -52,6 +53,7 @@ public abstract class Powerup extends Circle {
     this.x = r.nextFloat() * Window.width;
     this.y = r.nextFloat() * Window.height;
     this.radius = POWERUP_RADIUS;
+    this.id = UUID.randomUUID().toString();
   }
 
   /**
@@ -146,11 +148,7 @@ public abstract class Powerup extends Circle {
    * powerup.
    */
   public void kill() {
-    for (String pid : powerups.keySet()) {
-      if (powerups.get(pid) == this) {
-        powerups.remove(pid);
-      }
-    }
+    powerups.remove(this.getID());
   }
 
 }

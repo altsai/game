@@ -123,7 +123,7 @@ public class SinglePlayerGameState extends GamePlayState {
             newZombie.setSpeed(ZOMBIE_BASE_SPEED
                 + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
                 * ZOMBIE_BASE_SPEED);
-            this.zombies.put(generateID(), newZombie);
+            this.zombies.put(newZombie.getID(), newZombie);        // add to hashmap instead of add to list
           }
         }
 
@@ -132,7 +132,7 @@ public class SinglePlayerGameState extends GamePlayState {
         newZombie.setSpeed(ZOMBIE_BASE_SPEED
             + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
             * ZOMBIE_BASE_SPEED);
-        this.zombies.put(generateID(), newZombie);
+        this.zombies.put(newZombie.getID(), newZombie);
 
         this.lastZombieSpawnTime = System.currentTimeMillis();
       }

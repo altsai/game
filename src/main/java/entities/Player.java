@@ -1,8 +1,6 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Powerup;
+import java.util.UUID;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -10,6 +8,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import game_objects.Powerup;
 import powerups.Bomb;
 
 /**
@@ -78,6 +79,7 @@ public class Player extends Entity implements PlayerAction {
     this.canMove = true;
     this.immune = false;
     this.lastDir = 0;
+    this.id = UUID.randomUUID().toString();
   }
 
   public void setPlayer1(boolean flag) {

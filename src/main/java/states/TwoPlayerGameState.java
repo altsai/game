@@ -7,13 +7,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
+import powerups.Bomb;
+import powerups.Speed;
+import powerups.TimeStop;
 
 /**
  * Defines the two player game state.
@@ -86,7 +86,7 @@ public class TwoPlayerGameState extends GamePlayState {
             newZombie.setSpeed(ZOMBIE_BASE_SPEED
                 + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
                 * ZOMBIE_BASE_SPEED);
-            this.zombies.put(generateID(), newZombie);
+            this.zombies.put(newZombie.getID(), newZombie);
           }
         }
 
@@ -95,7 +95,7 @@ public class TwoPlayerGameState extends GamePlayState {
         newZombie.setSpeed(ZOMBIE_BASE_SPEED
             + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
             * ZOMBIE_BASE_SPEED);
-        this.zombies.put(generateID(), newZombie);
+        this.zombies.put(newZombie.getID(), newZombie);
 
         this.lastZombieSpawnTime = System.currentTimeMillis();
       }

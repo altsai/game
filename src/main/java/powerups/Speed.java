@@ -1,6 +1,6 @@
 package powerups;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
@@ -28,7 +28,7 @@ public class Speed extends Powerup {
    * @param powerups
    *          List of powerups in the game currently
    */
-  public Speed(ConcurrentHashMap<String, Powerup> p) {
+  public Speed(Map<String, Powerup> p) {
     // call the super constructor first to start timers
     super(p);
 

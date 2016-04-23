@@ -1,19 +1,19 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Entity;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SpriteSheet;
+
+import edu.brown.cs.altsai.game.Resources;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 
 /**
  * Bomb Powerup that destroys any Zombies within a certain radius. In two-player
@@ -47,7 +47,7 @@ public class Bomb extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private ConcurrentHashMap<String, Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   /**
    * Reference to the list of players in the game.
@@ -82,8 +82,7 @@ public class Bomb extends Powerup {
    * @param z
    *          the list of Zombies in the game
    */
-  public Bomb(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z) {
+  public Bomb(Map<String, Powerup> p, Map<String, Zombie> z) {
     // call the superconstructor to start timing
     super(p);
 
@@ -107,8 +106,7 @@ public class Bomb extends Powerup {
    * @param pl
    *          the list of Players in the game
    */
-  public Bomb(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z, List<Player> pl) {
+  public Bomb(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl) {
     // call the superconstructor to start timing
     super(p);
 

@@ -83,11 +83,11 @@ public abstract class GamePlayState extends BasicGameState {
     for (Player p : this.players) {
       p.render(gc, g);
     }
-    for (String zid : zombies.keySet()) {
-      zombies.get(zid).render(gc, g);
+    for (Zombie z : this.zombies.values()) {
+      z.render(gc, g);
     }
-    for (String pid : powerups.keySet()) {
-      powerups.get(pid).render(gc, g);
+    for (Powerup p : this.powerups.values()) {
+      p.render(gc, g);
     }
 
   }
@@ -128,8 +128,7 @@ public abstract class GamePlayState extends BasicGameState {
       int delta) throws SlickException {
 
     // check for player collision with every entity
-    for (String zid : zombies.keySet()) {
-      Zombie z = zombies.get(zid);
+    for (Zombie z : this.zombies.values()) {
       z.update(gc, delta);
 
       // check player's lives and mark invincible as necessary
@@ -146,8 +145,7 @@ public abstract class GamePlayState extends BasicGameState {
     }
 
     // check for player collision with every powerup
-    for (String pid : powerups.keySet()) {
-      Powerup powerup = powerups.get(pid);
+    for (Powerup powerup : this.powerups.values()) {
       for (Player p : this.players) {
         if (p.isCollision(powerup)) {
           p.collectPowerup(powerup);
@@ -168,11 +166,6 @@ public abstract class GamePlayState extends BasicGameState {
    */
   private void updatePowerups(GameContainer gc, int delta) {
 
-    // DO NOT USE ENHANCED FOR LOOP HERE. IDK WHY BUT THERES A THREADING ISSUE
-    // PLS DO NOT CHANGE...
-    // for (int i = 0; i < this.powerups.size(); i++) {
-    // this.powerups.get(i).update(gc, delta);
-    // }
     for (String pid : powerups.keySet()) {
       powerups.get(pid).update(gc, delta);
     }
