@@ -1,6 +1,7 @@
 package powerups;
 
 import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -55,7 +56,7 @@ public class Jail extends Powerup {
     long time = System.currentTimeMillis();
     if ((isUsed && time - activationStartTime >= JAIL_LIFETIME)
         || (isUsed && bombFired)) {
-      affectedPlayer.setBoundary(0, 800, 0, 1000);
+      affectedPlayer.setBoundary(0, Window.height, 0, Window.width);
 
       // kill the powerup
       kill();

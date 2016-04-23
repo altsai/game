@@ -147,8 +147,6 @@ public class Bomb extends Powerup {
   public void activate() {
     super.activate();
 
-    // TODO: if in jail
-
     this.explosionX = this.affectedPlayer.getX();
     this.explosionY = this.affectedPlayer.getY();
 

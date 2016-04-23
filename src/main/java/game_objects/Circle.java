@@ -72,6 +72,10 @@ public class Circle {
     return this.radius;
   }
 
+  public void setRadius(float r) {
+    radius = r;
+  }
+
   /**
    * Returns the distance from top left corner of game window.
    *

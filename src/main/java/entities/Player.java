@@ -256,28 +256,58 @@ public class Player extends Entity implements PlayerAction {
       return;
     }
 
+    boolean upFlag = false;
+    boolean downFlag = false;
+    boolean leftFlag = false;
+    boolean rightFlag = false;
+
     if (input.isKeyDown(keys[0])) {
       double newY = this.y - speed * delta;
+      upFlag = true;
 
       if (newY >= this.top) {
         this.y -= speed * delta;
       }
     } else if (input.isKeyDown(keys[1])) {
       double newY = this.y + speed * delta;
+      downFlag = true;
+
       if (newY <= this.bottom - this.image.getHeight()) {
         this.y += speed * delta;
       }
     }
     if (input.isKeyDown(keys[2])) {
       double newX = this.x - speed * delta;
+      leftFlag = true;
+
       if (newX >= this.left) {
         this.x -= speed * delta;
       }
     } else if (input.isKeyDown(keys[3])) {
       double newX = this.x + speed * delta;
+      rightFlag = true;
+
       if (newX <= this.right - this.image.getWidth()) {
         this.x += speed * delta;
       }
+    }
+
+    if (upFlag && rightFlag) {
+      lastDir = 45;
+    } else if (upFlag && leftFlag) {
+      lastDir = 135;
+    } else if (upFlag) {
+      lastDir = 90;
+    } else if (downFlag && rightFlag) {
+      lastDir = 315;
+    } else if (downFlag && leftFlag) {
+      lastDir = 225;
+    } else if (downFlag) {
+      lastDir = 270;
+    } else if (rightFlag) {
+      lastDir = 0;
+    } else if (leftFlag) {
+      lastDir = 180;
     }
   }
 

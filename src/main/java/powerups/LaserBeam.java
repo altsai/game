@@ -1,5 +1,6 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Window;
 import entities.Zombie;
 import game_objects.Powerup;
 
@@ -29,6 +30,9 @@ public class LaserBeam extends Powerup {
 
     if (this.isUsed) {
       // TODO advance along line of attack
+      float x = this.getX();
+      float y = this.getY();
+
       for (String zid : zombies.keySet()) {
         Zombie z = zombies.get(zid);
         if (this.isCollision(z)) {
@@ -46,12 +50,19 @@ public class LaserBeam extends Powerup {
   public void activate() {
     super.activate();
     direction = affectedPlayer.getLastDir();
-    // TODO set image at rotated angle
+    // TODO reset radius to larger
+    this.image.setRotation(direction);
+  }
+
+  private boolean hasReachedBoundary() {
+    boolean xbound = (this.x <= 0) || (this.x >= Window.width);
+    boolean ybound = (this.y <= 0) || (this.y >= Window.height);
+    return (xbound || ybound);
   }
 
   @Override
   public void deactivate() {
-    if (this.isUsed) { // TODO reached boundary
+    if (this.isUsed && hasReachedBoundary()) { // TODO reached boundary
       // kill the powerup
       kill();
     }
