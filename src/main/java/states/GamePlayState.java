@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -13,6 +14,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -38,7 +40,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected static final int ZOMBIE_SPAWN_DELAY = 1000;
   protected static final int POWERUP_SPAWN_DELAY = 5000;
   protected static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
-  protected static final int MAX_DIFFICULTY_LEVEL = 15;
+  protected static final int MAX_DIFFICULTY_LEVEL = 8;
   protected static final double SPEED_MULTIPLIER = 0.1;
 
   protected Random random;
@@ -72,6 +74,11 @@ public abstract class GamePlayState extends BasicGameState {
       throws SlickException {
 
     g.drawImage(Resources.getImage("background"), 0, 0);
+
+    // Draw bounding box
+    g.setColor(Color.black);
+    g.drawRoundRect(10, 40, Window.width - 20, Window.height - 50, 10);
+    g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
 
     for (Player p : this.players) {
       p.render(gc, g);

@@ -58,7 +58,6 @@ public class Player extends Entity implements PlayerAction {
     this.y = 500;
     this.radius = 30;
     this.lives = 2;
-    this.radius = 20;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
@@ -99,7 +98,7 @@ public class Player extends Entity implements PlayerAction {
       return;
     } else {
       this.lives--;
-      //      this.image = Resources.getImage("invinciblePlayer");
+      clearPowerupStorage();
       this.setState(true);
       this.invincibleTime = System.currentTimeMillis();
     }
@@ -107,9 +106,11 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public void collectPowerup(Powerup p) {
-    this.powerup = p;
-    this.powerup.setPlayer(this);
-    p.pickUp();
+    if (!this.isInvincible()) {
+      this.powerup = p;
+      this.powerup.setPlayer(this);
+      p.pickUp();
+    }
   }
 
   @Override
@@ -125,6 +126,10 @@ public class Player extends Entity implements PlayerAction {
   @Override
   public void incrementScore() {
     this.score++;
+  }
+
+  public Powerup getCurrPowerup() {
+    return this.powerup;
   }
 
   @Override

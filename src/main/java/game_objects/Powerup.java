@@ -80,6 +80,10 @@ public abstract class Powerup extends Circle {
     }
   }
 
+  public Image getImage() {
+    return this.image;
+  }
+
   /**
    * Method to be called when the powerup is picked up.
    */

@@ -25,11 +25,17 @@ public class MenuState extends BasicGameState {
   private static final int BUTTON_WIDTH = 280;
   private static final int BUTTON_HEIGHT = 140;
 
+  private TrueTypeFont ttf;
+  private TrueTypeFont ttf2;
+
   @Override
   public void init(GameContainer gc, StateBasedGame s)
       throws SlickException {
     // TODO Auto-generated method stub
-
+    Font font = new Font("Helvetica", Font.BOLD, 50);
+    ttf = new TrueTypeFont(font, true);
+    Font font2 = new Font("Helvetica", Font.BOLD, 20);
+    ttf2 = new TrueTypeFont(font2, true);
   }
 
   @Override
@@ -42,8 +48,6 @@ public class MenuState extends BasicGameState {
     Resources.getImage("key").draw(Window.width / 5 - 85, Window.height / 8 + 85, 128, 102);
     Resources.getImage("key").draw(Window.width / 5, Window.height / 8 + 85, 128, 102);
     Resources.getImage("key").draw(Window.width / 5 + 85, Window.height / 8 + 85, 128, 102);
-    Font font = new Font("Helvetica", Font.BOLD, 50);
-    TrueTypeFont ttf = new TrueTypeFont(font, true);
     ttf.drawString(Window.width / 5 + 38, Window.height / 8 + 30, "W", Color.gray);
     ttf.drawString(Window.width / 5 - 40, Window.height / 8 + 115, "A", Color.gray);
     ttf.drawString(Window.width / 5 + 45, Window.height / 8 + 115, "S", Color.gray);
@@ -53,8 +57,6 @@ public class MenuState extends BasicGameState {
     // Draw buttons
     Resources.getImage("playerLarge").draw(Window.width / 5 - 57, Window.height / 8 + 200, 70, 70);
     Resources.getImage("button").draw(Window.width / 5 + 40, Window.height / 8 + 167, BUTTON_WIDTH, BUTTON_HEIGHT);
-    Font font2 = new Font("Helvetica", Font.BOLD, 20);
-    TrueTypeFont ttf2 = new TrueTypeFont(font2, true);
     ttf2.drawString(Window.width / 5 + 70, Window.height / 8 + 230, "New Single Player Game");
 
     Resources.getImage("playerLarge").draw(Window.width / 5 - 57, Window.height / 8 + 300, 70, 70);

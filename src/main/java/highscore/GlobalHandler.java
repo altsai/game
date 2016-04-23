@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -46,12 +47,26 @@ public class GlobalHandler {
    * @return the current list of highscores, only of scores of the current day
    */
   protected List<Score> getScoresOfDay() {
+    // Set variables
     List<Score> toReturn = new ArrayList<>();
-    Date currentDate = getCurrentDate();
     int currPlace = 1;
 
+    // Get current date
+    Date currentDate = getCurrentDate();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(currentDate);
+    int currYear = cal.get(Calendar.YEAR);
+    int currMonth = cal.get(Calendar.MONTH);
+    int currDay = cal.get(Calendar.DAY_OF_MONTH);
+
     for (Score score : highscores) {
-      if (score.getDate().getYear() == currentDate.getYear() && score.getDate().getMonth() == currentDate.getMonth() && score.getDate().getDay() == currentDate.getDay()) {
+      // Get score variables
+      cal.setTime(score.getDate());
+      int year = cal.get(Calendar.YEAR);
+      int month = cal.get(Calendar.MONTH);
+      int day = cal.get(Calendar.DAY_OF_MONTH);
+
+      if (year == currYear && month == currMonth && day == currDay) {
         toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
         currPlace++;
       }
@@ -67,11 +82,22 @@ public class GlobalHandler {
    */
   protected List<Score> getScoresOfMonth() {
     List<Score> toReturn = new ArrayList<>();
-    Date currentDate = getCurrentDate();
     int currPlace = 1;
 
+    // Get current date
+    Date currentDate = getCurrentDate();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(currentDate);
+    int currYear = cal.get(Calendar.YEAR);
+    int currMonth = cal.get(Calendar.MONTH);
+
     for (Score score : highscores) {
-      if (score.getDate().getYear() == currentDate.getYear() && score.getDate().getMonth() == currentDate.getMonth()) {
+      // Get score variables
+      cal.setTime(score.getDate());
+      int year = cal.get(Calendar.YEAR);
+      int month = cal.get(Calendar.MONTH);
+
+      if (year == currYear && month == currMonth) {
         toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
         currPlace++;
       }
@@ -87,11 +113,20 @@ public class GlobalHandler {
    */
   protected List<Score> getScoresOfYear() {
     List<Score> toReturn = new ArrayList<>();
-    Date currentDate = getCurrentDate();
     int currPlace = 1;
 
+    // Get current date
+    Date currentDate = getCurrentDate();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(currentDate);
+    int currYear = cal.get(Calendar.YEAR);
+
     for (Score score : highscores) {
-      if (score.getDate().getYear() == currentDate.getYear()) {
+      // Get score variables
+      cal.setTime(score.getDate());
+      int year = cal.get(Calendar.YEAR);
+
+      if (year == currYear) {
         toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
         currPlace++;
       }
