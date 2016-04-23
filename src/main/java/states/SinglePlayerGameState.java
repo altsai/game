@@ -29,7 +29,9 @@ public class SinglePlayerGameState extends GamePlayState {
     // add players to the player list from the superclass
     Player player1 = new Player(null, "player1");
     player1.setPlayer1(true);
-    this.players.add(player1);
+    player1.setID("0");
+    this.players.put(player1.getID(), player1);
+    this.playerID = player1.getID();
   }
 
   @Override
@@ -38,9 +40,9 @@ public class SinglePlayerGameState extends GamePlayState {
 
     super.render(gc, s, g);
 
-    g.drawString("Player has " + this.players.get(0).getLives() + " lives",
+    g.drawString("Player has " + this.players.get(this.playerID).getLives() + " lives",
         100, 100);
-    g.drawString("Player speed: " + this.players.get(0).getSpeed(), 50, 50);
+    g.drawString("Player speed: " + this.players.get(this.playerID).getSpeed(), 50, 50);
 
     g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
   }
@@ -56,7 +58,7 @@ public class SinglePlayerGameState extends GamePlayState {
    * @return int, score of the player
    */
   public int getScore() {
-    return this.players.get(0).getScore();
+    return this.players.get(this.playerID).getScore();
   }
 
   @Override
@@ -80,7 +82,7 @@ public class SinglePlayerGameState extends GamePlayState {
       if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
 
         // have a random player to target
-        Player target = this.players.get(random.nextInt(this.players.size()));
+        Player target = this.players.get(String.valueOf(random.nextInt(this.players.size())));
 
         // at any given time there is a 30% chance of multiple spawns
         if (random.nextInt(9) < 3) {
@@ -121,7 +123,7 @@ public class SinglePlayerGameState extends GamePlayState {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
       double randomNum = random.nextDouble();
-      if (randomNum < 0.33) {
+      if (randomNum < 0.9) {
         Bomb bomb = new Bomb(powerups, zombies);                 // add to hashmap
         this.powerups.put(bomb.getID(), bomb);
       } else if (randomNum < 0.6 && randomNum >= 0.33) {

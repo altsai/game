@@ -36,8 +36,8 @@ public class TwoPlayerGameState extends GamePlayState {
     player2.setPlayer1(false);
 
     player2.setImage(Resources.getImage("player2"));
-    this.players.add(player1);
-    this.players.add(player2);
+    this.players.put(player1.getID(), player1);
+    this.players.put(player2.getID(), player2);
   }
 
   public String getWinner() {

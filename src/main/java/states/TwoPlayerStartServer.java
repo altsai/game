@@ -9,16 +9,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import edu.brown.cs.altsai.game.Window;
 
-/**
- * Defines the Menu state of the game.
- *
- * @author bl48
- *
- */
-public class MenuState extends BasicGameState {
+public class TwoPlayerStartServer extends BasicGameState {
 
   @Override
-  public void init(GameContainer gc, StateBasedGame s)
+  public void init(GameContainer arg0, StateBasedGame arg1)
       throws SlickException {
     // TODO Auto-generated method stub
 
@@ -27,32 +21,29 @@ public class MenuState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    g.drawString("Hit 1 to go to single player", Window.width / 2, Window.height / 2);
-    g.drawString("Hit 2 to go to double player", Window.width / 2, Window.height / 2 + 20);
-    g.drawString("Hit 3 to go to high scores", Window.width / 2, Window.height / 2 + 40);
+    g.drawString("Hit 1 to start a server", Window.width / 2, Window.height / 2);
+    g.drawString("Hit 2 to join a server", Window.width / 2, Window.height / 2 + 20);
 
   }
 
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
-
     // go to the singleplayer game when user presses 1
     if (gc.getInput().isKeyPressed(Input.KEY_1)) {
       // restart a new game everytime we enter a game state from menu
-      s.getState(States.SINGLE_PLAYER).init(gc, s);
-      s.enterState(States.SINGLE_PLAYER);
+      s.getState(States.TWO_PLAYER_HOST).init(gc, s);
+      s.enterState(States.TWO_PLAYER_HOST);
     } else if (gc.getInput().isKeyPressed(Input.KEY_2)) {
-      s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
-      s.enterState(States.TWO_PLAYER_START_SERVER);
-    } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
-      s.enterState(States.HIGH_SCORES);
+      s.getState(States.TWO_PLAYER_CLIENT).init(gc, s);
+      s.enterState(States.TWO_PLAYER_CLIENT);
     }
   }
 
   @Override
   public int getID() {
-    return States.MENU;
+    // TODO Auto-generated method stub
+    return States.TWO_PLAYER_START_SERVER;
   }
 
 }

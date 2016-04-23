@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 import game_objects.Powerup;
 
 public interface PlayerAction {
@@ -14,7 +16,7 @@ public interface PlayerAction {
 
   void incrementScore();
 
-  void usePowerup();
+  List<String> usePowerup();
 
   void clearPowerupStorage();
 }

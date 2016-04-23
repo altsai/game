@@ -1,5 +1,7 @@
 package powerups;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
@@ -33,6 +35,7 @@ public class Speed extends Powerup {
     super(p);
 
     this.image = Resources.getImage("speed");
+    this.powerupIndex = Powerup.SPEED;
   }
 
   @Override
@@ -59,13 +62,19 @@ public class Speed extends Powerup {
    *
    * Note that super.activate() is called first.
    */
-  public void activate() {
+  public List<String> activate() {
     // call super.activate() to mark the powerup as activated.
-    super.activate();
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
 
     // Speed specific method to increase player speed
     this.affectedPlayer.setSpeed(this.affectedPlayer.getSpeed()
         * SPEED_MULTIPLIER);
+
+    return new LinkedList<>();
   }
 
   @Override

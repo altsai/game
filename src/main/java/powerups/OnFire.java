@@ -1,6 +1,8 @@
 package powerups;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
@@ -49,6 +51,7 @@ public class OnFire extends Powerup {
     super(p);
     // TODO set image
     zombies = z;
+    this.powerupIndex = Powerup.ON_FIRE;
   }
 
   @Override
@@ -92,11 +95,18 @@ public class OnFire extends Powerup {
   }
 
   @Override
-  public void activate() {
-    super.activate();
+  public List<String> activate() {
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
+
     onFireTimes = new HashMap<>();
 
     // TODO reset player's image
+
+    return new LinkedList<>();
   }
 
   @Override

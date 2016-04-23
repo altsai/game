@@ -1,6 +1,7 @@
 package powerups;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class Bomb extends Powerup {
   /**
    * The explosion radius in pixels.
    */
-  private static final int EXPLOSION_RADIUS = 200;
+  public static final int EXPLOSION_RADIUS = 200;
 
   /**
    * The width of the animation.
@@ -35,7 +36,7 @@ public class Bomb extends Powerup {
   public static final int ANIMATION_WIDTH = EXPLOSION_RADIUS * 4;
 
   /**
-   * The height of the animation.
+   * The height of the animation.s
    */
   public static final int ANIMATION_HEIGHT = (int) (ANIMATION_WIDTH / 1.0315);
 
@@ -45,6 +46,11 @@ public class Bomb extends Powerup {
   public static final int ANIMATION_FRAME_TIME = 50;
 
   /**
+   * Duration of animation
+   */
+  public static final int ANIMATION_DURATION = 500;
+
+  /**
    * Reference to the list of Zombies in the game.
    */
   private Map<String, Zombie> zombies;
@@ -52,7 +58,7 @@ public class Bomb extends Powerup {
   /**
    * Reference to the list of players in the game.
    */
-  private List<Player> players;
+  private Map<String, Player> players;
 
   /**
    * SpriteSheet for the Bomb.
@@ -89,11 +95,12 @@ public class Bomb extends Powerup {
     // load bomb image and animation
     this.image = Resources.getImage("bomb");
     this.spriteSheet = Resources.getSprite("bomb_explosion");
-    this.animation = new Animation(this.spriteSheet, 500);
+    this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
     this.animation.setLooping(false);
     this.zombies = z;
+    this.powerupIndex = Powerup.BOMB;
 
-    players = new ArrayList<>();
+    players = new HashMap<>();
   }
 
   /**
@@ -106,7 +113,7 @@ public class Bomb extends Powerup {
    * @param pl
    *          the list of Players in the game
    */
-  public Bomb(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl) {
+  public Bomb(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> pl) {
     // call the superconstructor to start timing
     super(p);
 
@@ -116,19 +123,24 @@ public class Bomb extends Powerup {
     this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
     this.animation.setLooping(false);
     this.zombies = z;
+    this.powerupIndex = Powerup.BOMB;
 
     this.players = pl;
   }
 
+
   @Override
   public void render(GameContainer gc, Graphics g) {
     super.render(gc, g);
+
     if (this.isUsed) {
+
       // trigger animation
       this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2),
           this.explosionY - (ANIMATION_HEIGHT / 2), ANIMATION_WIDTH,
           ANIMATION_HEIGHT);
     }
+
 
   }
 
@@ -141,27 +153,34 @@ public class Bomb extends Powerup {
     deactivate();
   }
 
+
   @Override
-  public void activate() {
-    super.activate();
+  public List<String> activate() {
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
 
     // TODO: if in jail
 
     this.explosionX = this.affectedPlayer.getX();
     this.explosionY = this.affectedPlayer.getY();
 
+    List<String> removedZombies = new LinkedList<>();
 
     for (String key : this.zombies.keySet()) {
       Zombie curr = this.zombies.get(key);
       if (withinRadius(curr)) {
         this.zombies.remove(key);
+        removedZombies.add(key);
         this.affectedPlayer.incrementScore();
       }
     }
 
     // check if any other players have been hit for multiplayer
-    for (Player p : players) {
-      if (p != affectedPlayer) {
+    for (Player p : players.values()) {
+      if (!p.getID().equals(affectedPlayer.getID())) {
         // if the other player isn't invincible and is in blast radius
         if (!p.isInvincible() && withinRadius(p)) {
           // other player's speed is -10%
@@ -172,6 +191,7 @@ public class Bomb extends Powerup {
 
     // always check for deactivation of speed decrease on each update
     deactivate();
+    return removedZombies;
   }
 
   /**
@@ -185,7 +205,7 @@ public class Bomb extends Powerup {
    * @return True if entity within explosion radius.
    */
   private boolean withinRadius(Entity e) {
-    return this.distTo(e) <= EXPLOSION_RADIUS;
+    return this.affectedPlayer.distTo(e) <= EXPLOSION_RADIUS;
   }
 
   @Override
@@ -194,8 +214,10 @@ public class Bomb extends Powerup {
     // reset all other player's speeds back after 5 seconds
     if (this.isUsed
         && (System.currentTimeMillis() - this.activationStartTime > 5000)) {
-      for (Player p : this.players) {
-        p.setSpeed(p.getSpeed() / 0.9);
+      for (Player p : this.players.values()) {
+        if (p.getID().equals(affectedPlayer.getID())) {
+          p.setSpeed(Player.PLAYER_SPEED);
+        }
       }
       kill();
     }

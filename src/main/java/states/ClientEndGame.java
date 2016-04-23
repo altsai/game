@@ -7,7 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class TwoPlayerEndGame extends BasicGameState {
+public class ClientEndGame extends BasicGameState {
   //takes in the SinglePlayerGameState just played
   private GamePlayState gps;
 
@@ -15,7 +15,7 @@ public class TwoPlayerEndGame extends BasicGameState {
    * Constructor for a SinglePlayerEndGameState
    * @param singlePlayerGameState     single player state that just finished
    */
-  public TwoPlayerEndGame(GamePlayState gps) {
+  public ClientEndGame(GamePlayState gps) {
     this.gps = gps;
   }
 
@@ -45,6 +45,6 @@ public class TwoPlayerEndGame extends BasicGameState {
 
   @Override
   public int getID() {
-    return States.TWO_PLAYER_END_GAME;
+    return States.CLIENT_END_GAME;
   }
 }

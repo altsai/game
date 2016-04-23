@@ -1,6 +1,7 @@
 package powerups;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,7 @@ public class BlackHole extends Powerup {
     players = new ArrayList<>();
     players.add(affectedPlayer);
     game = gps;
+    this.powerupIndex = Powerup.BLACK_HOLE;
   }
 
   /**
@@ -73,6 +75,7 @@ public class BlackHole extends Powerup {
     zombies = z;
     players = pl;
     game = gps;
+    this.powerupIndex = Powerup.BLACK_HOLE;
   }
 
   @Override
@@ -94,8 +97,12 @@ public class BlackHole extends Powerup {
   }
 
   @Override
-  public void activate() {
-    super.activate();
+  public List<String> activate() {
+    this.isUsed = true;
+    this.activationStartTime = System.currentTimeMillis();
+
+    // clear the player's powerup storage after using the powerup
+    this.affectedPlayer.clearPowerupStorage();
 
     // reset location to player location
     this.setX(affectedPlayer.getX());
@@ -110,6 +117,8 @@ public class BlackHole extends Powerup {
     for (String key : zombies.keySet()) {
       zombies.get(key).setTarget(this);
     }
+
+    return new LinkedList<>();
   }
 
   @Override
