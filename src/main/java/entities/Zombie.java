@@ -1,13 +1,13 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import game_objects.Circle;
+
 import java.util.Random;
 import java.util.UUID;
 
 import org.newdawn.slick.GameContainer;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Circle;
 
 /**
  * Defines the zombie object.
@@ -33,6 +33,8 @@ public class Zombie extends Entity {
   private static final int DOWN = 2;
   private static final int LEFT = 3;
   private static final int CUSHION = 5;
+
+  private double initial_speed;
 
   // zombies keep track of a player and a specific target area of the player.
   private Circle player;
@@ -66,6 +68,8 @@ public class Zombie extends Entity {
     this.target = r.nextInt(LEFT + 1);
     this.state = false;
     this.id = UUID.randomUUID().toString();
+
+    this.initial_speed = this.getSpeed();
   }
 
   public void setTarget(Circle other) {
@@ -91,6 +95,10 @@ public class Zombie extends Entity {
    */
   public boolean isOnFire() {
     return this.state;
+  }
+
+  public double getInitSpeed() {
+    return initial_speed;
   }
 
   /**

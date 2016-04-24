@@ -95,7 +95,8 @@ public abstract class GamePlayState extends BasicGameState {
 
     long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
     if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
-      g.drawString("Game begins in: " + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
+      g.drawString("Game begins in: "
+          + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
     } else {
       this.gameStart = true;
 
@@ -217,7 +218,6 @@ public abstract class GamePlayState extends BasicGameState {
   public void setTimeInit(long time) {
     this.initialDelayTime = time;
   }
-
 
   /**
    * Method that spawns in zombies.
