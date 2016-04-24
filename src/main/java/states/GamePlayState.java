@@ -3,7 +3,6 @@ package states;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.jetty.util.ConcurrentHashSet;
@@ -245,8 +244,5 @@ public abstract class GamePlayState extends BasicGameState {
   protected abstract void endGame(GameContainer gc, StateBasedGame s)
       throws SlickException;
 
-  public String generateID() {
-    return UUID.randomUUID().toString();
-  }
 
 }

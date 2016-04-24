@@ -1,9 +1,9 @@
 package powerups;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -30,7 +30,7 @@ public class BlackHole extends Powerup {
   /**
    * Reference to the list of players in the game.
    */
-  private List<Player> players;
+  private Map<String, Player> players;
 
   /**
    * Reference to the game.
@@ -51,8 +51,8 @@ public class BlackHole extends Powerup {
     super(p);
     // TODO animation
     zombies = z;
-    players = new ArrayList<>();
-    players.add(affectedPlayer);
+    players = new ConcurrentHashMap<>();
+    players.put(affectedPlayer.getID(), affectedPlayer);
     game = gps;
     image = Resources.getImage("blackhole");
     this.powerupIndex = Powerup.BLACK_HOLE;
@@ -70,7 +70,7 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl,
+  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> pl,
       GamePlayState gps) {
     super(p);
     // TODO animation
@@ -119,8 +119,8 @@ public class BlackHole extends Powerup {
     this.game.setSpawnOn(false);
 
     // set target of all Zombies to the BlackHole
-    for (String zid : zombies.keySet()) {
-      zombies.get(zid).setTarget(this);
+    for (Zombie z : this.zombies.values()) {
+      z.setTarget(this);
     }
 
     return new LinkedList<>();
