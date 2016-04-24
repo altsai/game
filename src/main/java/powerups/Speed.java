@@ -1,13 +1,13 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import game_objects.Powerup;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
-
-import edu.brown.cs.altsai.game.Resources;
-import game_objects.Powerup;
 
 /**
  * Defines the speed powerup that boosts a Players speed by +20%.

@@ -42,6 +42,7 @@ public abstract class Powerup extends Circle {
   public static final int ON_FIRE = 3;
   public static final int SPEED = 4;
   public static final int TIMESTOP = 5;
+
   /**
    * Constructor for a powerup.
    *
@@ -57,8 +58,8 @@ public abstract class Powerup extends Circle {
     this.powerups = p;
 
     Random r = new Random();
-    this.x = r.nextFloat() * Window.width;
-    this.y = r.nextFloat() * Window.height;
+    this.x = r.nextFloat() * (Window.width - 30 - (2 * POWERUP_RADIUS)) + 15;
+    this.y = r.nextFloat() * (Window.height - 60 - (2 * POWERUP_RADIUS)) + 45;
     this.radius = POWERUP_RADIUS;
     this.id = UUID.randomUUID().toString();
   }

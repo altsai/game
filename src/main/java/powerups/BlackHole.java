@@ -1,6 +1,5 @@
 package powerups;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +26,14 @@ public class BlackHole extends Powerup {
    */
   private Map<String, Zombie> zombies;
 
-  /**
-   * Reference to the list of players in the game.
-   */
-  private List<Player> players;
+
 
   /**
    * Reference to the game.
    */
   private GamePlayState game;
+
+  private final static long EFFECT_DURATION = 3000;
 
   /**
    * Constructor for the BlackHole.
@@ -51,8 +49,6 @@ public class BlackHole extends Powerup {
     super(p);
     // TODO animation
     zombies = z;
-    players = new ArrayList<>();
-    players.add(affectedPlayer);
     game = gps;
     image = Resources.getImage("blackhole");
     this.powerupIndex = Powerup.BLACK_HOLE;
@@ -70,12 +66,11 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, List<Player> pl,
+  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> pl,
       GamePlayState gps) {
     super(p);
     // TODO animation
     zombies = z;
-    players = pl;
     game = gps;
     image = Resources.getImage("blackhole");
     this.powerupIndex = Powerup.BLACK_HOLE;
@@ -119,8 +114,8 @@ public class BlackHole extends Powerup {
     this.game.setSpawnOn(false);
 
     // set target of all Zombies to the BlackHole
-    for (String zid : zombies.keySet()) {
-      zombies.get(zid).setTarget(this);
+    for (Zombie z : this.zombies.values()) {
+      z.setTarget(this);
     }
 
     return new LinkedList<>();
@@ -128,10 +123,26 @@ public class BlackHole extends Powerup {
 
   @Override
   public void deactivate() {
-    if (this.isUsed && zombies.size() == 0) {
+//    if (this.isUsed && zombies.size() == 0) {
+//      this.game.setSpawnOn(true);
+//
+//      // kill the Powerup
+//      kill();
+//    }
+
+    // the effects only last for 3 seconds now
+    if (this.isUsed && (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION)) {
+      for (Zombie z : this.zombies.values()) {
+
+        // this check is necessary in case the use uses two blackholes in a row
+        // we want the zombies to follow the blackhole that hasn't expired
+        // instead of the player
+        if (z.getTarget() == this) {
+          z.setTarget(this.affectedPlayer);
+        }
+      }
       this.game.setSpawnOn(true);
 
-      // kill the Powerup
       kill();
     }
   }

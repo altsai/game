@@ -44,7 +44,8 @@ public class GameClient {
 
   public void start() throws IOException {
     Log.set(Log.LEVEL_DEBUG);
-    this.client = new Client();
+    // give buffer write of 2^14, and object buffer of 2^12
+    this.client = new Client(16384, 4096);
     Network.register(this.client);
 
     // maybe pass in the hashmaps into the listeners? and servers?

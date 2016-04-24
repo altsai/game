@@ -6,14 +6,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.google.common.collect.Maps;
-
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Speed;
 import powerups.TimeStop;
@@ -33,6 +25,15 @@ import server.Network.ZombieNew;
 import states.GamePlayState;
 import states.States;
 
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.google.common.collect.Maps;
+
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
+
 public class ClientListener extends Listener {
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
@@ -45,14 +46,9 @@ public class ClientListener extends Listener {
   private StateBasedGame s;
   private GameClient gc;
 
-  public ClientListener(Client client
-      , Map<String, Player> players
-      , Map<String, Zombie> zombies
-      , Map<String, Powerup> powerups
-      , String playerID
-      , GamePlayState gps
-      , StateBasedGame s
-      , GameClient gc) {
+  public ClientListener(Client client, Map<String, Player> players,
+      Map<String, Zombie> zombies, Map<String, Powerup> powerups,
+      String playerID, GamePlayState gps, StateBasedGame s, GameClient gc) {
 
     this.client = client;
     this.players = players;
@@ -160,26 +156,27 @@ public class ClientListener extends Listener {
     if (o instanceof PowerupNew) {
       PowerupNew packet = (PowerupNew) o;
       switch (packet.powerupIndex) {
-        case Powerup.BOMB:
-          Bomb newBomb = new Bomb(this.powerups, Maps.newHashMap(), this.players);
-          newBomb.setX(packet.x);
-          newBomb.setY(packet.y);
-          this.powerups.put(packet.id, newBomb);
-          break;
-        case Powerup.SPEED:
-          Speed newSpeed = new Speed(this.powerups);
-          newSpeed.setX(packet.x);
-          newSpeed.setY(packet.y);
-          this.powerups.put(packet.id, newSpeed);
-          break;
-        case Powerup.TIMESTOP:
-          TimeStop newTime = new TimeStop(this.powerups, Maps.newHashMap(), this.players, this.game);
-          newTime.setX(packet.x);
-          newTime.setY(packet.y);
-          this.powerups.put(packet.id, newTime);
-          break;
-        default:
-          break;
+      case Powerup.BOMB:
+        Bomb newBomb = new Bomb(this.powerups, Maps.newHashMap(), this.players);
+        newBomb.setX(packet.x);
+        newBomb.setY(packet.y);
+        this.powerups.put(packet.id, newBomb);
+        break;
+      case Powerup.SPEED:
+        Speed newSpeed = new Speed(this.powerups);
+        newSpeed.setX(packet.x);
+        newSpeed.setY(packet.y);
+        this.powerups.put(packet.id, newSpeed);
+        break;
+      case Powerup.TIMESTOP:
+        TimeStop newTime = new TimeStop(this.powerups, Maps.newHashMap(),
+            this.players, this.game);
+        newTime.setX(packet.x);
+        newTime.setY(packet.y);
+        this.powerups.put(packet.id, newTime);
+        break;
+      default:
+        break;
       }
     }
 
@@ -229,11 +226,10 @@ public class ClientListener extends Listener {
       }
     }
 
-//    if (o instanceof AnimationPacket) {
-//      AnimationPacket packet = (AnimationPacket) o;
-//
-//    }
-
+    // if (o instanceof AnimationPacket) {
+    // AnimationPacket packet = (AnimationPacket) o;
+    //
+    // }
 
   }
 }

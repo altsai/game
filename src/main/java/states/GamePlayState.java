@@ -3,7 +3,6 @@ package states;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.jetty.util.ConcurrentHashSet;
@@ -95,7 +94,8 @@ public abstract class GamePlayState extends BasicGameState {
 
     long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
     if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
-      g.drawString("Game begins in: " + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
+      g.drawString("Game begins in: "
+          + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
     } else {
       this.gameStart = true;
 
@@ -218,7 +218,6 @@ public abstract class GamePlayState extends BasicGameState {
     this.initialDelayTime = time;
   }
 
-
   /**
    * Method that spawns in zombies.
    *
@@ -245,8 +244,5 @@ public abstract class GamePlayState extends BasicGameState {
   protected abstract void endGame(GameContainer gc, StateBasedGame s)
       throws SlickException;
 
-  public String generateID() {
-    return UUID.randomUUID().toString();
-  }
 
 }

@@ -1,5 +1,9 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import game_objects.Powerup;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -9,12 +13,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
-import com.google.common.collect.Lists;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Powerup;
 import powerups.Bomb;
+import powerups.TimeStop;
+
+import com.google.common.collect.Lists;
 
 /**
  * Defines the Player object.
@@ -46,6 +48,7 @@ public class Player extends Entity implements PlayerAction {
   private boolean isPlayer1;
   private boolean isSingle;
   private long lastBombFired;
+  private long lastTimeStop;
   private boolean canMove;
   private boolean immune;
 
@@ -65,7 +68,7 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 30;
-    this.lives = 2;
+    this.lives = 200;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
@@ -77,6 +80,7 @@ public class Player extends Entity implements PlayerAction {
     this.isSingle = true;
     this.isPlayer1 = true;
     this.lastBombFired = 0;
+    this.lastTimeStop = 0;
     this.spriteSheet = Resources.getSprite("injuredAnimation");
     this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
     this.animation.setPingPong(true);
@@ -104,7 +108,6 @@ public class Player extends Entity implements PlayerAction {
   public void setLives(int lives) {
     this.lives = lives;
   }
-
 
   public boolean isPlayer1() {
     return this.isPlayer1;
@@ -157,12 +160,15 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public List<String> usePowerup() {
+    if (this.powerup instanceof Bomb) {
+      this.lastBombFired = System.currentTimeMillis();
+    }
+    if (this.powerup instanceof TimeStop) {
+      this.lastTimeStop = System.currentTimeMillis();
+    }
     if (this.powerup != null) {
-      List<String> output =  this.powerup.activate();
+      List<String> output = this.powerup.activate();
       this.powerup = null;
-      if (this.powerup instanceof Bomb) {
-        this.lastBombFired = System.currentTimeMillis();
-      }
       return output;
     } else {
       return Lists.newArrayList();
@@ -202,18 +208,17 @@ public class Player extends Entity implements PlayerAction {
       this.image = Resources.getImage("player");
     }
 
-
-//    // move the player according to input and delta.
-//    // both p1 and p2 have same controls since on separate windows
-//    move(input, delta, PLAYER1_CONTROLS);
-//
-////    if (this.isPlayer1) {
-////      move(input, delta, PLAYER1_CONTROLS);
-////    } else {
-////      move(input, delta, PLAYER2_CONTROLS);
-////    }
-//
-//    checkActionKey(input);
+    // // move the player according to input and delta.
+    // // both p1 and p2 have same controls since on separate windows
+    // move(input, delta, PLAYER1_CONTROLS);
+    //
+    // // if (this.isPlayer1) {
+    // // move(input, delta, PLAYER1_CONTROLS);
+    // // } else {
+    // // move(input, delta, PLAYER2_CONTROLS);
+    // // }
+    //
+    // checkActionKey(input);
   }
 
   /**
@@ -221,22 +226,25 @@ public class Player extends Entity implements PlayerAction {
    *
    * Doesn't check action key because that should be checked in the game state.
    *
-   * @param gc      Game Container.
-   * @param delta   int, time since last update
+   * @param gc
+   *          Game Container.
+   * @param delta
+   *          int, time since last update
    */
   public void updateAndControlNetworked(GameContainer gc, int delta) {
     update(gc, delta);
     move(gc.getInput(), delta, PLAYER1_CONTROLS);
   }
 
-
   /**
    * Method that moves the player and checks for action key.
    *
    * Used in single player.
    *
-   * @param gc      GameContainer
-   * @param delta   int time since last update
+   * @param gc
+   *          GameContainer
+   * @param delta
+   *          int time since last update
    */
   public void updateAndControl(GameContainer gc, int delta) {
     update(gc, delta);
@@ -256,21 +264,21 @@ public class Player extends Entity implements PlayerAction {
       usePowerup();
     }
 
-//    if (this.isSingle) {
-//      if (input.isKeyPressed(Input.KEY_SPACE)) {
-//        usePowerup();
-//      }
-//    } else {
-//      if (this.isPlayer1) {
-//        if (input.isKeyPressed(Input.KEY_LSHIFT)) {
-//          usePowerup();
-//        }
-//      } else {
-//        if (input.isKeyPressed(Input.KEY_RCONTROL)) {
-//          usePowerup();
-//        }
-//      }
-//    }
+    // if (this.isSingle) {
+    // if (input.isKeyPressed(Input.KEY_SPACE)) {
+    // usePowerup();
+    // }
+    // } else {
+    // if (this.isPlayer1) {
+    // if (input.isKeyPressed(Input.KEY_LSHIFT)) {
+    // usePowerup();
+    // }
+    // } else {
+    // if (input.isKeyPressed(Input.KEY_RCONTROL)) {
+    // usePowerup();
+    // }
+    // }
+    // }
   }
 
   @Override
@@ -302,11 +310,6 @@ public class Player extends Entity implements PlayerAction {
 
   public boolean isImmune() {
     return immune;
-  }
-
-  @Override
-  public double getSpeed() {
-    return this.speed;
   }
 
   /**
@@ -386,6 +389,10 @@ public class Player extends Entity implements PlayerAction {
 
   public long getLastBombFired() {
     return lastBombFired;
+  }
+
+  public long getLastTimeStop() {
+    return lastTimeStop;
   }
 
   public void setCanMove(boolean b) {
