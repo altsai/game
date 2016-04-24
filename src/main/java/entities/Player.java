@@ -160,15 +160,15 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public List<String> usePowerup() {
+    if (this.powerup instanceof Bomb) {
+      this.lastBombFired = System.currentTimeMillis();
+    }
+    if (this.powerup instanceof TimeStop) {
+      this.lastTimeStop = System.currentTimeMillis();
+    }
     if (this.powerup != null) {
       List<String> output = this.powerup.activate();
       this.powerup = null;
-      if (this.powerup instanceof Bomb) {
-        this.lastBombFired = System.currentTimeMillis();
-      }
-      if (this.powerup instanceof TimeStop) {
-        this.lastTimeStop = System.currentTimeMillis();
-      }
       return output;
     } else {
       return Lists.newArrayList();

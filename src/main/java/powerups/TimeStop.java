@@ -107,8 +107,6 @@ public class TimeStop extends Powerup {
     this.isUsed = true;
     this.activationStartTime = System.currentTimeMillis();
 
-    System.out.println(activationStartTime);
-    System.out.println(affectedPlayer.getLastTimeStop());
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
 
@@ -133,9 +131,7 @@ public class TimeStop extends Powerup {
 
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= FREEZE_TIME) {
-      System.out.println("here");
       if (affectedPlayer.getLastTimeStop() == this.activationStartTime) {
-        System.out.println("HERE");
         // tell the game to start spawning again
         this.game.setSpawnOn(true);
 
