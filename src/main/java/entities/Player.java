@@ -73,10 +73,10 @@ public class Player extends Entity implements PlayerAction {
     this.score = 0;
     this.image = Resources.getImage("player");
     this.speed = PLAYER_SPEED;
-    this.top = 0;
-    this.left = 0;
-    this.bottom = Window.height;
-    this.right = Window.width;
+    this.top = 42;
+    this.left = 12;
+    this.bottom = Window.height - (this.radius / 2);
+    this.right = Window.width - (this.radius / 2);
     this.isSingle = true;
     this.isPlayer1 = true;
     this.lastBombFired = 0;

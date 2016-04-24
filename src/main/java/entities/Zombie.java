@@ -44,7 +44,7 @@ public class Zombie extends Entity {
   public void init(Entity other) {
 
     this.player = other;
-    this.setRadius(30);
+    this.setRadius(20);
 
     Random r = new Random();
 
