@@ -44,20 +44,21 @@ public class Zombie extends Entity {
   public void init(Entity other) {
 
     this.player = other;
+    this.setRadius(30);
 
     Random r = new Random();
 
     // only spawn the zombie outside of a radius from the player
-    this.x = r.nextFloat() * Window.width;
+    this.x = r.nextFloat() * (Window.width - 30 - (2 * this.radius)) + 15;
 
     while (Math.abs(this.x - this.player.getX()) <= 100) {
-      this.x = r.nextFloat() * Window.width;
+      this.x = r.nextFloat() * (Window.width - 30 - (2 * this.radius)) + 15;
     }
 
-    this.y = r.nextFloat() * Window.height;
+    this.y = r.nextFloat() * (Window.height - 60 - (2 * this.radius)) + 45;
 
     while (Math.abs(this.y - this.player.getY()) <= 100) {
-      this.y = r.nextFloat() * Window.height;
+      this.y = r.nextFloat() * (Window.height - 60 - (2 * this.radius)) + 45;
     }
 
     this.radius = 20;
