@@ -28,6 +28,7 @@ import server.Network.UsePowerup;
 import server.Network.ZombieDie;
 import server.Network.ZombieFire;
 import server.Network.ZombieMove;
+import server.Network.ZombieMoveList;
 import server.Network.ZombieNew;
 import states.GamePlayState;
 import states.States;
@@ -216,6 +217,15 @@ public class ClientListener extends Listener {
       Player p = this.players.get(packet.playerId);
       if (p != null) {
         p.usePowerup();
+      }
+    }
+
+    if (o instanceof ZombieMoveList) {
+      ZombieMoveList packet = (ZombieMoveList) o;
+      for (ZombieMove move : packet.list) {
+        Zombie target = this.zombies.get(move.id);
+        target.setX(move.x);
+        target.setY(move.y);
       }
     }
 

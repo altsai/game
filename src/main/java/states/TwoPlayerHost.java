@@ -1,6 +1,7 @@
 package states;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -23,6 +24,8 @@ import powerups.Bomb;
 import powerups.Speed;
 import powerups.TimeStop;
 import server.GameServer;
+import server.Network.ZombieMove;
+import server.Network.ZombieMoveList;
 
 public class TwoPlayerHost extends GamePlayState {
   //list of all entities in the game
@@ -160,6 +163,8 @@ public class TwoPlayerHost extends GamePlayState {
         }
       }
 
+      this.moveZombies();
+
       // send the host's position
       this.server.sendHostPosition();
 
@@ -196,6 +201,47 @@ public class TwoPlayerHost extends GamePlayState {
     return States.TWO_PLAYER_HOST;
   }
 
+  private void moveZombies() {
+
+    if (this.server.getConnections().length > 0) {
+      if (this.zombies.size() > 9) {
+        // break up the list into smaller lists of 10 to send
+        List<ZombieMove> sentList = new LinkedList<>();
+        for (Zombie z : this.zombies.values()) {
+          ZombieMove packet = new ZombieMove();
+          packet.id = z.getID();
+          packet.x = z.getX();
+          packet.y = z.getY();
+          sentList.add(packet);
+          if (sentList.size() > 9) {
+            ZombieMoveList listPacket = new ZombieMoveList();
+            listPacket.list = sentList;
+            this.server.getConnections()[0].sendTCP(listPacket);
+            sentList.clear();
+          }
+        }
+        ZombieMoveList listPacket = new ZombieMoveList();
+        listPacket.list = sentList;
+        this.server.getConnections()[0].sendTCP(listPacket);
+
+      } else {
+
+        List<ZombieMove> sentList = new LinkedList<>();
+        for (Zombie z : this.zombies.values()) {
+          ZombieMove packet = new ZombieMove();
+          packet.id = z.getID();
+          packet.x = z.getX();
+          packet.y = z.getY();
+          sentList.add(packet);
+        }
+        ZombieMoveList listPacket = new ZombieMoveList();
+        listPacket.list = sentList;
+        this.server.getConnections()[0].sendTCP(listPacket);
+      }
+    }
+  }
+
+
   /**
    * Method that upates the entities and checks for collisions.
    *
@@ -219,8 +265,7 @@ public class TwoPlayerHost extends GamePlayState {
 
       // update the zombie's position and state on the client
       // might be able to optimize by having moveZombie take in a hashmap
-      // process into smaller lists, and then send lists instead of individual zombies
-      this.server.moveZombie(z);
+      // process into smaller lists, and then send lists instead of individual zombi
 
       // check player's lives and mark invincible as necessary
       for (Player p : this.players.values()) {

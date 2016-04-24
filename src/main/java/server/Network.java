@@ -36,6 +36,7 @@ public class Network {
     kryo.register(AnimationPacket.class);
     kryo.register(PowerupPickup.class);
     kryo.register(UsePowerup.class);
+    kryo.register(ZombieMoveList.class);
   }
 
   static public class PlayerNew {
@@ -84,6 +85,10 @@ public class Network {
     public String id;
     public float x;
     public float y;
+  }
+
+  static public class ZombieMoveList {
+    public List<ZombieMove> list;
   }
 
   static public class ZombieFire {

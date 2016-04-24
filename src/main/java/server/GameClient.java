@@ -62,8 +62,9 @@ public class GameClient {
     // uncomment to start LAN search
     //List<InetAddress> IPs = this.client.discoverHosts(Network.TCPPORT, 3000);
 
-    //InetAddress address = this.client.discoverHost(Network.TCPPORT, 3000);
-    this.client.connect(5000, "127.0.0.1", Network.TCPPORT, Network.UDPPORT);
+    //InetAddress address = this.client.discoverHost(Network.TCPPORT, 10000);
+    //System.out.println(address);
+    this.client.connect(5000, "169.254.158.231", Network.TCPPORT, Network.UDPPORT);
   }
 
   public boolean isConnected() {
