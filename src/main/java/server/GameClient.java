@@ -21,6 +21,7 @@ public class GameClient {
   private Map<String, Player> players;
   private GamePlayState game;
   private StateBasedGame s;
+  private String address;
 
   private String playerID;
 
@@ -31,13 +32,14 @@ public class GameClient {
       , Map<String, Powerup> powerups
       , String playerID
       , GamePlayState gps
-      , StateBasedGame s) throws IOException {
+      , StateBasedGame s, String address) throws IOException {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
     this.playerID = playerID;
     this.game = gps;
     this.s = s;
+    this.address = address;
   }
 
   public void start() throws IOException {
@@ -64,7 +66,9 @@ public class GameClient {
 
     //InetAddress address = this.client.discoverHost(Network.TCPPORT, 10000);
     //System.out.println(address);
-    this.client.connect(5000, "169.254.158.231", Network.TCPPORT, Network.UDPPORT);
+
+
+    this.client.connect(5000, address, Network.TCPPORT, Network.UDPPORT);
   }
 
   public boolean isConnected() {
