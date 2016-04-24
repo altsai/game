@@ -26,12 +26,13 @@ import states.TwoPlayerStartServer;
  */
 public class Main extends StateBasedGame {
 
+  private Connection conn;
   private HighscoreSystem highscoreSystem;
 
   public Main() throws ClassNotFoundException, SQLException, IOException {
     super("Survival game");
 
-    Connection conn = instantiateConnection();
+    conn = instantiateConnection();
     this.highscoreSystem = new HighscoreSystem("highscores.txt", 10, conn);
   }
 
@@ -69,7 +70,8 @@ public class Main extends StateBasedGame {
 
     SinglePlayerGameState singlePlayer = new SinglePlayerGameState();
     TwoPlayerHost twoPlayerHost = new TwoPlayerHost();
-    TwoPlayerClient twoPlayerClient = new TwoPlayerClient();
+    TwoPlayerStartServer twoPlayerStartServer = new TwoPlayerStartServer(conn);
+    TwoPlayerClient twoPlayerClient = new TwoPlayerClient(twoPlayerStartServer);
 
 
     this.addState(singlePlayer);
@@ -80,6 +82,6 @@ public class Main extends StateBasedGame {
     this.addState(twoPlayerClient);
     this.addState(new HostEndGame(twoPlayerHost));
     this.addState(new ClientEndGame(twoPlayerClient));
-    this.addState(new TwoPlayerStartServer());
+    this.addState(twoPlayerStartServer);
   }
 }

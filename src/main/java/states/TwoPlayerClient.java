@@ -29,6 +29,11 @@ public class TwoPlayerClient extends GamePlayState {
   private boolean errorMakingClient;
   private boolean hasClient;
   private String playerID;
+  private String address;
+
+  public TwoPlayerClient(TwoPlayerStartServer twoPlayerStartServer) {
+    this.address = twoPlayerStartServer.getAddress();
+  }
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
@@ -106,7 +111,8 @@ public class TwoPlayerClient extends GamePlayState {
             , this.powerups
             , this.playerID
             , this
-            , s);
+            , s
+            , address);
         this.client.start();
       } catch (IOException e) {
         System.out.println(e.getMessage());
