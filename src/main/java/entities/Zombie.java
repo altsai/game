@@ -72,6 +72,10 @@ public class Zombie extends Entity {
     this.player = other;
   }
 
+  public Circle getTarget() {
+    return this.player;
+  }
+
   @Override
   public void update(GameContainer gc, int delta) {
     followPlayer(delta);

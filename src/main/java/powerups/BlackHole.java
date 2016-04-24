@@ -32,10 +32,13 @@ public class BlackHole extends Powerup {
    */
   private Map<String, Player> players;
 
+
   /**
    * Reference to the game.
    */
   private GamePlayState game;
+
+  private final static long EFFECT_DURATION = 3000;
 
   /**
    * Constructor for the BlackHole.
@@ -52,7 +55,6 @@ public class BlackHole extends Powerup {
     // TODO animation
     zombies = z;
     players = new ConcurrentHashMap<>();
-    players.put(affectedPlayer.getID(), affectedPlayer);
     game = gps;
     image = Resources.getImage("blackhole");
     this.powerupIndex = Powerup.BLACK_HOLE;
@@ -128,10 +130,22 @@ public class BlackHole extends Powerup {
 
   @Override
   public void deactivate() {
-    if (this.isUsed && zombies.size() == 0) {
+//    if (this.isUsed && zombies.size() == 0) {
+//      this.game.setSpawnOn(true);
+//
+//      // kill the Powerup
+//      kill();
+//    }
+
+    // the effects only last for 3 seconds now
+    if (this.isUsed && (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION)) {
+      for (Zombie z : this.zombies.values()) {
+        if (z.getTarget() == this) {
+          z.setTarget(this.affectedPlayer);
+        }
+      }
       this.game.setSpawnOn(true);
 
-      // kill the Powerup
       kill();
     }
   }

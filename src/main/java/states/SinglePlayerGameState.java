@@ -17,10 +17,6 @@ import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
 import powerups.BlackHole;
-import powerups.Bomb;
-import powerups.OnFire;
-import powerups.Speed;
-import powerups.TimeStop;
 
 /**
  * Defines the Single Player game state.
@@ -155,23 +151,26 @@ public class SinglePlayerGameState extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      double randomNum = random.nextDouble();
-      if (randomNum < 0.2) {
-        Bomb bomb = new Bomb(powerups, zombies);
-        this.powerups.put(bomb.getID(), bomb);
-      } else if (randomNum < 0.4 && randomNum >= 0.2) {
-        Speed speed = new Speed(powerups);
-        this.powerups.put(speed.getID(), speed);
-      } else if (randomNum < 0.6 && randomNum >= 0.4) {
-        TimeStop timestop = new TimeStop(powerups, zombies, this);
-        this.powerups.put(timestop.getID(), timestop);
-      } else if (randomNum < 0.8 && randomNum >= 0.6) {
-        OnFire onfire = new OnFire(powerups, zombies);
-        this.powerups.put(onfire.getID(), onfire);
-      } else {
-        BlackHole blackhole = new BlackHole(powerups, zombies, this);
-        this.powerups.put(blackhole.getID(), blackhole);
-      }
+      BlackHole blackhole = new BlackHole(powerups, zombies, this);
+      this.powerups.put(blackhole.getID(), blackhole);
+
+//      double randomNum = random.nextDouble();
+//      if (randomNum < 0.2) {
+//        Bomb bomb = new Bomb(powerups, zombies);
+//        this.powerups.put(bomb.getID(), bomb);
+//      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+//        Speed speed = new Speed(powerups);
+//        this.powerups.put(speed.getID(), speed);
+//      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+//        TimeStop timestop = new TimeStop(powerups, zombies, this);
+//        this.powerups.put(timestop.getID(), timestop);
+//      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+//        OnFire onfire = new OnFire(powerups, zombies);
+//        this.powerups.put(onfire.getID(), onfire);
+//      } else {
+//        BlackHole blackhole = new BlackHole(powerups, zombies, this);
+//        this.powerups.put(blackhole.getID(), blackhole);
+//      }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
