@@ -3,7 +3,6 @@ package powerups;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -27,10 +26,6 @@ public class BlackHole extends Powerup {
    */
   private Map<String, Zombie> zombies;
 
-  /**
-   * Reference to the list of players in the game.
-   */
-  private Map<String, Player> players;
 
 
   /**
@@ -54,7 +49,6 @@ public class BlackHole extends Powerup {
     super(p);
     // TODO animation
     zombies = z;
-    players = new ConcurrentHashMap<>();
     game = gps;
     image = Resources.getImage("blackhole");
     this.powerupIndex = Powerup.BLACK_HOLE;
@@ -77,7 +71,6 @@ public class BlackHole extends Powerup {
     super(p);
     // TODO animation
     zombies = z;
-    players = pl;
     game = gps;
     image = Resources.getImage("blackhole");
     this.powerupIndex = Powerup.BLACK_HOLE;
@@ -140,6 +133,10 @@ public class BlackHole extends Powerup {
     // the effects only last for 3 seconds now
     if (this.isUsed && (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION)) {
       for (Zombie z : this.zombies.values()) {
+
+        // this check is necessary in case the use uses two blackholes in a row
+        // we want the zombies to follow the blackhole that hasn't expired
+        // instead of the player
         if (z.getTarget() == this) {
           z.setTarget(this.affectedPlayer);
         }
