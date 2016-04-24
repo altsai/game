@@ -61,6 +61,7 @@ public class SinglePlayerGameState extends GamePlayState {
       Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20, 20);
     }
 
+
     // Draw score
     ttf.drawString(15, 10, "Score", Color.black);
     ttf2.drawString(80, 10, Integer.toString(this.getScore()), Color.green);
@@ -157,19 +158,19 @@ public class SinglePlayerGameState extends GamePlayState {
       double randomNum = random.nextDouble();
       if (randomNum < 0.2) {
         Bomb bomb = new Bomb(powerups, zombies);
-        this.powerups.put(generateID(), bomb);
+        this.powerups.put(bomb.getID(), bomb);
       } else if (randomNum < 0.4 && randomNum >= 0.2) {
         Speed speed = new Speed(powerups);
-        this.powerups.put(generateID(), speed);
+        this.powerups.put(speed.getID(), speed);
       } else if (randomNum < 0.6 && randomNum >= 0.4) {
         TimeStop timestop = new TimeStop(powerups, zombies, this);
-        this.powerups.put(generateID(), timestop);
+        this.powerups.put(timestop.getID(), timestop);
       } else if (randomNum < 0.8 && randomNum >= 0.6) {
         OnFire onfire = new OnFire(powerups, zombies);
-        this.powerups.put(generateID(), onfire);
+        this.powerups.put(onfire.getID(), onfire);
       } else {
         BlackHole blackhole = new BlackHole(powerups, zombies, this);
-        this.powerups.put(generateID(), blackhole);
+        this.powerups.put(blackhole.getID(), blackhole);
       }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();

@@ -304,11 +304,6 @@ public class Player extends Entity implements PlayerAction {
     return immune;
   }
 
-  @Override
-  public double getSpeed() {
-    return this.speed;
-  }
-
   /**
    * Method to determine the player's new position according to WASD input.
    *
@@ -388,9 +383,6 @@ public class Player extends Entity implements PlayerAction {
     return lastBombFired;
   }
 
-  public void setCanMove(boolean b) {
-    canMove = b;
-  }
 
   public float getLastDir() {
     return lastDir;
