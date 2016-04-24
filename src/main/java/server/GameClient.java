@@ -42,7 +42,8 @@ public class GameClient {
 
   public void start() throws IOException {
     Log.set(Log.LEVEL_DEBUG);
-    this.client = new Client();
+    // give buffer write of 2^14, and object buffer of 2^12
+    this.client = new Client(16384, 4096);
     Network.register(this.client);
 
     // maybe pass in the hashmaps into the listeners? and servers?
@@ -64,7 +65,7 @@ public class GameClient {
 
     //InetAddress address = this.client.discoverHost(Network.TCPPORT, 10000);
     //System.out.println(address);
-    this.client.connect(5000, "169.254.158.231", Network.TCPPORT, Network.UDPPORT);
+    this.client.connect(5000, "127.0.0.1", Network.TCPPORT, Network.UDPPORT);
   }
 
   public boolean isConnected() {

@@ -54,7 +54,7 @@ public class GameServer {
 
   public void start() throws IOException {
     Log.set(Log.LEVEL_DEBUG);
-    this.server = new Server();
+    this.server = new Server(16384, 4096);
     Network.register(this.server);
 
     // maybe pass in the hashmaps into the listeners? and servers?
