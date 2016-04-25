@@ -72,7 +72,7 @@ public class LaserBeam extends Powerup {
 
       for (String zid : zombies.keySet()) {
         Zombie z = zombies.get(zid);
-        if (this.isCollision(z)) {
+        if (laser.isCollision(z)) {
           zombies.remove(zid);
           affectedPlayer.incrementScore();
         }
