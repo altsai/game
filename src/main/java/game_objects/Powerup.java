@@ -1,5 +1,6 @@
 package game_objects;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -13,6 +14,7 @@ import org.newdawn.slick.Image;
 import com.google.common.collect.Lists;
 
 import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
 import entities.Player;
 
 /**
@@ -56,6 +58,7 @@ public abstract class Powerup extends Circle {
     this.spawnStartTime = System.currentTimeMillis();
     this.isPickedUp = false;
     this.powerups = p;
+    this.activationStartTime = 0;
 
     Random r = new Random();
     this.x = r.nextFloat() * (Window.width - 30 - (2 * POWERUP_RADIUS)) + 15;
@@ -143,6 +146,10 @@ public abstract class Powerup extends Circle {
    */
   public abstract void deactivate();
 
+  public List<Entity> getChildren() {
+    return new ArrayList<Entity>();
+  }
+
   /**
    * Method to remove the powerup from the map.
    *
@@ -155,6 +162,10 @@ public abstract class Powerup extends Circle {
 
   public int getPowerupIndex() {
     return this.powerupIndex;
+  }
+
+  public boolean isActivated() {
+    return (activationStartTime != 0);
   }
 
 }

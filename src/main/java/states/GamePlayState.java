@@ -16,6 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -107,6 +108,13 @@ public abstract class GamePlayState extends BasicGameState {
       }
       for (Powerup p : this.powerups.values()) {
         p.render(gc, g);
+      }
+      for (Powerup p : pickedUpPowerups) {
+        if (p.isActivated()) {
+          for (Entity e : p.getChildren()) {
+            e.render(gc, g);
+          }
+        }
       }
     }
 
@@ -243,6 +251,5 @@ public abstract class GamePlayState extends BasicGameState {
    */
   protected abstract void endGame(GameContainer gc, StateBasedGame s)
       throws SlickException;
-
 
 }

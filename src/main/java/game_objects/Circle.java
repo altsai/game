@@ -1,5 +1,6 @@
 package game_objects;
 
+
 /**
  * Defines a circular hitbox.
  *
@@ -149,6 +150,7 @@ public class Circle {
 
   /**
    * Gets the unique ID for this object
+   *
    * @return
    */
   public String getID() {

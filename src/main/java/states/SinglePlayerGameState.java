@@ -11,7 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.BlackHole;
+import powerups.LaserBeam;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
@@ -155,7 +155,7 @@ public class SinglePlayerGameState extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      double randomNum = random.nextDouble();
+      // double randomNum = random.nextDouble();
       // if (randomNum < 0.2) {
       // Bomb bomb = new Bomb(powerups, zombies);
       // this.powerups.put(bomb.getID(), bomb);
@@ -169,8 +169,10 @@ public class SinglePlayerGameState extends GamePlayState {
       // OnFire onfire = new OnFire(powerups, zombies);
       // this.powerups.put(onfire.getID(), onfire);
       // } else {
-      BlackHole blackhole = new BlackHole(powerups, zombies, this);
-      this.powerups.put(blackhole.getID(), blackhole);
+      // BlackHole blackhole = new BlackHole(powerups, zombies, this);
+      // this.powerups.put(blackhole.getID(), blackhole);
+      LaserBeam lb = new LaserBeam(powerups, zombies);
+      this.powerups.put(lb.getID(), lb);
       // }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
