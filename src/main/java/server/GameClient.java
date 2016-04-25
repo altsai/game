@@ -2,6 +2,7 @@ package server;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -27,6 +28,7 @@ public class GameClient {
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
+  private Set<Powerup> pickedUpPowerups;
 
   // game state of client game
   private GamePlayState game;
@@ -54,6 +56,7 @@ public class GameClient {
   public GameClient(Map<String, Player> players
       , Map<String, Zombie> zombies
       , Map<String, Powerup> powerups
+      , Set<Powerup> pickedUpPowerups
       , String playerID
       , GamePlayState gps
       , StateBasedGame s, String address) {
@@ -64,6 +67,7 @@ public class GameClient {
     this.game = gps;
     this.s = s;
     this.address = address;
+    this.pickedUpPowerups = pickedUpPowerups;
   }
 
   /**
@@ -74,8 +78,8 @@ public class GameClient {
   public void start() throws IOException {
     Log.set(Log.LEVEL_DEBUG);
 
-    // give buffer write of 2^14, and object buffer of 2^12
-    this.client = new Client(16384, 4096);
+    // give buffer write of 2^16, and object buffer of 2^14
+    this.client = new Client(65536, 16384);
     Network.register(this.client);
 
     // maybe pass in the hashmaps into the listeners? and servers?
@@ -84,6 +88,7 @@ public class GameClient {
             , this.players
             , this.zombies
             , this.powerups
+            , this.pickedUpPowerups
             , this.playerID
             , this.game
             , this.s
@@ -117,6 +122,7 @@ public class GameClient {
     newMove.id = this.playerID;
     newMove.x = this.players.get(this.playerID).getX();
     newMove.y = this.players.get(this.playerID).getY();
+    newMove.lastDir = this.players.get(this.playerID).getLastDir();
     this.client.sendUDP(newMove);
   }
 

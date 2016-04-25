@@ -7,30 +7,94 @@ import java.util.Map;
 import org.newdawn.slick.GameContainer;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
+import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import server.GameServer;
 
 public class LaserBeam extends Powerup {
 
   /**
-   * Reference to the list of Zombies in the game.
+   * Reference to the map of Zombies in the game.
    */
   private Map<String, Zombie> zombies;
+
+  /**
+   * Reference to Map of players in game.
+   */
+  private Map<String, Player> players;
 
   private float direction;
   private static final float LASER_SPEED = 6.0f;
 
   private LaserShot laser;
 
+  private GameServer server;
+
+  /**
+   * Single player game constructor for laser.
+   * @param p  Map of powerups
+   * @param z  Map of zombies
+   */
   public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z) {
     super(p);
     this.image = Resources.getImage("laserbeam");
     zombies = z;
     this.powerupIndex = Powerup.LASER;
+    this.players = Maps.newHashMap();
+  }
+
+  /**
+   * Dummy constructor that only takes in powerups.
+   *
+   * This constructor is used by the client in the networked game
+   * because it serves as the "image" of the laser beam. No processing
+   * or zombie killing is done client-side.
+   *
+   * @param p  Map of Powerups
+   */
+  public LaserBeam(Map<String, Powerup> p) {
+    super(p);
+    this.image = Resources.getImage("laserbeam");
+    this.zombies = Maps.newHashMap();
+    this.powerups = p;
+    this.players = Maps.newHashMap();
+    this.powerupIndex = Powerup.LASER;
+  }
+
+  /**
+   * Two player constructor for laser (not networked).
+   * @param p           Map of powerups
+   * @param z           Map of zombies
+   * @param player      Map of players
+   */
+  public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> player) {
+    super(p);
+    this.image = Resources.getImage("laserbeam");
+    zombies = z;
+    this.powerupIndex = Powerup.LASER;
+    players = player;
+  }
+
+  /**
+   * Two Player constructor for laser (networked);
+   * @param p       Map of powerups
+   * @param z       Map of zombies
+   * @param player  Map of players
+   * @param server  GameServer to send information to the client.
+   */
+  public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> player, GameServer server) {
+    super(p);
+    this.image = Resources.getImage("laserbeam");
+    zombies = z;
+    this.powerupIndex = Powerup.LASER;
+    players = player;
+    this.server = server;
   }
 
   @Override
@@ -72,11 +136,33 @@ public class LaserBeam extends Powerup {
         laser.setY(y + LASER_SPEED);
       }
 
+      List<String> removedZombies = Lists.newLinkedList();
+
       for (String zid : zombies.keySet()) {
         Zombie z = zombies.get(zid);
         if (laser.isCollision(z)) {
           zombies.remove(zid);
+          removedZombies.add(zid);
+
           affectedPlayer.incrementScore();
+        }
+      }
+
+      // update client if this is networked version of laser
+      if (server != null) {
+        server.removeZombie(removedZombies);
+      }
+
+      for (Player p : players.values()) {
+        if (p != affectedPlayer) {
+          if (laser.isCollision(p)) {
+            p.loseLife();
+
+            // update the client if this is networked version of laser
+            if (server != null) {
+              server.updatePlayer(p.getID(), true);
+            }
+          }
         }
       }
     }

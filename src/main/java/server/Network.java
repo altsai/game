@@ -34,6 +34,7 @@ public class Network {
     kryo.register(PowerupRemove.class);
     kryo.register(ZombieDie.class);
     kryo.register(java.util.LinkedList.class);
+    kryo.register(java.util.ArrayList.class);
     kryo.register(ActionStart.class);
     kryo.register(GameEnd.class);
     kryo.register(PowerupPickup.class);
@@ -57,6 +58,7 @@ public class Network {
     public String id;
     public float x;
     public float y;
+    public float lastDir;
   }
 
   /**
@@ -70,6 +72,11 @@ public class Network {
     public double speed;
     public boolean loseLife;
     public int score;
+    public float top;
+    public float left;
+    public float bottom;
+    public float right;
+    public long lastBombFired;
   }
 
   /**

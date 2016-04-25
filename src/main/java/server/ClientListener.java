@@ -1,6 +1,7 @@
 package server;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -19,6 +20,7 @@ import powerups.Jail;
 import powerups.LaserBeam;
 import powerups.Speed;
 import powerups.TimeStop;
+import server.Network.ActionStart;
 import server.Network.GameEnd;
 import server.Network.PlayerMove;
 import server.Network.PlayerNew;
@@ -46,6 +48,7 @@ public class ClientListener extends Listener {
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
+  private Set<Powerup> pickedUpPowerups;
 
   // boolean to determine if client is connected
   private boolean connected;
@@ -77,7 +80,7 @@ public class ClientListener extends Listener {
    * @param gc           GameClient
    */
   public ClientListener(Client client, Map<String, Player> players,
-      Map<String, Zombie> zombies, Map<String, Powerup> powerups,
+      Map<String, Zombie> zombies, Map<String, Powerup> powerups, Set<Powerup> pickedUpPowerups,
       String playerID, GamePlayState gps, StateBasedGame s, GameClient gc) {
 
     this.client = client;
@@ -85,6 +88,7 @@ public class ClientListener extends Listener {
     this.zombies = zombies;
     this.powerups = powerups;
     this.playerID = playerID;
+    this.pickedUpPowerups = pickedUpPowerups;
     this.game = gps;
     this.s = s;
     this.gc = gc;
@@ -179,6 +183,7 @@ public class ClientListener extends Listener {
       PlayerMove move = (PlayerMove) o;
       this.players.get(move.id).setX(move.x);
       this.players.get(move.id).setY(move.y);
+      this.players.get(move.id).setDirection(move.lastDir);
     }
 
     // create a new zombie to put in zombie map
@@ -208,6 +213,8 @@ public class ClientListener extends Listener {
       if (update.loseLife) {
         p.loseLife();
       }
+      p.setBoundary(update.top, update.bottom, update.left, update.right);
+      p.setLastBombFired(update.lastBombFired);
     }
 
     // create new powerup to put in powerup map
@@ -242,7 +249,7 @@ public class ClientListener extends Listener {
       case Powerup.LASER:
 
         // change this once laser is finished
-        LaserBeam newLaser = new LaserBeam(this.powerups, this.zombies);
+        LaserBeam newLaser = new LaserBeam(this.powerups);
         newLaser.setX(packet.x);
         newLaser.setY(packet.y);
         this.powerups.put(packet.id, newLaser);
@@ -285,6 +292,7 @@ public class ClientListener extends Listener {
         return;
       } else {
         player.collectPowerup(p);
+        this.pickedUpPowerups.add(p);
       }
     }
 
@@ -300,10 +308,22 @@ public class ClientListener extends Listener {
     // packet that moves a list of zombies
     if (o instanceof ZombieMoveList) {
       ZombieMoveList packet = (ZombieMoveList) o;
-      for (ZombieMove move : packet.list) {
-        Zombie target = this.zombies.get(move.id);
-        target.setX(move.x);
-        target.setY(move.y);
+      if (packet.list.size() > 0) {
+        for (ZombieMove move : packet.list) {
+          Zombie target = this.zombies.get(move.id);
+          if (target != null) {
+            target.setX(move.x);
+            target.setY(move.y);
+          }
+        }
+      }
+    }
+
+    if (o instanceof ActionStart) {
+      ActionStart response = (ActionStart) o;
+      Player p = this.players.get(response.playerID);
+      if (p != null) {
+        p.usePowerup();
       }
     }
 

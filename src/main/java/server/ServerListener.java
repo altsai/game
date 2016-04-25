@@ -157,6 +157,7 @@ public class ServerListener extends Listener {
       PlayerMove move = (PlayerMove) o;
       this.players.get(move.id).setX(move.x);
       this.players.get(move.id).setY(move.y);
+      this.players.get(move.id).setDirection(move.lastDir);
     }
 
     // updates the client player with new variables

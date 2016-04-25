@@ -15,6 +15,7 @@ import com.esotericsoftware.minlog.Log;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import server.Network.ActionStart;
 import server.Network.GameEnd;
 import server.Network.PlayerMove;
 import server.Network.PlayerUpdate;
@@ -88,8 +89,8 @@ public class GameServer {
     // set a debug log
     Log.set(Log.LEVEL_DEBUG);
 
-    // server has write buffer of 2^15, and object buffer of 2^12
-    this.server = new Server(32768, 4096);
+    // server has write buffer of 2^17, and object buffer of 2^14
+    this.server = new Server(131072, 16384);
     Network.register(this.server);
 
     // maybe pass in the hashmaps into the listeners? and servers?
@@ -161,6 +162,7 @@ public class GameServer {
     newMove.id = this.player1ID;
     newMove.x = this.players.get(this.player1ID).getX();
     newMove.y = this.players.get(this.player1ID).getY();
+    newMove.lastDir = this.players.get(this.player1ID).getLastDir();
     sendUDP(newMove);
   }
 
@@ -203,6 +205,11 @@ public class GameServer {
     update.loseLife = loseLife;
     update.score = p.getScore();
     update.speed = p.getSpeed();
+    update.left = p.getLeft();
+    update.right = p.getRight();
+    update.top = p.getTop();
+    update.bottom = p.getBottom();
+    update.lastBombFired = p.getLastBombFired();
     sendTCP(update);
   }
 
@@ -284,10 +291,19 @@ public class GameServer {
     sendTCP(packet);
   }
 
+  public void sendUsePowerup() {
+    ActionStart packet = new ActionStart();
+    packet.playerID = this.player1ID;
+    packet.pressedAction = true;
+    sendTCP(packet);
+  }
+
   /**
    * Closes the server, shuts down connections.
    */
   public void close() {
     this.server.close();
   }
+
+
 }
