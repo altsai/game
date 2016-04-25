@@ -11,7 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.LaserBeam;
+import powerups.OnFire;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
@@ -166,13 +166,13 @@ public class SinglePlayerGameState extends GamePlayState {
       // TimeStop timestop = new TimeStop(powerups, zombies, this);
       // this.powerups.put(timestop.getID(), timestop);
       // } else if (randomNum < 0.8 && randomNum >= 0.6) {
-      // OnFire onfire = new OnFire(powerups, zombies);
-      // this.powerups.put(onfire.getID(), onfire);
+      OnFire onfire = new OnFire(powerups, zombies);
+      this.powerups.put(onfire.getID(), onfire);
       // } else {
       // BlackHole blackhole = new BlackHole(powerups, zombies, this);
       // this.powerups.put(blackhole.getID(), blackhole);
-      LaserBeam lb = new LaserBeam(powerups, zombies);
-      this.powerups.put(lb.getID(), lb);
+      // LaserBeam lb = new LaserBeam(powerups, zombies);
+      // this.powerups.put(lb.getID(), lb);
       // }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();

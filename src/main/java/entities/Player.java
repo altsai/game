@@ -14,6 +14,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
 import powerups.Bomb;
+import powerups.OnFire;
 import powerups.TimeStop;
 
 import com.google.common.collect.Lists;
@@ -49,6 +50,7 @@ public class Player extends Entity implements PlayerAction {
   private boolean isSingle;
   private long lastBombFired;
   private long lastTimeStop;
+  private long lastFire;
   private boolean canMove;
   private boolean immune;
 
@@ -162,6 +164,9 @@ public class Player extends Entity implements PlayerAction {
   public List<String> usePowerup() {
     if (this.powerup instanceof Bomb) {
       this.lastBombFired = System.currentTimeMillis();
+    }
+    if (this.powerup instanceof OnFire) {
+      this.lastFire = System.currentTimeMillis();
     }
     if (this.powerup instanceof TimeStop) {
       this.lastTimeStop = System.currentTimeMillis();
@@ -393,6 +398,10 @@ public class Player extends Entity implements PlayerAction {
 
   public long getLastTimeStop() {
     return lastTimeStop;
+  }
+
+  public long getLastFire() {
+    return lastFire;
   }
 
   public void setCanMove(boolean b) {
