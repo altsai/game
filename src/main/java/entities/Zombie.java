@@ -1,13 +1,16 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Circle;
-
 import java.util.Random;
 import java.util.UUID;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.particles.ParticleSystem;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Circle;
 
 /**
  * Defines the zombie object.
@@ -40,11 +43,14 @@ public class Zombie extends Entity {
   private Circle player;
   private Integer target;
 
+  private ParticleSystem fireParticles;
+  private FireEmitterCustom emitter;
+
   @Override
   public void init(Entity other) {
 
     this.player = other;
-    this.setRadius(30);
+    this.setRadius(20);
 
     Random r = new Random();
 
@@ -71,6 +77,23 @@ public class Zombie extends Entity {
     this.id = UUID.randomUUID().toString();
 
     this.initial_speed = this.getSpeed();
+
+    initFire();
+  }
+
+  private void initFire() {
+    fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
+    //    File xmlFile = new File("particle/fire.xml");
+    try {
+      //      ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
+      //      emitter.setPosition(this.radius / 2, this.radius / 2);
+      //      fireParticles.addEmitter(emitter);
+      emitter = new FireEmitterCustom((int) this.radius / 2, (int) this.radius / 2, 30);
+      fireParticles.addEmitter(emitter);
+      fireParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void setTarget(Circle other) {
@@ -79,6 +102,15 @@ public class Zombie extends Entity {
 
   public Circle getTarget() {
     return this.player;
+  }
+
+  @Override
+  public void render(GameContainer gc, Graphics g) {
+    super.render(gc, g);
+
+    if (this.isOnFire()) {
+      fireParticles.render(this.x, this.y);
+    }
   }
 
   @Override

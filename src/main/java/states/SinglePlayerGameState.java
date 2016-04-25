@@ -1,5 +1,6 @@
 package states;
 
+
 import java.awt.Font;
 
 import org.newdawn.slick.Color;
@@ -155,7 +156,8 @@ public class SinglePlayerGameState extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      double randomNum = random.nextDouble();
+
+      //      double randomNum = random.nextDouble();
       //      if (randomNum < 0.2) {
       //        Bomb bomb = new Bomb(powerups, zombies);
       //        this.powerups.put(bomb.getID(), bomb);
@@ -172,6 +174,9 @@ public class SinglePlayerGameState extends GamePlayState {
       //        BlackHole blackhole = new BlackHole(powerups, zombies, this);
       //        this.powerups.put(blackhole.getID(), blackhole);
       //      }
+      //      LaserBeam lb = new LaserBeam(powerups, zombies);
+      //      this.powerups.put(lb.getID(), lb);
+
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }

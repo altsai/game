@@ -79,7 +79,7 @@ public class OnFire extends Powerup {
 
         // if collides with the player
         if (z.isCollision(affectedPlayer) && (onFireTimes.get(zid) == null)) {
-          z.setImage(Resources.getImage("firezombie"));
+          z.setState(true);
           onFireTimes.put(zid, System.currentTimeMillis());
         }
 
@@ -88,7 +88,7 @@ public class OnFire extends Powerup {
           for (String ozid : zombies.keySet()) {
             Zombie other = zombies.get(ozid);
             if ((!ozid.equals(zid)) && (z.distTo(other) <= FIRE_RADIUS)) {
-              other.setImage(Resources.getImage("firezombie"));
+              other.setState(true);
               onFireTimes.put(ozid, System.currentTimeMillis());
             }
           }
@@ -120,7 +120,9 @@ public class OnFire extends Powerup {
   public void deactivate() {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= FIRE_TIME) {
-      affectedPlayer.revert();
+      if (affectedPlayer.getLastFire() == this.activationStartTime) {
+        affectedPlayer.revert();
+      }
 
       // kill all lit Zombies who have not been removed yet
       for (String zid : onFireTimes.keySet()) {
@@ -132,5 +134,4 @@ public class OnFire extends Powerup {
       kill();
     }
   }
-
 }

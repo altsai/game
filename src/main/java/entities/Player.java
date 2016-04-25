@@ -17,6 +17,7 @@ import edu.brown.cs.altsai.game.Window;
 import effects.FireEmitterCustom;
 import game_objects.Powerup;
 import powerups.Bomb;
+import powerups.OnFire;
 import powerups.TimeStop;
 
 /**
@@ -50,6 +51,7 @@ public class Player extends Entity implements PlayerAction {
   private boolean isSingle;
   private long lastBombFired;
   private long lastTimeStop;
+  private long lastFire;
   private boolean canMove;
   private boolean immune;
   private ParticleSystem fireParticles;
@@ -71,15 +73,15 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 30;
-    this.lives = 200;
+    this.lives = 3;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
     this.speed = PLAYER_SPEED;
-    this.top = 0;
-    this.left = 0;
-    this.bottom = Window.height;
-    this.right = Window.width;
+    this.top = 42;
+    this.left = 12;
+    this.bottom = Window.height - (this.radius / 2);
+    this.right = Window.width - (this.radius / 2);
     this.isSingle = true;
     this.isPlayer1 = true;
     this.lastBombFired = 0;
@@ -180,6 +182,9 @@ public class Player extends Entity implements PlayerAction {
   public List<String> usePowerup() {
     if (this.powerup instanceof Bomb) {
       this.lastBombFired = System.currentTimeMillis();
+    }
+    if (this.powerup instanceof OnFire) {
+      this.lastFire = System.currentTimeMillis();
     }
     if (this.powerup instanceof TimeStop) {
       this.lastTimeStop = System.currentTimeMillis();
@@ -429,6 +434,10 @@ public class Player extends Entity implements PlayerAction {
 
   public long getLastTimeStop() {
     return lastTimeStop;
+  }
+
+  public long getLastFire() {
+    return lastFire;
   }
 
   public void setCanMove(boolean b) {
