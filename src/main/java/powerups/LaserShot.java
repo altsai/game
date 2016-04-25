@@ -7,9 +7,10 @@ import entities.Entity;
 
 public class LaserShot extends Entity {
 
-  public LaserShot(Entity other) {
+  public LaserShot(Entity other, float angle) {
     super(other);
     setImage(Resources.getImage("lasershot"));
+    image.setRotation(-angle);
     setRadius(75);
   }
 

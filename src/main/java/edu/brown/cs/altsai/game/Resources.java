@@ -55,7 +55,7 @@ public class Resources {
       images.put("jail", loadImage("img/jail.png"));
       images.put("firezombie", loadImage("img/firezombie.png"));
       images.put("laserbeam", loadImage("img/laserbeam.png"));
-      images.put("lasershot", loadImage("img/laser_shot.png"));
+      images.put("lasershot", loadImage("img/laser_shot_copy.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
     } catch (SlickException e) {

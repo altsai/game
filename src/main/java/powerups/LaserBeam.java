@@ -92,7 +92,7 @@ public class LaserBeam extends Powerup {
     this.affectedPlayer.clearPowerupStorage();
     direction = affectedPlayer.getLastDir();
     // TODO reset radius to larger
-    laser = new LaserShot(null);
+    laser = new LaserShot(null, direction);
     laser.setX(affectedPlayer.getX());
     laser.setY(affectedPlayer.getY());
 
