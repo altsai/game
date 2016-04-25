@@ -10,6 +10,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+
+import powerups.Jail;
 
 import com.google.common.collect.Lists;
 
@@ -38,12 +41,17 @@ public abstract class Powerup extends Circle {
   protected Map<String, Powerup> powerups;
   protected int powerupIndex;
 
+  protected float activationx;
+  protected float activationy;
+
   public static final int BLACK_HOLE = 0;
   public static final int BOMB = 1;
   public static final int JAIL = 2;
   public static final int ON_FIRE = 3;
   public static final int SPEED = 4;
   public static final int TIMESTOP = 5;
+
+  private final float JAIL_RADIUS = 150;
 
   /**
    * Constructor for a powerup.
@@ -90,6 +98,15 @@ public abstract class Powerup extends Circle {
   public void render(GameContainer gc, Graphics g) {
     if (this.image != null && !this.isPickedUp) {
       image.draw(this.x, this.y, this.radius, this.radius, this.color);
+    }
+
+    if ((activationStartTime != 0) && (this instanceof Jail)) {
+      float upperLeftX = activationx - (JAIL_RADIUS / 2);
+      float upperLeftY = activationy - (JAIL_RADIUS / 2);
+
+      if ((upperLeftX < 10) || (upperLeftY < 40) {
+        g.draw(new Rectangle(0, 0, JAIL_RADIUS, JAIL_RADIUS));
+      }
     }
   }
 

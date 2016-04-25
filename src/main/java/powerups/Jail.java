@@ -51,11 +51,11 @@ public class Jail extends Powerup {
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
 
-    float x = affectedPlayer.getX();
-    float y = affectedPlayer.getY();
+    activationx = affectedPlayer.getX();
+    activationy = affectedPlayer.getY();
 
-    affectedPlayer.setBoundary(y - JAIL_RADIUS, y + JAIL_RADIUS, x
-        - JAIL_RADIUS, x + JAIL_RADIUS);
+    affectedPlayer.setBoundary(activationy - JAIL_RADIUS, activationy
+        + JAIL_RADIUS, activationx - JAIL_RADIUS, activationx + JAIL_RADIUS);
 
     return Lists.newArrayList();
   }
