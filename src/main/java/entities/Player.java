@@ -1,9 +1,5 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import game_objects.Powerup;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -12,11 +8,17 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
-
-import powerups.Bomb;
-import powerups.TimeStop;
+import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Lists;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
+import powerups.Bomb;
+import powerups.OnFire;
+import powerups.TimeStop;
 
 /**
  * Defines the Player object.
@@ -49,8 +51,11 @@ public class Player extends Entity implements PlayerAction {
   private boolean isSingle;
   private long lastBombFired;
   private long lastTimeStop;
+  private long lastFire;
   private boolean canMove;
   private boolean immune;
+  private ParticleSystem fireParticles;
+  private FireEmitterCustom emitter;
 
   private static final int ANIMATION_FRAME_TIME = 100;
 
@@ -68,7 +73,7 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 30;
-    this.lives = 200;
+    this.lives = 3;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
@@ -88,6 +93,23 @@ public class Player extends Entity implements PlayerAction {
     this.immune = false;
     this.lastDir = 0;
     this.id = UUID.randomUUID().toString();
+
+    initFire();
+  }
+
+  private void initFire() {
+    fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
+    //    File xmlFile = new File("particle/fire.xml");
+    try {
+      //      ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
+      //      emitter.setPosition(this.radius / 2, this.radius / 2);
+      //      fireParticles.addEmitter(emitter);
+      emitter = new FireEmitterCustom((int) this.radius / 2, (int) this.radius / 2, 30);
+      fireParticles.addEmitter(emitter);
+      fireParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void setPlayer1(boolean flag) {
@@ -132,11 +154,9 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public void collectPowerup(Powerup p) {
-    if (!this.isInvincible()) {
-      this.powerup = p;
-      this.powerup.setPlayer(this);
-      p.pickUp();
-    }
+    this.powerup = p;
+    this.powerup.setPlayer(this);
+    p.pickUp();
   }
 
   @Override
@@ -163,6 +183,9 @@ public class Player extends Entity implements PlayerAction {
     if (this.powerup instanceof Bomb) {
       this.lastBombFired = System.currentTimeMillis();
     }
+    if (this.powerup instanceof OnFire) {
+      this.lastFire = System.currentTimeMillis();
+    }
     if (this.powerup instanceof TimeStop) {
       this.lastTimeStop = System.currentTimeMillis();
     }
@@ -182,6 +205,10 @@ public class Player extends Entity implements PlayerAction {
     if (this.isInvincible()) {
       this.animation.draw(this.x, this.y, 30, 30);
     }
+
+    if (this.isImmune()) {
+      fireParticles.render(this.x, this.y);
+    }
   }
 
   @Override
@@ -200,6 +227,10 @@ public class Player extends Entity implements PlayerAction {
     // Update animation
     if (this.isInvincible()) {
       this.animation.update(delta);
+    }
+
+    if (this.isImmune()) {
+      fireParticles.update(delta);
     }
 
     if (!immune && state
@@ -299,12 +330,10 @@ public class Player extends Entity implements PlayerAction {
   }
 
   public void setImmune() {
-    setImage(Resources.getImage("player2"));
     immune = true;
   }
 
   public void revert() {
-    setImage(Resources.getImage("player"));
     immune = false;
   }
 
@@ -332,7 +361,12 @@ public class Player extends Entity implements PlayerAction {
     boolean leftFlag = false;
     boolean rightFlag = false;
 
+    float xMulti = 1.0f;
+    float yMulti = 1.0f;
+
     if (input.isKeyDown(keys[0])) {
+      yMulti =  -2.0f;
+
       double newY = this.y - speed * delta;
       upFlag = true;
 
@@ -340,14 +374,17 @@ public class Player extends Entity implements PlayerAction {
         this.y -= speed * delta;
       }
     } else if (input.isKeyDown(keys[1])) {
+      yMulti = 2.0f;
+
       double newY = this.y + speed * delta;
       downFlag = true;
 
       if (newY <= this.bottom - this.image.getHeight()) {
         this.y += speed * delta;
       }
-    }
-    if (input.isKeyDown(keys[2])) {
+    } if (input.isKeyDown(keys[2])) {
+      xMulti = 3f;
+
       double newX = this.x - speed * delta;
       leftFlag = true;
 
@@ -355,6 +392,8 @@ public class Player extends Entity implements PlayerAction {
         this.x -= speed * delta;
       }
     } else if (input.isKeyDown(keys[3])) {
+      xMulti = -3f;
+
       double newX = this.x + speed * delta;
       rightFlag = true;
 
@@ -362,6 +401,8 @@ public class Player extends Entity implements PlayerAction {
         this.x += speed * delta;
       }
     }
+
+    emitter.setMultipliers(xMulti, yMulti);
 
     if (upFlag && rightFlag) {
       lastDir = 45;
@@ -393,6 +434,10 @@ public class Player extends Entity implements PlayerAction {
 
   public long getLastTimeStop() {
     return lastTimeStop;
+  }
+
+  public long getLastFire() {
+    return lastFire;
   }
 
   public void setCanMove(boolean b) {

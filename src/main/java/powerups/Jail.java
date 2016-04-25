@@ -54,8 +54,8 @@ public class Jail extends Powerup {
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
 
-    float x = affectedPlayer.getX();
-    float y = affectedPlayer.getY();
+    activationx = affectedPlayer.getX();
+    activationy = affectedPlayer.getY();
 
     // get the other player in the game
     Player other = otherPlayer(this.affectedPlayer);

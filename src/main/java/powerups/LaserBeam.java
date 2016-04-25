@@ -1,5 +1,6 @@
 package powerups;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +8,9 @@ import org.newdawn.slick.GameContainer;
 
 import com.google.common.collect.Lists;
 
+import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
 import entities.Zombie;
 import game_objects.Powerup;
 
@@ -19,10 +22,13 @@ public class LaserBeam extends Powerup {
   private Map<String, Zombie> zombies;
 
   private float direction;
+  private static final float LASER_SPEED = 6.0f;
 
-  public LaserBeam(Map<String, Powerup> p,
-      Map<String, Zombie> z) {
+  private LaserShot laser;
+
+  public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z) {
     super(p);
+    this.image = Resources.getImage("laserbeam");
     zombies = z;
     this.powerupIndex = Powerup.LASER;
   }
@@ -34,12 +40,41 @@ public class LaserBeam extends Powerup {
 
     if (this.isUsed) {
       // TODO advance along line of attack
-      float x = this.getX();
-      float y = this.getY();
+      float x = laser.getX();
+      float y = laser.getY();
+
+      if ((direction > 0) && (direction < 180)) {
+        // move up
+        laser.setY(y - LASER_SPEED);
+      } else if ((direction > 180) && (direction < 360)) {
+        // move down
+        laser.setY(y + LASER_SPEED);
+      }
+
+      if ((direction > 90) && (direction < 270)) {
+        // move left
+        laser.setX(x - LASER_SPEED);
+      } else if ((direction > 270) && (direction != 0)) {
+        // move right
+        laser.setX(x + LASER_SPEED);
+      } else if ((direction > 0) && (direction < 90)) {
+        // move right
+        laser.setX(x + LASER_SPEED);
+      }
+
+      if (direction == 0) {
+        laser.setX(x + LASER_SPEED);
+      } else if (direction == 90) {
+        laser.setY(y - LASER_SPEED);
+      } else if (direction == 180) {
+        laser.setX(x - LASER_SPEED);
+      } else if (direction == 270) {
+        laser.setY(y + LASER_SPEED);
+      }
 
       for (String zid : zombies.keySet()) {
         Zombie z = zombies.get(zid);
-        if (this.isCollision(z)) {
+        if (laser.isCollision(z)) {
           zombies.remove(zid);
           affectedPlayer.incrementScore();
         }
@@ -59,8 +94,9 @@ public class LaserBeam extends Powerup {
     this.affectedPlayer.clearPowerupStorage();
     direction = affectedPlayer.getLastDir();
     // TODO reset radius to larger
-    this.image.setRotation(direction);
-
+    laser = new LaserShot(null, direction);
+    laser.setX(affectedPlayer.getX());
+    laser.setY(affectedPlayer.getY());
 
     // TODO return list of zombies hit by laser
     return Lists.newArrayList();
@@ -78,6 +114,13 @@ public class LaserBeam extends Powerup {
       // kill the powerup
       kill();
     }
+  }
+
+  @Override
+  public List<Entity> getChildren() {
+    List<Entity> toReturn = new ArrayList<>();
+    toReturn.add(laser);
+    return toReturn;
   }
 
 }

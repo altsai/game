@@ -119,10 +119,7 @@ public class TwoPlayerStartServer extends BasicGameState {
 
   }
 
-  private void addServer(String name) throws SQLException, SocketException {
-    String add = "INSERT INTO servers VALUES (?, ?)";
-    PreparedStatement prep = conn.prepareStatement(add);
-
+  private String getIpAddress() throws SocketException {
     String localAddr = "";
     Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
     for (; n.hasMoreElements();)
@@ -139,6 +136,12 @@ public class TwoPlayerStartServer extends BasicGameState {
       }
     }
 
+    return localAddr;
+  }
+
+  private void addServer(String name, String localAddr) throws SQLException, SocketException {
+    String add = "INSERT INTO servers VALUES (?, ?)";
+    PreparedStatement prep = conn.prepareStatement(add);
     prep.setString(1, name);
     prep.setString(2, localAddr);
 
@@ -147,6 +150,10 @@ public class TwoPlayerStartServer extends BasicGameState {
     prep.close();
 
 
+  }
+
+  public Connection getConn() {
+    return this.conn;
   }
 
   @Override
@@ -172,7 +179,8 @@ public class TwoPlayerStartServer extends BasicGameState {
 
     if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && serverName.hasFocus()) {
       try {
-        addServer(serverName.getText());
+        address = getIpAddress();
+        addServer(serverName.getText(), address);
       } catch (SocketException | SQLException e) {
         e.printStackTrace();
       }

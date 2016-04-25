@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,8 @@ public class GameServer {
   // gameplaysstates
   private GamePlayState game;
   private StateBasedGame s;
+  private java.sql.Connection conn;
+  private String address;
 
   private Server server;
 
@@ -62,13 +65,17 @@ public class GameServer {
       , Map<String, Powerup> powerups
       , String player1ID
       , GamePlayState game
-      , StateBasedGame s) {
+      , StateBasedGame s
+      , java.sql.Connection conn
+      , String address) {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
     this.player1ID = player1ID;
     this.game = game;
     this.s = s;
+    this.conn = conn;
+    this.address = address;
   }
 
   /**
@@ -102,14 +109,18 @@ public class GameServer {
     this.server.start();
   }
 
-  /**
-   * Gets all the connections from the server.
-   *
-   * There should be only one connection because there should
-   * only be one server-client pair.
-   *
-   * @return   Array of connections
-   */
+  public void deleteServer() {
+    try {
+      String delete = "DELETE FROM servers WHERE ip = ?";
+      PreparedStatement prep = conn.prepareStatement(delete);
+      prep.setString(1, address);
+      prep.execute();
+      System.out.println(address);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
   public Connection[] getConnections() {
     return this.server.getConnections();
   }

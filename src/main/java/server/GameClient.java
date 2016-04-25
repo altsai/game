@@ -98,7 +98,6 @@ public class GameClient {
     //InetAddress address = this.client.discoverHost(Network.TCPPORT, 10000);
     //System.out.println(address);
 
-
     this.client.connect(5000, address, Network.TCPPORT, Network.UDPPORT);
   }
 

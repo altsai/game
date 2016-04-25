@@ -122,6 +122,7 @@ public class ServerListener extends Listener {
    * Method to enter game end state on disconnection.
    */
   public void disconnected(Connection c) {
+    gs.deleteServer();
 
     this.endGame = true;
     if (this.connected) {
