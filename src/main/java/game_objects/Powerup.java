@@ -101,11 +101,23 @@ public abstract class Powerup extends Circle {
     }
 
     if ((activationStartTime != 0) && (this instanceof Jail)) {
-      float upperLeftX = activationx - (JAIL_RADIUS / 2);
-      float upperLeftY = activationy - (JAIL_RADIUS / 2);
+      float upperLeftX = activationx - JAIL_RADIUS;
+      float upperLeftY = activationy - JAIL_RADIUS;
+      float lowerRightX = upperLeftX + JAIL_RADIUS;
+      float lowerRightY = upperLeftY + JAIL_RADIUS;
 
-      if ((upperLeftX < 10) || (upperLeftY < 40)) {
-        g.draw(new Rectangle(0, 0, JAIL_RADIUS, JAIL_RADIUS));
+      if ((upperLeftX < 10) && (upperLeftY < 40)) {
+        g.draw(new Rectangle(12, 42, JAIL_RADIUS, JAIL_RADIUS));
+      } else if ((lowerRightX >= Window.width - 10)
+          && (lowerRightY >= Window.height - 10)) {
+        g.draw(new Rectangle(Window.width - 12 - JAIL_RADIUS, Window.height
+            - 12 - JAIL_RADIUS, JAIL_RADIUS, JAIL_RADIUS));
+      } else if () {
+
+      } else if () {
+
+      } else {
+        g.draw(new Rectangle(upperLeftX, upperLeftY, JAIL_RADIUS, JAIL_RADIUS));
       }
     }
   }
