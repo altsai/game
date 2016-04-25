@@ -106,17 +106,24 @@ public abstract class Powerup extends Circle {
       float upperLeftY = activationy - JAIL_RADIUS;
       float lowerRightX = upperLeftX + JAIL_RADIUS;
       float lowerRightY = upperLeftY + JAIL_RADIUS;
+      float jail_diam = JAIL_RADIUS * 2;
 
       if ((upperLeftX < 10) && (upperLeftY < 40)) {
-        g.draw(new Rectangle(12, 42, JAIL_RADIUS, JAIL_RADIUS));
+        g.draw(new Rectangle(11, 41, jail_diam, jail_diam));
       } else if ((lowerRightX >= Window.width - 10)
           && (lowerRightY >= Window.height - 10)) {
-        g.draw(new Rectangle(Window.width - 12 - JAIL_RADIUS, Window.height
-            - 12 - JAIL_RADIUS, JAIL_RADIUS, JAIL_RADIUS));
-      } else if () {
-
-      } else if () {
-
+        g.draw(new Rectangle(Window.width - 11 - jail_diam, Window.height - 11
+            - jail_diam, jail_diam, jail_diam));
+      } else if (upperLeftX < 10) {
+        g.draw(new Rectangle(11, upperLeftY, jail_diam, jail_diam));
+      } else if (upperLeftY < 40) {
+        g.draw(new Rectangle(upperLeftX, 41, jail_diam, jail_diam));
+      } else if (lowerRightX > Window.width - 10) {
+        g.draw(new Rectangle(Window.width - 11 - jail_diam, upperLeftY,
+            jail_diam, jail_diam));
+      } else if (lowerRightY > -Window.height - 10) {
+        g.draw(new Rectangle(upperLeftX, Window.height - 11 - jail_diam,
+            jail_diam, jail_diam));
       } else {
         g.draw(new Rectangle(upperLeftX, upperLeftY, JAIL_RADIUS, JAIL_RADIUS));
       }

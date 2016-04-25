@@ -1,15 +1,15 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Zombie;
+import game_objects.Powerup;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
-
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import game_objects.Powerup;
 
 /**
  * OnFire Powerup that gives the player a temporary capability of lighting
