@@ -1,17 +1,17 @@
 package powerups;
 
+import java.util.List;
+import java.util.Map;
+
+import org.newdawn.slick.GameContainer;
+
+import com.google.common.collect.Lists;
+
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.newdawn.slick.GameContainer;
-
-import com.google.common.collect.Lists;
 
 public class Jail extends Powerup {
 
@@ -19,11 +19,14 @@ public class Jail extends Powerup {
   private final int JAIL_LIFETIME = 5000;
   private boolean bombFired;
 
-  public Jail(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z, List<Player> pl) {
+  private Map<String, Player> players;
+
+  public Jail(Map<String, Powerup> p,
+      Map<String, Zombie> z, Map<String, Player> pl) {
     super(p);
     bombFired = false;
     image = Resources.getImage("jail");
+    players = pl;
     // TODO set image
     this.powerupIndex = Powerup.JAIL;
   }
@@ -54,8 +57,14 @@ public class Jail extends Powerup {
     float x = affectedPlayer.getX();
     float y = affectedPlayer.getY();
 
-    affectedPlayer.setBoundary(y - JAIL_RADIUS, y + JAIL_RADIUS, x
-        - JAIL_RADIUS, x + JAIL_RADIUS);
+    // get the other player in the game
+    Player other = otherPlayer(this.affectedPlayer);
+
+    // check that there is another player, set it to the boundary
+    if (other != null) {
+      other.setBoundary(y - JAIL_RADIUS, y + JAIL_RADIUS, x
+          - JAIL_RADIUS, x + JAIL_RADIUS);
+    }
 
     return Lists.newArrayList();
   }
@@ -65,11 +74,33 @@ public class Jail extends Powerup {
     long time = System.currentTimeMillis();
     if ((isUsed && time - activationStartTime >= JAIL_LIFETIME)
         || (isUsed && bombFired)) {
-      affectedPlayer.setBoundary(0, Window.height, 0, Window.width);
+
+      Player other = otherPlayer(this.affectedPlayer);
+
+      if (other != null) {
+        other.setBoundary(0, Window.height, 0, Window.width);
+      }
 
       // kill the powerup
       kill();
     }
+  }
+
+
+  /**
+   * Method that returns the other player (not affected player in the game).
+   *
+   * @param thisPlayer   The affectedPlayer, player that picked up the jail
+   * @return             Player, other player to be jailed
+   */
+  private Player otherPlayer(Player thisPlayer) {
+    for (Player p : this.players.values()) {
+      if (p != this.affectedPlayer) {
+        return p;
+      }
+    }
+
+    return null;
   }
 
 }

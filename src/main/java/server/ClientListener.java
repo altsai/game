@@ -6,7 +6,17 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.google.common.collect.Maps;
+
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 import powerups.Bomb;
+import powerups.Jail;
+import powerups.LaserBeam;
 import powerups.Speed;
 import powerups.TimeStop;
 import server.Network.GameEnd;
@@ -18,34 +28,54 @@ import server.Network.PowerupPickup;
 import server.Network.PowerupRemove;
 import server.Network.UsePowerup;
 import server.Network.ZombieDie;
-import server.Network.ZombieFire;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
 import server.Network.ZombieNew;
 import states.GamePlayState;
 import states.States;
 
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.google.common.collect.Maps;
-
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-
+/**
+ * ClientListener class that receives packet from server and converts to actions.
+ *
+ * @author bl48
+ *
+ */
 public class ClientListener extends Listener {
+
+  // maps of objects that the client renders
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
+
+  // boolean to determine if client is connected
   private boolean connected;
+
+  // boolean to determine if the game ended
   private boolean endGame;
+
+  // client to send packets to server with
   private Client client;
+
+  // the playerID of the player the client controls
   private String playerID;
+
+  // games to change game state
   private GamePlayState game;
   private StateBasedGame s;
   private GameClient gc;
 
+  /**
+   * Constructor for a ClientListener.
+   *
+   * @param client       Client object
+   * @param players      Map of Strings to Players
+   * @param zombies      Map of Strings to Zombies
+   * @param powerups     Map of Strings to Powerup IDs
+   * @param playerID     PlayerID of the player that client controls
+   * @param gps          GamePlayState
+   * @param s            StateBasedGame
+   * @param gc           GameClient
+   */
   public ClientListener(Client client, Map<String, Player> players,
       Map<String, Zombie> zombies, Map<String, Powerup> powerups,
       String playerID, GamePlayState gps, StateBasedGame s, GameClient gc) {
@@ -60,27 +90,54 @@ public class ClientListener extends Listener {
     this.gc = gc;
   }
 
+  /**
+   * Determines if the client is connected.
+   *
+   * @return boolean, true if connected, otherwise false.
+   */
   public boolean isConnected() {
     return this.connected;
   }
 
+  /**
+   * Determines if the game ended.
+   *
+   * @return boolean, true if game ended, else false.
+   */
   public boolean isGameEnd() {
     return this.endGame;
   }
 
   @Override
+  /**
+   * Method to run as soon as the client finds a server to connect with.
+   *
+   * Here is where we would send a packet to the server and check that
+   * the server is the correct server to connect with.
+   */
   public void connected(Connection c) {
     this.connected = true;
+
+    // create a new player to represent the client
     PlayerNew newPlayer = new PlayerNew();
+    // give the name Player2 for now
     newPlayer.name = "Player2";
     newPlayer.isPlayer1 = false;
     newPlayer.id = this.playerID;
+
+    // send the server this player so that the server is aware of the client
     this.client.sendTCP(newPlayer);
+
+    // set the time that the game is initiated (used for the 3 second delay)
     this.game.setTimeInit(System.currentTimeMillis());
   }
 
   @Override
+  /**
+   * Method that runs when the client is disconnected from server.
+   */
   public void disconnected(Connection c) {
+
     this.endGame = true;
 
     // if we had a previous connection and the game hasn't ended due to a death
@@ -90,6 +147,8 @@ public class ClientListener extends Listener {
       this.game.setLoser("Connection lost");
       this.s.enterState(States.CLIENT_END_GAME, new FadeOutTransition(),
           new FadeInTransition());
+
+      // if we had a previous connection and game ended due to loss
     } else if (this.connected && this.game.isGameEnd()) {
       this.s.enterState(States.CLIENT_END_GAME, new FadeOutTransition(),
           new FadeInTransition());
@@ -97,6 +156,9 @@ public class ClientListener extends Listener {
   }
 
   @Override
+  /**
+   * Method that takes an incoming packet and deserializes it
+   */
   public void received(Connection c, Object o) {
 
     // add the first player to this player list
@@ -119,6 +181,7 @@ public class ClientListener extends Listener {
       this.players.get(move.id).setY(move.y);
     }
 
+    // create a new zombie to put in zombie map
     if (o instanceof ZombieNew) {
       ZombieNew zombie = (ZombieNew) o;
       Zombie newZombie = new Zombie(this.players.get(zombie.targetID));
@@ -126,14 +189,7 @@ public class ClientListener extends Listener {
       this.zombies.put(zombie.id, newZombie);
     }
 
-    if (o instanceof ZombieFire) {
-      ZombieFire update = (ZombieFire) o;
-      Zombie selected = this.zombies.get(update.id);
-      if (selected != null) {
-        selected.setState(update.onFire);
-      }
-    }
-
+    // update the zombie's position in map
     if (o instanceof ZombieMove) {
       ZombieMove move = (ZombieMove) o;
       Zombie selected = this.zombies.get(move.id);
@@ -143,6 +199,7 @@ public class ClientListener extends Listener {
       }
     }
 
+    // update variables of a player
     if (o instanceof PlayerUpdate) {
       PlayerUpdate update = (PlayerUpdate) o;
       Player p = this.players.get(update.id);
@@ -153,6 +210,7 @@ public class ClientListener extends Listener {
       }
     }
 
+    // create new powerup to put in powerup map
     if (o instanceof PowerupNew) {
       PowerupNew packet = (PowerupNew) o;
       switch (packet.powerupIndex) {
@@ -175,16 +233,33 @@ public class ClientListener extends Listener {
         newTime.setY(packet.y);
         this.powerups.put(packet.id, newTime);
         break;
+      case Powerup.JAIL:
+        Jail newJail = new Jail(this.powerups, this.zombies, this.players);
+        newJail.setX(packet.x);
+        newJail.setY(packet.y);
+        this.powerups.put(packet.id, newJail);
+        break;
+      case Powerup.LASER:
+
+        // change this once laser is finished
+        LaserBeam newLaser = new LaserBeam(this.powerups, this.zombies);
+        newLaser.setX(packet.x);
+        newLaser.setY(packet.y);
+        this.powerups.put(packet.id, newLaser);
+        break;
+
       default:
         break;
       }
     }
 
+    // removes a powerup from the map (expired)
     if (o instanceof PowerupRemove) {
       PowerupRemove packet = (PowerupRemove) o;
       this.powerups.remove(packet.id);
     }
 
+    // removes zombie from map (zombie killed)
     if (o instanceof ZombieDie) {
       ZombieDie packet = (ZombieDie) o;
       for (String key : packet.idList) {
@@ -192,12 +267,16 @@ public class ClientListener extends Listener {
       }
     }
 
+    // ends game
     if (o instanceof GameEnd) {
       GameEnd packet = (GameEnd) o;
+
+      // sets the current game's loser to whatever loser the packet says
       this.game.setLoser(packet.loserString);
       this.game.setGameEnd(true);
     }
 
+    // picks up a powerup
     if (o instanceof PowerupPickup) {
       PowerupPickup packet = (PowerupPickup) o;
       Player player = this.players.get(packet.playerId);
@@ -209,6 +288,7 @@ public class ClientListener extends Listener {
       }
     }
 
+    // packet that signals the spacebar press
     if (o instanceof UsePowerup) {
       UsePowerup packet = (UsePowerup) o;
       Player p = this.players.get(packet.playerId);
@@ -217,6 +297,7 @@ public class ClientListener extends Listener {
       }
     }
 
+    // packet that moves a list of zombies
     if (o instanceof ZombieMoveList) {
       ZombieMoveList packet = (ZombieMoveList) o;
       for (ZombieMove move : packet.list) {
@@ -225,11 +306,6 @@ public class ClientListener extends Listener {
         target.setY(move.y);
       }
     }
-
-    // if (o instanceof AnimationPacket) {
-    // AnimationPacket packet = (AnimationPacket) o;
-    //
-    // }
 
   }
 }

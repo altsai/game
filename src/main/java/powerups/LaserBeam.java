@@ -1,7 +1,7 @@
 package powerups;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
@@ -16,14 +16,15 @@ public class LaserBeam extends Powerup {
   /**
    * Reference to the list of Zombies in the game.
    */
-  private ConcurrentHashMap<String, Zombie> zombies;
+  private Map<String, Zombie> zombies;
 
   private float direction;
 
-  public LaserBeam(ConcurrentHashMap<String, Powerup> p,
-      ConcurrentHashMap<String, Zombie> z) {
+  public LaserBeam(Map<String, Powerup> p,
+      Map<String, Zombie> z) {
     super(p);
     zombies = z;
+    this.powerupIndex = Powerup.LASER;
   }
 
   @Override

@@ -21,6 +21,10 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/**
+ * State that represents the menu where the player decides to host or join.
+ *
+ */
 public class TwoPlayerStartServer extends BasicGameState {
 
   private Connection conn;
@@ -32,6 +36,10 @@ public class TwoPlayerStartServer extends BasicGameState {
   private boolean makeServer;
   private boolean initializedTextFields = false;
 
+  /**
+   * Instantiates a TwoPlayerStartServer state.
+   * @param conn Connection to database
+   */
   public TwoPlayerStartServer(Connection conn) {
     this.conn = conn;
   }
@@ -65,6 +73,10 @@ public class TwoPlayerStartServer extends BasicGameState {
     }
   }
 
+  /**
+   * Fetches all servers from the database.
+   * @throws SQLException on error with connection.
+   */
   private void getServers() throws SQLException {
     String query = "SELECT * FROM servers";
     PreparedStatement prep = conn.prepareStatement(query);
