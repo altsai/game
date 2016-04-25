@@ -50,6 +50,7 @@ public abstract class Powerup extends Circle {
   public static final int ON_FIRE = 3;
   public static final int SPEED = 4;
   public static final int TIMESTOP = 5;
+  public static final int LASER = 6;
 
   private final float JAIL_RADIUS = 150;
 

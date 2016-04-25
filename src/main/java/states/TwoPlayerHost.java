@@ -1,6 +1,7 @@
 package states;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,13 @@ public class TwoPlayerHost extends GamePlayState {
   private boolean errorMakingServer;
   private boolean makeServer;
   private String player1ID;
+
+  private Connection conn;
+  private TwoPlayerStartServer twoPlayerStartServer;
+
+  public TwoPlayerHost(TwoPlayerStartServer twoPlayerStartServer) {
+    this.twoPlayerStartServer = twoPlayerStartServer;
+  }
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
@@ -138,7 +146,9 @@ public class TwoPlayerHost extends GamePlayState {
             , this.powerups
             , this.player1ID
             , this
-            , s);
+            , s
+            , twoPlayerStartServer.getConn()
+            , twoPlayerStartServer.getAddress());
         this.server.start();
         this.makeServer = true;
       } catch (IOException e) {

@@ -44,7 +44,7 @@ public class Resources {
       images.put("background", loadImage("img/light_blue_gradient.jpg"));
       images.put("key", loadImage("img/blank_key.png"));
       images
-          .put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
+      .put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
       images.put("button", loadImage("img/wasd_button.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
@@ -55,6 +55,7 @@ public class Resources {
       images.put("jail", loadImage("img/jail.png"));
       images.put("firezombie", loadImage("img/firezombie.png"));
       images.put("laserbeam", loadImage("img/laserbeam.png"));
+      images.put("particle", loadImage("img/particle.png"));
       images.put("lasershot", loadImage("img/laser_shot_copy.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));

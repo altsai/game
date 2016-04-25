@@ -21,6 +21,10 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/**
+ * State that represents the menu where the player decides to host or join.
+ *
+ */
 public class TwoPlayerStartServer extends BasicGameState {
 
   private Connection conn;
@@ -32,6 +36,10 @@ public class TwoPlayerStartServer extends BasicGameState {
   private boolean makeServer;
   private boolean initializedTextFields = false;
 
+  /**
+   * Instantiates a TwoPlayerStartServer state.
+   * @param conn Connection to database
+   */
   public TwoPlayerStartServer(Connection conn) {
     this.conn = conn;
   }
@@ -65,6 +73,10 @@ public class TwoPlayerStartServer extends BasicGameState {
     }
   }
 
+  /**
+   * Fetches all servers from the database.
+   * @throws SQLException on error with connection.
+   */
   private void getServers() throws SQLException {
     String query = "SELECT * FROM servers";
     PreparedStatement prep = conn.prepareStatement(query);
@@ -107,10 +119,7 @@ public class TwoPlayerStartServer extends BasicGameState {
 
   }
 
-  private void addServer(String name) throws SQLException, SocketException {
-    String add = "INSERT INTO servers VALUES (?, ?)";
-    PreparedStatement prep = conn.prepareStatement(add);
-
+  private String getIpAddress() throws SocketException {
     String localAddr = "";
     Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
     for (; n.hasMoreElements();)
@@ -127,6 +136,12 @@ public class TwoPlayerStartServer extends BasicGameState {
       }
     }
 
+    return localAddr;
+  }
+
+  private void addServer(String name, String localAddr) throws SQLException, SocketException {
+    String add = "INSERT INTO servers VALUES (?, ?)";
+    PreparedStatement prep = conn.prepareStatement(add);
     prep.setString(1, name);
     prep.setString(2, localAddr);
 
@@ -135,6 +150,10 @@ public class TwoPlayerStartServer extends BasicGameState {
     prep.close();
 
 
+  }
+
+  public Connection getConn() {
+    return this.conn;
   }
 
   @Override
@@ -160,7 +179,8 @@ public class TwoPlayerStartServer extends BasicGameState {
 
     if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && serverName.hasFocus()) {
       try {
-        addServer(serverName.getText());
+        address = getIpAddress();
+        addServer(serverName.getText(), address);
       } catch (SocketException | SQLException e) {
         e.printStackTrace();
       }

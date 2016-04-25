@@ -1,11 +1,5 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Entity;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +7,12 @@ import java.util.Map;
 import org.newdawn.slick.GameContainer;
 
 import com.google.common.collect.Lists;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
+import entities.Zombie;
+import game_objects.Powerup;
 
 public class LaserBeam extends Powerup {
 
@@ -22,6 +22,7 @@ public class LaserBeam extends Powerup {
   private Map<String, Zombie> zombies;
 
   private float direction;
+  private static final float LASER_SPEED = 6.0f;
 
   private LaserShot laser;
 
@@ -29,6 +30,7 @@ public class LaserBeam extends Powerup {
     super(p);
     this.image = Resources.getImage("laserbeam");
     zombies = z;
+    this.powerupIndex = Powerup.LASER;
   }
 
   @Override
@@ -43,31 +45,31 @@ public class LaserBeam extends Powerup {
 
       if ((direction > 0) && (direction < 180)) {
         // move up
-        laser.setY(y - 3);
+        laser.setY(y - LASER_SPEED);
       } else if ((direction > 180) && (direction < 360)) {
         // move down
-        laser.setY(y + 3);
+        laser.setY(y + LASER_SPEED);
       }
 
       if ((direction > 90) && (direction < 270)) {
         // move left
-        laser.setX(x - 3);
+        laser.setX(x - LASER_SPEED);
       } else if ((direction > 270) && (direction != 0)) {
         // move right
-        laser.setX(x + 3);
+        laser.setX(x + LASER_SPEED);
       } else if ((direction > 0) && (direction < 90)) {
         // move right
-        laser.setX(x + 3);
+        laser.setX(x + LASER_SPEED);
       }
 
       if (direction == 0) {
-        laser.setX(x + 3);
+        laser.setX(x + LASER_SPEED);
       } else if (direction == 90) {
-        laser.setY(y - 3);
+        laser.setY(y - LASER_SPEED);
       } else if (direction == 180) {
-        laser.setX(x - 3);
+        laser.setX(x - LASER_SPEED);
       } else if (direction == 270) {
-        laser.setY(y + 3);
+        laser.setY(y + LASER_SPEED);
       }
 
       for (String zid : zombies.keySet()) {

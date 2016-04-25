@@ -29,10 +29,10 @@ public class TwoPlayerClient extends GamePlayState {
   private boolean errorMakingClient;
   private boolean hasClient;
   private String playerID;
-  private String address;
+  private TwoPlayerStartServer twoPlayerStartServer;
 
   public TwoPlayerClient(TwoPlayerStartServer twoPlayerStartServer) {
-    this.address = twoPlayerStartServer.getAddress();
+    this.twoPlayerStartServer = twoPlayerStartServer;
   }
 
   @Override
@@ -112,7 +112,7 @@ public class TwoPlayerClient extends GamePlayState {
             , this.playerID
             , this
             , s
-            , address);
+            , twoPlayerStartServer.getAddress());
         this.client.start();
       } catch (IOException e) {
         System.out.println(e.getMessage());

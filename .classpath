@@ -28,11 +28,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/jinput.jar"/>
-	<classpathentry kind="lib" path="lib/kryonet-2.21-all.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.0.8-bin.jar"/>
-	<classpathentry kind="lib" path="lib/slick.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/lib/slick.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Dropbox/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Boning/Desktop/kryonet-2.21/jars/production/onejar/kryonet-2.21-all.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

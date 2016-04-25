@@ -24,18 +24,44 @@ import server.Network.ZombieDie;
 import states.GamePlayState;
 import states.States;
 
+/**
+ * Listener object that receives packet from client and performs action.
+ *
+ * @author bl48
+ *
+ */
 public class ServerListener extends Listener {
+
+  // map of objects that the host renders
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
+
+  // boolean checks for game state
   private boolean connected;
   private boolean endGame;
-  private Server server;
+
+  // the Host player's id
   private String player1ID;
+
+  private Server server;
+
   private GamePlayState game;
   private StateBasedGame s;
   private GameServer gs;
 
+  /**
+   * Constructor for a ServerListener.
+   *
+   * @param server      Server that connects to client.
+   * @param players     Map String to Player
+   * @param zombies     Map String to Zombie
+   * @param powerups    Map String to Powerup
+   * @param player1ID   String ID of Host player
+   * @param game        GamePlayState
+   * @param s           StateBasedGame
+   * @param gs          GameServer
+   */
   public ServerListener(Server server
       , Map<String, Player> players
       , Map<String, Zombie> zombies
@@ -54,15 +80,29 @@ public class ServerListener extends Listener {
     this.gs = gs;
   }
 
+  /**
+   * Tells if the server is connected to a client.
+   * @return true if connected
+   */
   public boolean isConnected() {
     return this.server.getConnections().length > 0;
   }
 
+  /**
+   * Tells if game has ended.
+   * @return true if game ended, else false.
+   */
   public boolean isGameEnd() {
     return this.endGame;
   }
 
   @Override
+  /**
+   * Runs whenver the server is connected with a client.
+   *
+   * First checks that the server only has one connection.
+   * Rejects any other connections if server already connected.
+   */
   public void connected(Connection c) {
     if (this.connected) {
       c.close();
@@ -78,7 +118,12 @@ public class ServerListener extends Listener {
   }
 
   @Override
+  /**
+   * Method to enter game end state on disconnection.
+   */
   public void disconnected(Connection c) {
+    gs.deleteServer();
+
     this.endGame = true;
     if (this.connected) {
       this.connected = false;
@@ -90,6 +135,9 @@ public class ServerListener extends Listener {
   }
 
   @Override
+  /**
+   * Method called when a packet is received.
+   */
   public void received(Connection c, Object o) {
 
     // if given a new player packet, adds the new player
@@ -104,12 +152,14 @@ public class ServerListener extends Listener {
       }
     }
 
+    // if given a packet of client movement, updates the client player
     if (o instanceof PlayerMove) {
       PlayerMove move = (PlayerMove) o;
       this.players.get(move.id).setX(move.x);
       this.players.get(move.id).setY(move.y);
     }
 
+    // updates the client player with new variables
     if (o instanceof PlayerUpdate) {
       PlayerUpdate update = (PlayerUpdate) o;
       Player p = this.players.get(update.id);
@@ -157,14 +207,6 @@ public class ServerListener extends Listener {
         this.server.getConnections()[0].sendTCP(packet);
       }
 
-//      // also update the client with new info on the client player
-//      // ex: The client used speed powerup, so now needs to speed up
-//      PlayerUpdate update = new PlayerUpdate();
-//      update.id = p.getID();
-//      update.loseLife = false;
-//      update.score = p.getScore();
-//      update.speed = p.getSpeed();
-//      this.server.getConnections()[0].sendTCP(update);
     }
 
 
