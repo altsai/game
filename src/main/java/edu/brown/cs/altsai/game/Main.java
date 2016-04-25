@@ -69,8 +69,8 @@ public class Main extends StateBasedGame {
     new Resources();
 
     SinglePlayerGameState singlePlayer = new SinglePlayerGameState();
-    TwoPlayerHost twoPlayerHost = new TwoPlayerHost();
     TwoPlayerStartServer twoPlayerStartServer = new TwoPlayerStartServer(conn);
+    TwoPlayerHost twoPlayerHost = new TwoPlayerHost(twoPlayerStartServer);
     TwoPlayerClient twoPlayerClient = new TwoPlayerClient(twoPlayerStartServer);
 
 

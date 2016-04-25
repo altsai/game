@@ -79,6 +79,8 @@ public class ServerListener extends Listener {
 
   @Override
   public void disconnected(Connection c) {
+    gs.deleteServer();
+
     this.endGame = true;
     if (this.connected) {
       this.connected = false;
@@ -157,14 +159,14 @@ public class ServerListener extends Listener {
         this.server.getConnections()[0].sendTCP(packet);
       }
 
-//      // also update the client with new info on the client player
-//      // ex: The client used speed powerup, so now needs to speed up
-//      PlayerUpdate update = new PlayerUpdate();
-//      update.id = p.getID();
-//      update.loseLife = false;
-//      update.score = p.getScore();
-//      update.speed = p.getSpeed();
-//      this.server.getConnections()[0].sendTCP(update);
+      //      // also update the client with new info on the client player
+      //      // ex: The client used speed powerup, so now needs to speed up
+      //      PlayerUpdate update = new PlayerUpdate();
+      //      update.id = p.getID();
+      //      update.loseLife = false;
+      //      update.score = p.getScore();
+      //      update.speed = p.getSpeed();
+      //      this.server.getConnections()[0].sendTCP(update);
     }
 
 
