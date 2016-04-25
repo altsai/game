@@ -104,7 +104,7 @@ public abstract class Powerup extends Circle {
       float upperLeftX = activationx - (JAIL_RADIUS / 2);
       float upperLeftY = activationy - (JAIL_RADIUS / 2);
 
-      if ((upperLeftX < 10) || (upperLeftY < 40) {
+      if ((upperLeftX < 10) || (upperLeftY < 40)) {
         g.draw(new Rectangle(0, 0, JAIL_RADIUS, JAIL_RADIUS));
       }
     }
