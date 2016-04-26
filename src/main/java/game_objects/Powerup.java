@@ -40,9 +40,12 @@ public abstract class Powerup extends Circle {
   protected boolean isUsed;
   protected Map<String, Powerup> powerups;
   protected int powerupIndex;
+  protected Player other;
 
   protected float activationx;
   protected float activationy;
+  protected float otherx;
+  protected float othery;
 
   public static final int BLACK_HOLE = 0;
   public static final int BOMB = 1;
@@ -74,6 +77,7 @@ public abstract class Powerup extends Circle {
     this.y = r.nextFloat() * (Window.height - 60 - (2 * POWERUP_RADIUS)) + 45;
     this.radius = POWERUP_RADIUS;
     this.id = UUID.randomUUID().toString();
+    other = null;
   }
 
   /**
@@ -102,11 +106,11 @@ public abstract class Powerup extends Circle {
     }
 
     if ((activationStartTime != 0) && (this instanceof Jail)) {
-      float upperLeftX = activationx - JAIL_RADIUS;
-      float upperLeftY = activationy - JAIL_RADIUS;
-      float lowerRightX = upperLeftX + JAIL_RADIUS;
-      float lowerRightY = upperLeftY + JAIL_RADIUS;
       float jail_diam = JAIL_RADIUS * 2;
+      float upperLeftX = otherx - JAIL_RADIUS;
+      float upperLeftY = othery - JAIL_RADIUS;
+      float lowerRightX = upperLeftX + jail_diam;
+      float lowerRightY = upperLeftY + jail_diam;
 
       if ((upperLeftX < 10) && (upperLeftY < 40)) {
         g.draw(new Rectangle(11, 41, jail_diam, jail_diam));

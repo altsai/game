@@ -18,20 +18,17 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.Jail;
+import server.GameServer;
+import server.Network.ZombieMove;
+import server.Network.ZombieMoveList;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.Bomb;
-import powerups.LaserBeam;
-import powerups.Speed;
-import powerups.TimeStop;
-import server.GameServer;
-import server.Network.ZombieMove;
-import server.Network.ZombieMoveList;
 
 public class TwoPlayerHost extends GamePlayState {
-  //list of all entities in the game
+  // list of all entities in the game
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Set<Powerup> pickedUpPowerups;
@@ -110,7 +107,8 @@ public class TwoPlayerHost extends GamePlayState {
       // check that a 3 second delay has completed before playing the game
       long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
       if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
-        g.drawString("Game begins in: " + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
+        g.drawString("Game begins in: "
+            + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
       } else {
 
         this.gameStart = true;
@@ -151,14 +149,9 @@ public class TwoPlayerHost extends GamePlayState {
 
     if (!this.makeServer) {
       try {
-        this.server = new GameServer(this.players
-            , this.zombies
-            , this.powerups
-            , this.player1ID
-            , this
-            , s
-            , twoPlayerStartServer.getConn()
-            , twoPlayerStartServer.getAddress());
+        this.server = new GameServer(this.players, this.zombies, this.powerups,
+            this.player1ID, this, s, twoPlayerStartServer.getConn(),
+            twoPlayerStartServer.getAddress());
         this.server.start();
         this.makeServer = true;
       } catch (IOException e) {
@@ -168,13 +161,13 @@ public class TwoPlayerHost extends GamePlayState {
       }
     }
 
-
     // if the server has a connection attached, start the game
     if (this.gameStart && this.server.getConnections().length > 0) {
       spawnZombie();
       spawnPowerup();
 
-      // update player positions, make sure to be only able to control host player
+      // update player positions, make sure to be only able to control host
+      // player
       for (Player p : this.players.values()) {
         if (p.getID().equals(this.player1ID)) {
           p.updateAndControlNetworked(gc, delta);
@@ -200,7 +193,8 @@ public class TwoPlayerHost extends GamePlayState {
       // if the host presses space, use the powerup
       if (gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
         this.server.sendUsePowerup();
-        List<String> removedZombies = this.players.get(this.player1ID).usePowerup();
+        List<String> removedZombies = this.players.get(this.player1ID)
+            .usePowerup();
         if (removedZombies.size() > 0) {
           this.server.removeZombie(removedZombies);
         }
@@ -212,8 +206,6 @@ public class TwoPlayerHost extends GamePlayState {
       this.server.close();
       s.enterState(States.MENU);
     }
-
-
 
   }
 
@@ -262,7 +254,6 @@ public class TwoPlayerHost extends GamePlayState {
     }
   }
 
-
   /**
    * Method that upates the entities and checks for collisions.
    *
@@ -274,9 +265,7 @@ public class TwoPlayerHost extends GamePlayState {
   private void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
       int delta) {
 
-
-    //TODO: Combine all zombies in alist and send the list as a packet
-
+    // TODO: Combine all zombies in alist and send the list as a packet
 
     // check for player collision with every entity
     for (Zombie z : this.zombies.values()) {
@@ -286,7 +275,8 @@ public class TwoPlayerHost extends GamePlayState {
 
       // update the zombie's position and state on the client
       // might be able to optimize by having moveZombie take in a hashmap
-      // process into smaller lists, and then send lists instead of individual zombi
+      // process into smaller lists, and then send lists instead of individual
+      // zombi
 
       // check player's lives and mark invincible as necessary
       for (Player p : this.players.values()) {
@@ -316,13 +306,14 @@ public class TwoPlayerHost extends GamePlayState {
     for (Powerup powerup : this.powerups.values()) {
       for (Player p : this.players.values()) {
 
-        // check that the pickedup powerup isn't in the state where it has been picked up,
+        // check that the pickedup powerup isn't in the state where it has been
+        // picked up,
         // but is still in map because it's effects haven't worn off.
         if (p.isCollision(powerup) && !this.pickedUpPowerups.contains(powerup)) {
           p.collectPowerup(powerup);
           this.pickedUpPowerups.add(powerup);
           this.server.sendPowerupPickup(p, powerup);
-          //this.server.removePowerup(powerup.getID());
+          // this.server.removePowerup(powerup.getID());
         }
       }
     }
@@ -413,39 +404,37 @@ public class TwoPlayerHost extends GamePlayState {
     }
   }
 
-
   @Override
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      double randomNum = random.nextDouble();
-      if (randomNum < 0.2) {
-        Bomb bomb = new Bomb(powerups, zombies);
-        this.powerups.put(bomb.getID(), bomb);
-        this.server.sendNewPowerup(bomb);
-      } else if (randomNum < 0.4 && randomNum >= 0.2) {
-        Speed speed = new Speed(powerups);
-        this.powerups.put(speed.getID(), speed);
-        this.server.sendNewPowerup(speed);
-      } else if (randomNum < 0.6 && randomNum >= 0.4) {
-        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
-        this.powerups.put(timestop.getID(), timestop);
-        this.server.sendNewPowerup(timestop);
-      } else if (randomNum < 0.8 && randomNum >= 0.6){
-        LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-        this.powerups.put(lb.getID(), lb);
-        this.server.sendNewPowerup(lb);
-      } else {
-//        Jail jail = new Jail(powerups, zombies, players);
-//        this.powerups.put(jail.getID(), jail);
-//        this.server.sendNewPowerup(jail);
-      }
+      // double randomNum = random.nextDouble();
+      // if (randomNum < 0.2) {
+      // Bomb bomb = new Bomb(powerups, zombies);
+      // this.powerups.put(bomb.getID(), bomb);
+      // this.server.sendNewPowerup(bomb);
+      // } else if (randomNum < 0.4 && randomNum >= 0.2) {
+      // Speed speed = new Speed(powerups);
+      // this.powerups.put(speed.getID(), speed);
+      // this.server.sendNewPowerup(speed);
+      // } else if (randomNum < 0.6 && randomNum >= 0.4) {
+      // TimeStop timestop = new TimeStop(powerups, zombies, players, this);
+      // this.powerups.put(timestop.getID(), timestop);
+      // this.server.sendNewPowerup(timestop);
+      // } else if (randomNum < 0.8 && randomNum >= 0.6) {
+      // LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
+      // this.powerups.put(lb.getID(), lb);
+      // this.server.sendNewPowerup(lb);
+      // } else {
+      Jail jail = new Jail(powerups, zombies, players);
+      this.powerups.put(jail.getID(), jail);
+      this.server.sendNewPowerup(jail);
+      // }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
 
   }
-
 
   @Override
   protected void endGame(GameContainer gc, StateBasedGame s) {
