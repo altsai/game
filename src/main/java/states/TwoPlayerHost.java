@@ -78,7 +78,7 @@ public class TwoPlayerHost extends GamePlayState {
     this.difficultyLevel = 1;
     this.makeServer = false;
 
-    Player p1 = new Player(null, "Player1");
+    Player p1 = new Player(null, "player1");
     p1.setPlayer1(true);
 
     // explicitly set the id of the first player to "0"

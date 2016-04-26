@@ -29,7 +29,6 @@ public class Jail extends Powerup {
     players = pl;
     // TODO set image
     this.powerupIndex = Powerup.JAIL;
-    other = otherPlayer(affectedPlayer);
   }
 
   @Override
@@ -51,6 +50,7 @@ public class Jail extends Powerup {
 
   @Override
   public List<String> activate() {
+    other = otherPlayer(affectedPlayer);
     this.isUsed = true;
     this.activationStartTime = System.currentTimeMillis();
     otherx = other.getX();
@@ -126,7 +126,7 @@ public class Jail extends Powerup {
    */
   private Player otherPlayer(Player thisPlayer) {
     for (Player p : this.players.values()) {
-      if (p != thisPlayer) {
+      if (!p.getName().equals(thisPlayer.getName())) {
         return p;
       }
     }
