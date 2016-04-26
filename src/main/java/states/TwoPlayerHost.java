@@ -91,6 +91,17 @@ public class TwoPlayerHost extends GamePlayState {
     this.players.put(p1.getID(), p1);
     this.lastZombieSpawnTime = System.currentTimeMillis();
     this.lastDifficultyIncreaseTime = System.currentTimeMillis();
+
+    monitorShutdown();
+  }
+
+  public void monitorShutdown() {
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        server.deleteServer();
+      }
+    });
   }
 
   @Override
@@ -436,9 +447,9 @@ public class TwoPlayerHost extends GamePlayState {
         this.powerups.put(lb.getID(), lb);
         this.server.sendNewPowerup(lb);
       } else {
-//        Jail jail = new Jail(powerups, zombies, players);
-//        this.powerups.put(jail.getID(), jail);
-//        this.server.sendNewPowerup(jail);
+        //        Jail jail = new Jail(powerups, zombies, players);
+        //        this.powerups.put(jail.getID(), jail);
+        //        this.server.sendNewPowerup(jail);
       }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();

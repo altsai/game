@@ -41,11 +41,18 @@ public class Resources {
       images.put("bomb", loadImage("img/wasd_bomb.png"));
       images.put("speed", loadImage("img/wasd_speed.png"));
       images.put("timestop", loadImage("img/wasd_timestop.png"));
-      images.put("background", loadImage("img/light_blue_gradient.jpg"));
+      images.put("background", loadImage("img/wasd_background_blue_2.png"));
       images.put("key", loadImage("img/blank_key.png"));
-      images
-      .put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
+      images.put("w_key", loadImage("img/W_key.png"));
+      images.put("a_key", loadImage("img/A_key.png"));
+      images.put("s_key", loadImage("img/S_key.png"));
+      images.put("d_key", loadImage("img/D_key.png"));
+      images.put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
       images.put("button", loadImage("img/wasd_button.png"));
+      images.put("buttonSingle", loadImage("img/wasd_button_singleplayer.png"));
+      images.put("buttonMulti", loadImage("img/wasd_button_multiplayer.png"));
+      images.put("buttonRank", loadImage("img/wasd_button_rankings.png"));
+      images.put("buttonAbout", loadImage("img/wasd_button_about.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("injuredAnimation",
@@ -58,7 +65,6 @@ public class Resources {
       images.put("laserbeam", loadImage("img/laserbeam.png"));
       images.put("particle", loadImage("img/particle.png"));
       images.put("particle_black", loadImage("img/particle_black.png"));
-      images.put("lasershot", loadImage("img/laser_shot_copy.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("bomb_explosion_2",

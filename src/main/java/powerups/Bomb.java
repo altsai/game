@@ -135,11 +135,11 @@ public class Bomb extends Powerup {
 
     if (this.isUsed) {
 
-      this.animation.draw(this.explosionX, this.explosionY, 196, 190);
+      //      this.animation.draw(this.explosionX, this.explosionY, 196, 190);
       // trigger animation
-      //      this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2),
-      //          this.explosionY - (ANIMATION_HEIGHT / 2), ANIMATION_WIDTH,
-      //          ANIMATION_HEIGHT);
+      this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2),
+          this.explosionY - (ANIMATION_HEIGHT / 2), ANIMATION_WIDTH,
+          ANIMATION_HEIGHT);
       if (animation.getFrame() == 29) {
         this.isUsed = false;
       }

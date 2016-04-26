@@ -17,7 +17,7 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.LaserBeam;
+import powerups.Bomb;
 
 /**
  * Defines the Single Player game state.
@@ -38,9 +38,9 @@ public class SinglePlayerGameState extends GamePlayState {
     Player player1 = new Player(null, "player1");
     player1.setPlayer1(true);
 
-    Font font = new Font("Helvetica", Font.BOLD, 20);
+    Font font = new Font("Arial", Font.BOLD, 20);
     ttf = new TrueTypeFont(font, true);
-    Font font2 = new Font("Helvetica", Font.PLAIN, 20);
+    Font font2 = new Font("Arial", Font.PLAIN, 20);
     ttf2 = new TrueTypeFont(font2, true);
 
     player1.setID("0");
@@ -156,24 +156,25 @@ public class SinglePlayerGameState extends GamePlayState {
 
 
       //      double randomNum = random.nextDouble();
-      //      if (randomNum < 0.2) {
-      //      Bomb bomb = new Bomb(powerups, zombies);
-      //      this.powerups.put(bomb.getID(), bomb);
-      //      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+      //      if (randomNum < .16) {
+      Bomb bomb = new Bomb(powerups, zombies);
+      this.powerups.put(bomb.getID(), bomb);
+      //      } else if (randomNum < 0.32 && randomNum >= 0.16) {
       //        Speed speed = new Speed(powerups);
       //        this.powerups.put(speed.getID(), speed);
-      //      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+      //      } else if (randomNum < 0.48 && randomNum >= 0.32) {
       //        TimeStop timestop = new TimeStop(powerups, zombies, this);
       //        this.powerups.put(timestop.getID(), timestop);
-      //      } else if (randomNum < 0.8 && randomNum >= 0.6) {
-      //      OnFire onfire = new OnFire(powerups, zombies);
-      //      this.powerups.put(onfire.getID(), onfire);
-      //      } else {
+      //      } else if (randomNum < 0.64 && randomNum >= 0.48) {
+      //        OnFire onfire = new OnFire(powerups, zombies);
+      //        this.powerups.put(onfire.getID(), onfire);
+      //      } else if (randomNum < .80 && randomNum >= .64){
       //      BlackHole blackhole = new BlackHole(powerups, zombies, this);
       //      this.powerups.put(blackhole.getID(), blackhole);
+      //      } else {
+      //        LaserBeam lb = new LaserBeam(powerups, zombies);
+      //        this.powerups.put(lb.getID(), lb);
       //      }
-      LaserBeam lb = new LaserBeam(powerups, zombies);
-      this.powerups.put(lb.getID(), lb);
 
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
