@@ -24,11 +24,13 @@ public class LaserBeam extends Powerup {
   private float direction;
   private static final float LASER_SPEED = 6.0f;
 
+
   private LaserShot laser;
 
   public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z) {
     super(p);
     this.image = Resources.getImage("laserbeam");
+
     zombies = z;
     this.powerupIndex = Powerup.LASER;
   }
@@ -39,6 +41,7 @@ public class LaserBeam extends Powerup {
     super.update(gc, delta);
 
     if (this.isUsed) {
+
       // TODO advance along line of attack
       float x = laser.getX();
       float y = laser.getY();

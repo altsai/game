@@ -43,7 +43,7 @@ public class Bomb extends Powerup {
   /**
    * The animation frame time.
    */
-  public static final int ANIMATION_FRAME_TIME = 50;
+  public static final int ANIMATION_FRAME_TIME = 100;
 
   /**
    * Duration of animation
@@ -135,10 +135,16 @@ public class Bomb extends Powerup {
 
     if (this.isUsed) {
 
+      this.animation.draw(this.explosionX, this.explosionY, 196, 190);
       // trigger animation
-      this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2),
-          this.explosionY - (ANIMATION_HEIGHT / 2), ANIMATION_WIDTH,
-          ANIMATION_HEIGHT);
+      //      this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2),
+      //          this.explosionY - (ANIMATION_HEIGHT / 2), ANIMATION_WIDTH,
+      //          ANIMATION_HEIGHT);
+      if (animation.getFrame() == 29) {
+        this.isUsed = false;
+      }
+    } else {
+      animation.restart();
     }
 
 

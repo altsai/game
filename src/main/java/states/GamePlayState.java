@@ -100,12 +100,7 @@ public abstract class GamePlayState extends BasicGameState {
     } else {
       this.gameStart = true;
 
-      for (Player p : this.players.values()) {
-        p.render(gc, g);
-      }
-      for (Zombie z : this.zombies.values()) {
-        z.render(gc, g);
-      }
+
       for (Powerup p : this.powerups.values()) {
         p.render(gc, g);
       }
@@ -116,6 +111,13 @@ public abstract class GamePlayState extends BasicGameState {
           }
         }
       }
+      for (Player p : this.players.values()) {
+        p.render(gc, g);
+      }
+      for (Zombie z : this.zombies.values()) {
+        z.render(gc, g);
+      }
+
     }
 
   }
