@@ -1,13 +1,19 @@
 package powerups;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.particles.ConfigurableEmitter;
+import org.newdawn.slick.particles.ParticleIO;
+import org.newdawn.slick.particles.ParticleSystem;
 
 import edu.brown.cs.altsai.game.Resources;
-import entities.Player;
+import effects.FireEmitterCustom;
 import entities.Zombie;
 import game_objects.Powerup;
 import states.GamePlayState;
@@ -26,6 +32,9 @@ public class BlackHole extends Powerup {
    */
   private Map<String, Zombie> zombies;
 
+  private ParticleSystem bhParticles;
+  private FireEmitterCustom emitter;
+
 
 
   /**
@@ -34,6 +43,8 @@ public class BlackHole extends Powerup {
   private GamePlayState game;
 
   private final static long EFFECT_DURATION = 3000;
+
+  private Image imageLarge;
 
   /**
    * Constructor for the BlackHole.
@@ -51,29 +62,38 @@ public class BlackHole extends Powerup {
     zombies = z;
     game = gps;
     image = Resources.getImage("blackhole");
+    imageLarge = Resources.getImage("blackholeLarge");
     this.powerupIndex = Powerup.BLACK_HOLE;
+
+    initParticles();
   }
 
-  /**
-   * Constructor for the BlackHole.
-   *
-   * @param p
-   *          the list of Powerups in the game
-   * @param z
-   *          the list of Zombies in the game
-   * @param pl
-   *          the list of players in the game
-   * @param gps
-   *          the GamePlayState
-   */
-  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> pl,
-      GamePlayState gps) {
-    super(p);
-    // TODO animation
-    zombies = z;
-    game = gps;
-    image = Resources.getImage("blackhole");
-    this.powerupIndex = Powerup.BLACK_HOLE;
+  private void initParticles() {
+    bhParticles = new ParticleSystem(Resources.getImage("particle"), 3000);
+    File xmlFile = new File("particle/bhEmitter.xml");
+    try {
+      ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
+      bhParticles.addEmitter(emitter);
+      //      emitter = new FireEmitterCustom(50);
+      //      bhParticles.addEmitter(emitter);
+      bhParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void render(GameContainer gc, Graphics g) {
+    super.render(gc, g);
+
+    if (this.isUsed) {
+
+      // trigger animation
+      imageLarge.draw(this.x - 40, this.y - 40, 100, 100);
+      bhParticles.render(this.x, this.y);
+    }
+
+
   }
 
   @Override
@@ -90,6 +110,11 @@ public class BlackHole extends Powerup {
         }
         z.update(gc, delta);
       }
+
+      // rotate image
+      imageLarge.rotate(.05f * delta);
+
+      bhParticles.update(delta);
     }
 
     // check if BlackHole should be deactivated
@@ -123,12 +148,12 @@ public class BlackHole extends Powerup {
 
   @Override
   public void deactivate() {
-//    if (this.isUsed && zombies.size() == 0) {
-//      this.game.setSpawnOn(true);
-//
-//      // kill the Powerup
-//      kill();
-//    }
+    //    if (this.isUsed && zombies.size() == 0) {
+    //      this.game.setSpawnOn(true);
+    //
+    //      // kill the Powerup
+    //      kill();
+    //    }
 
     // the effects only last for 3 seconds now
     if (this.isUsed && (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION)) {

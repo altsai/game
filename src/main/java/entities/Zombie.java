@@ -30,13 +30,6 @@ public class Zombie extends Entity {
     super(other);
   }
 
-  // constants for targeting the player's box
-  private static final int UP = 0;
-  private static final int RIGHT = 1;
-  private static final int DOWN = 2;
-  private static final int LEFT = 3;
-  private static final int CUSHION = 5;
-
   private double initial_speed;
 
   // zombies keep track of a player and a specific target area of the player.
@@ -71,8 +64,6 @@ public class Zombie extends Entity {
     this.image = Resources.getImage("zombie");
     this.speed = ((Player) player).getSpeed() * 3;
 
-    // give the zombie a random target of the player to track
-    this.target = r.nextInt(LEFT + 1);
     this.state = false;
     this.id = UUID.randomUUID().toString();
 
@@ -88,7 +79,7 @@ public class Zombie extends Entity {
       //      ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
       //      emitter.setPosition(this.radius / 2, this.radius / 2);
       //      fireParticles.addEmitter(emitter);
-      emitter = new FireEmitterCustom((int) this.radius / 2, (int) this.radius / 2, 30);
+      emitter = new FireEmitterCustom((int) this.radius / 2, (int) this.radius / 2, 10);
       fireParticles.addEmitter(emitter);
       fireParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
     } catch (Exception e) {
@@ -117,6 +108,9 @@ public class Zombie extends Entity {
   public void update(GameContainer gc, int delta) {
     followPlayer(delta);
 
+    if (this.isOnFire()) {
+      fireParticles.update(delta);
+    }
   }
 
   @Override
@@ -148,17 +142,6 @@ public class Zombie extends Entity {
 
     float playerX = this.player.getX();
     float playerY = this.player.getY();
-
-    switch (this.target) {
-    case UP:
-      playerY -= CUSHION;
-    case DOWN:
-      playerY += CUSHION;
-    case LEFT:
-      playerX -= CUSHION;
-    case RIGHT:
-      playerX += CUSHION;
-    }
 
     float xDiff = playerX - this.x;
     float yDiff = playerY - this.y;

@@ -47,6 +47,15 @@ public class FireEmitterCustom implements ParticleEmitter {
   }
 
   /**
+   * Create a default fire effect with size
+   *
+   * @param size The size of the particle being pumped out
+   */
+  public FireEmitterCustom(float size) {
+    this.size = size;
+  }
+
+  /**
    * Create a default fire effect at x,y
    *
    * @param x The x coordinate of the fire effect

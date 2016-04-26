@@ -30,7 +30,8 @@ public class OnFire extends Powerup {
    */
   private final int INDIV_FIRE = 2000;
 
-  private final int FIRE_RADIUS = 25;
+  private final int FIRE_RADIUS = 35;
+  private final int FIRE_RADIUS_PLAYER = 45;
 
   /**
    * Reference to the list of Zombies in the game.
@@ -78,7 +79,7 @@ public class OnFire extends Powerup {
         }
 
         // if collides with the player
-        if (z.isCollision(affectedPlayer) && (onFireTimes.get(zid) == null)) {
+        if (z.distTo(affectedPlayer) <= FIRE_RADIUS_PLAYER && (onFireTimes.get(zid) == null)) {
           z.setState(true);
           onFireTimes.put(zid, System.currentTimeMillis());
         }

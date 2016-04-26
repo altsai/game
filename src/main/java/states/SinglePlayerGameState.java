@@ -17,7 +17,7 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.OnFire;
+import powerups.LaserBeam;
 
 /**
  * Defines the Single Player game state.
@@ -70,8 +70,6 @@ public class SinglePlayerGameState extends GamePlayState {
     if (currPowerup != null) {
       currPowerup.getImage().draw(Window.width / 2 - 9, 11, 20, 20);
     }
-
-    g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
   }
 
   @Override
@@ -159,8 +157,8 @@ public class SinglePlayerGameState extends GamePlayState {
 
       //      double randomNum = random.nextDouble();
       //      if (randomNum < 0.2) {
-      //        Bomb bomb = new Bomb(powerups, zombies);
-      //        this.powerups.put(bomb.getID(), bomb);
+      //      Bomb bomb = new Bomb(powerups, zombies);
+      //      this.powerups.put(bomb.getID(), bomb);
       //      } else if (randomNum < 0.4 && randomNum >= 0.2) {
       //        Speed speed = new Speed(powerups);
       //        this.powerups.put(speed.getID(), speed);
@@ -168,14 +166,14 @@ public class SinglePlayerGameState extends GamePlayState {
       //        TimeStop timestop = new TimeStop(powerups, zombies, this);
       //        this.powerups.put(timestop.getID(), timestop);
       //      } else if (randomNum < 0.8 && randomNum >= 0.6) {
-      OnFire onfire = new OnFire(powerups, zombies);
-      this.powerups.put(onfire.getID(), onfire);
+      //      OnFire onfire = new OnFire(powerups, zombies);
+      //      this.powerups.put(onfire.getID(), onfire);
       //      } else {
-      //        BlackHole blackhole = new BlackHole(powerups, zombies, this);
-      //        this.powerups.put(blackhole.getID(), blackhole);
+      //      BlackHole blackhole = new BlackHole(powerups, zombies, this);
+      //      this.powerups.put(blackhole.getID(), blackhole);
       //      }
-      //      LaserBeam lb = new LaserBeam(powerups, zombies);
-      //      this.powerups.put(lb.getID(), lb);
+      LaserBeam lb = new LaserBeam(powerups, zombies);
+      this.powerups.put(lb.getID(), lb);
 
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
