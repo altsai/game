@@ -89,8 +89,8 @@ public class GameServer {
     // set a debug log
     Log.set(Log.LEVEL_DEBUG);
 
-    // server has write buffer of 2^17, and object buffer of 2^14
-    this.server = new Server(131072, 16384);
+    // server has write buffer of 2^21, and object buffer of 2^18
+    this.server = new Server(2097152, 262144);
     Network.register(this.server);
 
     // maybe pass in the hashmaps into the listeners? and servers?

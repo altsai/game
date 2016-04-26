@@ -226,7 +226,7 @@ public class TwoPlayerHost extends GamePlayState {
   }
 
   private void moveZombies() {
-
+    // change this to a list of arrays?
     if (this.server.getConnections().length > 0) {
       if (this.zombies.size() > 9) {
         // break up the list into smaller lists of 10 to send
