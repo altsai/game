@@ -27,7 +27,6 @@ public class Jail extends Powerup {
     bombFired = false;
     image = Resources.getImage("jail");
     players = pl;
-    // TODO set image
     this.powerupIndex = Powerup.JAIL;
   }
 
