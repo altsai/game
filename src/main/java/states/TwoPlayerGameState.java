@@ -7,13 +7,14 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.Bomb;
+import powerups.Jail;
+import powerups.Speed;
+import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
-import powerups.Bomb;
-import powerups.Speed;
-import powerups.TimeStop;
 
 /**
  * Defines the two player game state.
@@ -125,6 +126,8 @@ public class TwoPlayerGameState extends GamePlayState {
         TimeStop timestop = new TimeStop(powerups, zombies, this);
         this.powerups.put(timestop.getID(), timestop);
       }
+      Jail jail = new Jail(powerups, zombies, players);
+      this.powerups.put(jail.getID(), jail);
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }

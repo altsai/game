@@ -97,6 +97,9 @@ public class Player extends Entity implements PlayerAction {
     initFire();
   }
 
+  /**
+   * Initializes the fire particle emitter for player.
+   */
   private void initFire() {
     fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
     //    File xmlFile = new File("particle/fire.xml");
@@ -112,6 +115,11 @@ public class Player extends Entity implements PlayerAction {
     }
   }
 
+  /**
+   * Sets the current player as player1 in the game (the host).
+   *
+   * @param flag  Boolean, true if player1, else false.
+   */
   public void setPlayer1(boolean flag) {
     this.isPlayer1 = flag;
     if (flag == false) {
@@ -119,20 +127,79 @@ public class Player extends Entity implements PlayerAction {
     }
   }
 
+  /**
+   * Returns the name of the player.
+   *
+   * @return  String, name of the player
+   */
   public String getName() {
     return this.name;
   }
 
+  /**
+   * Sets the current player's score.
+   *
+   * @param score  Integer, score of a player.
+   */
   public void setScore(int score) {
     this.score = score;
   }
 
+  /**
+   * Sets the lives of a player.
+   * @param lives Integer, number of lives
+   */
   public void setLives(int lives) {
     this.lives = lives;
   }
 
+  /**
+   * Checks if the current player is player1.
+   * @return Boolean, true if player1, else false.
+   */
   public boolean isPlayer1() {
     return this.isPlayer1;
+  }
+
+  /**
+   * Gets the left boundary.
+   * @return float, left boundary
+   */
+  public float getLeft() {
+    return this.left;
+  }
+
+  /**
+   * Gets the right boundary.
+   * @return float, right boundary
+   */
+  public float getRight() {
+    return this.right;
+  }
+
+  /**
+   * Gets the top boundary.
+   * @return float, top boundary
+   */
+  public float getTop() {
+    return this.top;
+  }
+
+  /**
+   * Gets the bottom boundary.
+   * @return float, bottom boundary
+   */
+  public float getBottom() {
+    return this.bottom;
+  }
+
+  /**
+   * Sets the last time that a bomb is fired for the player.
+   *
+   * @param time Long, last time that a bomb is fired.
+   */
+  public void setLastBombFired(long time) {
+    this.lastBombFired = time;
   }
 
   @Override
@@ -174,9 +241,6 @@ public class Player extends Entity implements PlayerAction {
     this.score++;
   }
 
-  public Powerup getCurrPowerup() {
-    return this.powerup;
-  }
 
   @Override
   public List<String> usePowerup() {
@@ -329,14 +393,32 @@ public class Player extends Entity implements PlayerAction {
     return this.state;
   }
 
+  /**
+   * Method to set the player immune after being on fire.
+   */
   public void setImmune() {
     immune = true;
   }
 
+  /**
+   * Method to return the current powerup in storage.
+   * @return Powerup, powerup used by player.
+   */
+  public Powerup getCurrPowerup() {
+    return this.powerup;
+  }
+
+  /**
+   * Method to set the player to be not immune.
+   */
   public void revert() {
     immune = false;
   }
 
+  /**
+   * Method to check if player is immune (on fire).
+   * @return Boolean, true if immune, else false
+   */
   public boolean isImmune() {
     return immune;
   }
@@ -423,27 +505,47 @@ public class Player extends Entity implements PlayerAction {
     }
   }
 
+  /**
+   * Sets the last direction that the player was facing.
+   * @param dir float, angle in degrees
+   */
+  public void setDirection(float dir) {
+    this.lastDir = dir;
+  }
+
   @Override
   public String toString() {
     return this.name;
   }
 
+  /**
+   * Gets the last time that a bomb was fired by player.
+   * @return Long, last time that bomb was fired.
+   */
   public long getLastBombFired() {
     return lastBombFired;
   }
 
+  /**
+   * Gets the last time that a timestop was used by player.
+   * @return Long, last time that timestop was used.
+   */
   public long getLastTimeStop() {
     return lastTimeStop;
   }
 
+  /**
+   * gets the last time that a fire powerup was used.
+   * @return Long, last time.
+   */
   public long getLastFire() {
     return lastFire;
   }
 
-  public void setCanMove(boolean b) {
-    canMove = b;
-  }
-
+  /**
+   * Gets the last direction that the player was facing.
+   * @return float, direction in angle degrees.
+   */
   public float getLastDir() {
     return lastDir;
   }

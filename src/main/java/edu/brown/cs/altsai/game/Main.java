@@ -1,5 +1,7 @@
 package edu.brown.cs.altsai.game;
 
+import highscore.HighscoreSystem;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +12,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import highscore.HighscoreSystem;
 import states.ClientEndGame;
 import states.HighScoreState;
 import states.HostEndGame;
@@ -36,7 +37,8 @@ public class Main extends StateBasedGame {
     this.highscoreSystem = new HighscoreSystem("highscores.txt", 10, conn);
   }
 
-  private Connection instantiateConnection() throws SQLException, ClassNotFoundException {
+  private Connection instantiateConnection() throws SQLException,
+      ClassNotFoundException {
     String url = "jdbc:mysql://cs32db.csox7dghpjsn.us-east-1.rds.amazonaws.com:3306/";
     String userName = "cs32user";
     String password = "cs32pass";
@@ -47,13 +49,14 @@ public class Main extends StateBasedGame {
   }
 
   public static void main(String[] arguments) {
-    //    System.setProperty("org.lwjgl.librarypath",
-    //    new File("natives").getAbsolutePath());
+    // System.setProperty("org.lwjgl.librarypath",
+    // new File("natives").getAbsolutePath());
     try {
       AppGameContainer app = new AppGameContainer(new Main());
       app.setDisplayMode(Window.width, Window.height, false);
       app.start();
-    } catch (SlickException | ClassNotFoundException | SQLException | IOException e) {
+    } catch (SlickException | ClassNotFoundException | SQLException
+        | IOException e) {
       e.printStackTrace();
     }
   }
@@ -72,7 +75,6 @@ public class Main extends StateBasedGame {
     TwoPlayerStartServer twoPlayerStartServer = new TwoPlayerStartServer(conn);
     TwoPlayerHost twoPlayerHost = new TwoPlayerHost(twoPlayerStartServer);
     TwoPlayerClient twoPlayerClient = new TwoPlayerClient(twoPlayerStartServer);
-
 
     this.addState(singlePlayer);
     this.addState(new MenuState());

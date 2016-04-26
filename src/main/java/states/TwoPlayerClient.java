@@ -2,14 +2,17 @@ package states;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
@@ -19,6 +22,8 @@ public class TwoPlayerClient extends GamePlayState {
   //list of all entities in the game
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
+
+  private Set<Powerup> pickedUpPowerups;
 
   // players in the game
   private Map<String, Player> players;
@@ -41,6 +46,7 @@ public class TwoPlayerClient extends GamePlayState {
     this.zombies = new ConcurrentHashMap<>();
     this.powerups = new ConcurrentHashMap<>();
     this.players = new ConcurrentHashMap<>();
+    this.pickedUpPowerups = new ConcurrentHashSet<>();
     this.hasClient = false;
     this.gameEnd = false;
 
@@ -93,6 +99,13 @@ public class TwoPlayerClient extends GamePlayState {
         for (Powerup p : this.powerups.values()) {
           p.render(gc, g);
         }
+        for (Powerup p : pickedUpPowerups) {
+          if (p.isActivated()) {
+            for (Entity e : p.getChildren()) {
+              e.render(gc, g);
+            }
+          }
+        }
       }
     }
 
@@ -109,6 +122,7 @@ public class TwoPlayerClient extends GamePlayState {
         this.client = new GameClient(this.players
             , this.zombies
             , this.powerups
+            , this.pickedUpPowerups
             , this.playerID
             , this
             , s

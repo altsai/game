@@ -1,6 +1,5 @@
 package game_objects;
 
-
 /**
  * Defines a circular hitbox.
  *
