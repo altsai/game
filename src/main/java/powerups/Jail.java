@@ -1,17 +1,17 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
+
 import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
 import com.google.common.collect.Lists;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
 
 public class Jail extends Powerup {
 
@@ -21,13 +21,12 @@ public class Jail extends Powerup {
 
   private Map<String, Player> players;
 
-  public Jail(Map<String, Powerup> p,
-      Map<String, Zombie> z, Map<String, Player> pl) {
+  public Jail(Map<String, Powerup> p, Map<String, Zombie> z,
+      Map<String, Player> pl) {
     super(p);
     bombFired = false;
     image = Resources.getImage("jail");
     players = pl;
-    // TODO set image
     this.powerupIndex = Powerup.JAIL;
   }
 
@@ -36,10 +35,12 @@ public class Jail extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    long lastBomb = this.affectedPlayer.getLastBombFired();
+    if (this.isUsed) {
+      long lastBomb = this.affectedPlayer.getLastBombFired();
 
-    if (this.isUsed && (lastBomb > this.activationStartTime)) {
-      bombFired = true;
+      if (this.isUsed && (lastBomb > this.activationStartTime)) {
+        bombFired = true;
+      }
     }
 
     // check if jail should be deactivated
@@ -48,22 +49,53 @@ public class Jail extends Powerup {
 
   @Override
   public List<String> activate() {
+    other = otherPlayer(affectedPlayer);
     this.isUsed = true;
     this.activationStartTime = System.currentTimeMillis();
+    otherx = other.getX();
+    othery = other.getY();
 
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
 
-    activationx = affectedPlayer.getX();
-    activationy = affectedPlayer.getY();
-
-    // get the other player in the game
-    Player other = otherPlayer(this.affectedPlayer);
-
     // check that there is another player, set it to the boundary
     if (other != null) {
-      other.setBoundary(y - JAIL_RADIUS, y + JAIL_RADIUS, x
-          - JAIL_RADIUS, x + JAIL_RADIUS);
+      float jail_diam = JAIL_RADIUS * 2;
+      float upperLeftX = otherx - JAIL_RADIUS;
+      float upperLeftY = othery - JAIL_RADIUS;
+      float lowerRightX = upperLeftX + jail_diam;
+      float lowerRightY = upperLeftY + jail_diam;
+
+      if ((upperLeftX < 10) && (upperLeftY < 40)) {
+        upperLeftX = 11;
+        upperLeftY = 41;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
+      } else if ((lowerRightX >= Window.width - 10)
+          && (lowerRightY >= Window.height - 10)) {
+        upperLeftX = Window.width - 11 - jail_diam;
+        upperLeftY = Window.height - 11 - jail_diam;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
+      } else if (upperLeftX < 10) {
+        upperLeftX = 11;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
+      } else if (upperLeftY < 40) {
+        upperLeftY = 41;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
+      } else if (lowerRightX > Window.width - 10) {
+        upperLeftX = Window.width - 11 - jail_diam;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
+      } else if (lowerRightY > -Window.height - 10) {
+        upperLeftY = Window.height - 11 - jail_diam;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
+      }
+
+      other.setBoundary(upperLeftY, lowerRightY, upperLeftX, lowerRightX);
     }
 
     return Lists.newArrayList();
@@ -75,8 +107,6 @@ public class Jail extends Powerup {
     if ((isUsed && time - activationStartTime >= JAIL_LIFETIME)
         || (isUsed && bombFired)) {
 
-      Player other = otherPlayer(this.affectedPlayer);
-
       if (other != null) {
         other.setBoundary(0, Window.height, 0, Window.width);
       }
@@ -86,16 +116,16 @@ public class Jail extends Powerup {
     }
   }
 
-
   /**
    * Method that returns the other player (not affected player in the game).
    *
-   * @param thisPlayer   The affectedPlayer, player that picked up the jail
-   * @return             Player, other player to be jailed
+   * @param thisPlayer
+   *          The affectedPlayer, player that picked up the jail
+   * @return Player, other player to be jailed
    */
   private Player otherPlayer(Player thisPlayer) {
     for (Player p : this.players.values()) {
-      if (p != this.affectedPlayer) {
+      if (!p.getName().equals(thisPlayer.getName())) {
         return p;
       }
     }
