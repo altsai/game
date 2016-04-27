@@ -78,8 +78,8 @@ public class GameClient {
   public void start() throws IOException {
     Log.set(Log.LEVEL_DEBUG);
 
-    // give buffer write of 2^16, and object buffer of 2^14
-    this.client = new Client(65536, 16384);
+    // give buffer write of 2^20, and object buffer of 2^18
+    this.client = new Client(1048576, 262144);
     Network.register(this.client);
 
     // maybe pass in the hashmaps into the listeners? and servers?
