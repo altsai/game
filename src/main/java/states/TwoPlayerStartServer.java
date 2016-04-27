@@ -168,6 +168,7 @@ public class TwoPlayerStartServer extends BasicGameState {
         int serverNum = Integer.parseInt(serverField.getText());
         if (serverNum - 1 < serverAddresses.size() && serverNum > 0) {
           address = serverAddresses.get(serverNum - 1);
+          s.getState(States.TWO_PLAYER_CLIENT).init(gc, s);
           s.enterState(States.TWO_PLAYER_CLIENT);
         } else {
           JOptionPane.showMessageDialog(null, "Oops! That's not a valid number!");
