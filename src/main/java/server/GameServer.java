@@ -116,7 +116,6 @@ public class GameServer {
       PreparedStatement prep = conn.prepareStatement(delete);
       prep.setString(1, address);
       prep.execute();
-      System.out.println(address);
     } catch (Exception e) {
       e.printStackTrace();
     }

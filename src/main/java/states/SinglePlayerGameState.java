@@ -17,7 +17,7 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.Bomb;
+import powerups.BlackHole;
 
 /**
  * Defines the Single Player game state.
@@ -62,7 +62,7 @@ public class SinglePlayerGameState extends GamePlayState {
     ttf.drawString(15, 10, "Score", Color.black);
     ttf2.drawString(80, 10, Integer.toString(this.getScore()), Color.green);
 
-    // TODO: Draw current power-up in the middle
+    // Draw current power-up in the middle
     g.setColor(Color.black);
     g.drawRect(Window.width / 2 - 15, 6, 30, 30);
     g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
@@ -157,8 +157,8 @@ public class SinglePlayerGameState extends GamePlayState {
 
       //      double randomNum = random.nextDouble();
       //      if (randomNum < .16) {
-      Bomb bomb = new Bomb(powerups, zombies);
-      this.powerups.put(bomb.getID(), bomb);
+      //      Bomb bomb = new Bomb(powerups, zombies);
+      //      this.powerups.put(bomb.getID(), bomb);
       //      } else if (randomNum < 0.32 && randomNum >= 0.16) {
       //        Speed speed = new Speed(powerups);
       //        this.powerups.put(speed.getID(), speed);
@@ -169,11 +169,11 @@ public class SinglePlayerGameState extends GamePlayState {
       //        OnFire onfire = new OnFire(powerups, zombies);
       //        this.powerups.put(onfire.getID(), onfire);
       //      } else if (randomNum < .80 && randomNum >= .64){
-      //      BlackHole blackhole = new BlackHole(powerups, zombies, this);
-      //      this.powerups.put(blackhole.getID(), blackhole);
+      BlackHole blackhole = new BlackHole(powerups, zombies, this);
+      this.powerups.put(blackhole.getID(), blackhole);
       //      } else {
-      //        LaserBeam lb = new LaserBeam(powerups, zombies);
-      //        this.powerups.put(lb.getID(), lb);
+      //      LaserBeam lb = new LaserBeam(powerups, zombies);
+      //      this.powerups.put(lb.getID(), lb);
       //      }
 
 

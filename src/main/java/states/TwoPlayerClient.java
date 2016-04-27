@@ -6,12 +6,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.jetty.util.ConcurrentHashSet;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
@@ -72,7 +75,39 @@ public class TwoPlayerClient extends GamePlayState {
       g.drawString("ERROR CREATING Client", 0, 0);
     } else {
 
-      g.drawString("Client", 0, 0);
+      //g.drawString("Client", 0, 0);
+
+      g.drawImage(Resources.getImage("background"), 0, 0);
+
+      // Draw bounding box
+      g.setColor(Color.black);
+      g.drawRoundRect(10, 40, Window.width - 20, Window.height - 50, 10);
+      g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
+
+      if (players.get("0") != null && players.get("1") != null) {
+        // Draw lives
+        for (int i = 0; i < this.players.get("0").getLives() + 1; i++) {
+          Resources.getImage("life").draw(15 + i * 25, 10, 20, 20);
+        }
+        for (int i = 0; i < this.players.get("1").getLives() + 1; i++) {
+          Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20, 20);
+        }
+
+        // Draw current powerups
+        g.setColor(Color.black);
+        g.drawRect(Window.width / 4 - 15, 6, 30, 30);
+        g.drawRect(3 * Window.width / 4 - 15, 6, 30, 30);
+        g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
+        Powerup currPowerup1 = this.players.get("0").getCurrPowerup();
+        Powerup currPowerup2 = this.players.get("1").getCurrPowerup();
+        if (currPowerup1 != null) {
+          currPowerup1.getImage().draw(Window.width / 4 - 9, 11, 20, 20);
+        }
+        if (currPowerup2 != null) {
+          currPowerup2.getImage().draw(3 * Window.width / 4 - 9, 11, 20, 20);
+        }
+
+      }
 
       // check that a 3 second delay has completed before playing the game
       long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
@@ -82,20 +117,6 @@ public class TwoPlayerClient extends GamePlayState {
 
         this.gameStart = true;
 
-        for (Player p : this.players.values()) {
-          p.render(gc, g);
-
-          if (p.getID().equals(this.playerID)) {
-            g.drawString(p.getName() + " score: " + p.getScore(), 300, 50);
-            g.drawString("Lives: " + p.getLives(), 300, 70);
-          } else {
-            g.drawString(p.getName() + " score: " + p.getScore(), 0, 50);
-            g.drawString("Lives: " + p.getLives(), 0, 70);
-          }
-        }
-        for (Zombie z : this.zombies.values()) {
-          z.render(gc, g);
-        }
         for (Powerup p : this.powerups.values()) {
           p.render(gc, g);
         }
@@ -106,6 +127,14 @@ public class TwoPlayerClient extends GamePlayState {
             }
           }
         }
+
+        for (Player p : this.players.values()) {
+          p.render(gc, g);
+        }
+        for (Zombie z : this.zombies.values()) {
+          z.render(gc, g);
+        }
+
       }
     }
 

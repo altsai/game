@@ -70,6 +70,7 @@ public class Resources {
       sprites.put("bomb_explosion_2",
           loadSprite("img/wasd_bomb_animation_large_2.png", 500, 281));
       sprites.put("laser", loadSprite("img/wasd_laser_3_small.png", 297, 105));
+      sprites.put("blackholeAnimation", loadSprite("img/wasd_blackhole_animation.png", 200, 200));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }

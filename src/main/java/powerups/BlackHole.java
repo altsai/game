@@ -1,19 +1,16 @@
 package powerups;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.particles.ConfigurableEmitter;
-import org.newdawn.slick.particles.ParticleIO;
-import org.newdawn.slick.particles.ParticleSystem;
+import org.newdawn.slick.SpriteSheet;
 
 import edu.brown.cs.altsai.game.Resources;
-import effects.FireEmitterCustom;
 import entities.Zombie;
 import game_objects.Powerup;
 import states.GamePlayState;
@@ -32,9 +29,6 @@ public class BlackHole extends Powerup {
    */
   private Map<String, Zombie> zombies;
 
-  private ParticleSystem bhParticles;
-  private FireEmitterCustom emitter;
-
 
 
   /**
@@ -45,6 +39,13 @@ public class BlackHole extends Powerup {
   private final static long EFFECT_DURATION = 3000;
 
   private Image imageLarge;
+
+  private static final int ANIMATION_FRAME_TIME = 150;
+
+  private float currAngle = 0;
+
+  private SpriteSheet spriteSheet;
+  private Animation animation;
 
   /**
    * Constructor for the BlackHole.
@@ -63,23 +64,10 @@ public class BlackHole extends Powerup {
     game = gps;
     image = Resources.getImage("blackhole");
     imageLarge = Resources.getImage("blackholeLarge");
+    this.spriteSheet = Resources.getSprite("blackholeAnimation");
+    this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
+    animation.setPingPong(true);
     this.powerupIndex = Powerup.BLACK_HOLE;
-
-    initParticles();
-  }
-
-  private void initParticles() {
-    bhParticles = new ParticleSystem(Resources.getImage("particle"), 3000);
-    File xmlFile = new File("particle/bhEmitter.xml");
-    try {
-      ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
-      bhParticles.addEmitter(emitter);
-      //      emitter = new FireEmitterCustom(50);
-      //      bhParticles.addEmitter(emitter);
-      bhParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
@@ -89,8 +77,10 @@ public class BlackHole extends Powerup {
     if (this.isUsed) {
 
       // trigger animation
-      imageLarge.draw(this.x - 40, this.y - 40, 100, 100);
-      bhParticles.render(this.x, this.y);
+      //imageLarge.draw(this.x - 40, this.y - 40, 100, 100);
+      animation.getCurrentFrame().setRotation(currAngle);
+      animation.getCurrentFrame().draw(this.x - 80, this.y - 80, 200, 200);
+      animation.draw(-10000, -10000);
     }
 
 
@@ -112,9 +102,9 @@ public class BlackHole extends Powerup {
       }
 
       // rotate image
-      imageLarge.rotate(.05f * delta);
-
-      bhParticles.update(delta);
+      //imageLarge.rotate(.05f * delta);
+      currAngle += 1;
+      animation.update(delta);
     }
 
     // check if BlackHole should be deactivated
