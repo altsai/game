@@ -21,6 +21,8 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Resources;
+
 /**
  * State that represents the menu where the player decides to host or join.
  *
@@ -98,6 +100,9 @@ public class TwoPlayerStartServer extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
+
+    g.drawImage(Resources.getImage("background"), 0, 0);
+
     // Draw server names
     int y = 50;
     for (int i = 0; i < serverNames.size(); i++) {
