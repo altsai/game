@@ -23,7 +23,7 @@ import edu.brown.cs.altsai.game.Window;
 public class MenuState extends BasicGameState {
 
   private static final int BUTTON_WIDTH = 280;
-  private static final int BUTTON_HEIGHT = 140;
+  private static final int BUTTON_HEIGHT = 67;
 
   private TrueTypeFont ttf;
   private TrueTypeFont ttf2;
@@ -56,16 +56,16 @@ public class MenuState extends BasicGameState {
 
     // Draw buttons
     Resources.getImage("buttonSingle").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 167, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Window.height / 8 + 200, BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonMulti").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 267, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Window.height / 8 + 300, BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonRank").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 367, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Window.height / 8 + 400, BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonAbout").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 467, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Window.height / 8 + 500, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   }
 
@@ -78,19 +78,20 @@ public class MenuState extends BasicGameState {
     int posY = gc.getInput().getMouseY();
 
     // Check if they are clicking in the button area
-    if (gc.getInput().isMousePressed(0) && posX >= Window.width / 5 + 40
-        && posX <= Window.width / 5 + 40 + BUTTON_WIDTH) {
+    if (gc.getInput().isMousePressed(0) && posX >= Window.width / 2 - BUTTON_WIDTH / 2 - 20
+        && posX <= Window.width / 2 - BUTTON_WIDTH / 2 - 20 + BUTTON_WIDTH) {
       if (posY >= Window.height / 8 + 200
-          && posY <= Window.height / 8 + 200 + BUTTON_HEIGHT / 2) {
+          && posY <= Window.height / 8 + 200 + BUTTON_HEIGHT) {
         // restart a new game every time we enter a game state from menu
         s.getState(States.SINGLE_PLAYER).init(gc, s);
         s.enterState(States.SINGLE_PLAYER);
       } else if (posY >= Window.height / 8 + 300
-          && posY <= Window.height / 8 + 300 + BUTTON_HEIGHT / 2) {
+          && posY <= Window.height / 8 + 300 + BUTTON_HEIGHT) {
         s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
         s.enterState(States.TWO_PLAYER_START_SERVER);
       } else if (posY >= Window.height / 8 + 400
-          && posY <= Window.height / 8 + 400 + BUTTON_HEIGHT / 2) {
+          && posY <= Window.height / 8 + 400 + BUTTON_HEIGHT) {
+        s.getState(States.HIGH_SCORES).init(gc, s);
         s.enterState(States.HIGH_SCORES);
       }
     }
@@ -103,6 +104,7 @@ public class MenuState extends BasicGameState {
       s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
       s.enterState(States.TWO_PLAYER_START_SERVER);
     } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
+      s.getState(States.HIGH_SCORES).init(gc, s);
       s.enterState(States.HIGH_SCORES);
     }
   }

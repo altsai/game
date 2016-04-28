@@ -47,12 +47,18 @@ public class Resources {
       images.put("a_key", loadImage("img/A_key.png"));
       images.put("s_key", loadImage("img/S_key.png"));
       images.put("d_key", loadImage("img/D_key.png"));
+      images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
       images.put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
       images.put("button", loadImage("img/wasd_button.png"));
       images.put("buttonSingle", loadImage("img/wasd_button_singleplayer.png"));
       images.put("buttonMulti", loadImage("img/wasd_button_multiplayer.png"));
       images.put("buttonRank", loadImage("img/wasd_button_rankings.png"));
       images.put("buttonAbout", loadImage("img/wasd_button_about.png"));
+      images.put("buttonLocal", loadImage("img/wasd_button_local.png"));
+      images.put("buttonYear", loadImage("img/wasd_button_year.png"));
+      images.put("buttonMonth", loadImage("img/wasd_button_month.png"));
+      images.put("buttonToday", loadImage("img/wasd_button_today.png"));
+      images.put("buttonAllTime", loadImage("img/wasd_button_alltime.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("injuredAnimation",

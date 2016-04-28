@@ -17,6 +17,9 @@ public class GlobalHandler {
   private Connection conn;
   private List<Score> highscores;
   private Map<String, Score> nameMap;
+  private Map<String, Score> nameMapYear;
+  private Map<String, Score> nameMapMonth;
+  private Map<String, Score> nameMapDay;
 
   /**
    * Creates a new GlobalHandler.
@@ -28,6 +31,9 @@ public class GlobalHandler {
     this.conn = conn;
     this.highscores = new ArrayList<>();
     this.nameMap = new HashMap<>();
+    this.nameMapYear = new HashMap<>();
+    this.nameMapMonth = new HashMap<>();
+    this.nameMapDay = new HashMap<>();
 
     collectScores();
   }
@@ -50,6 +56,7 @@ public class GlobalHandler {
     // Set variables
     List<Score> toReturn = new ArrayList<>();
     int currPlace = 1;
+    nameMapDay = new HashMap<>();
 
     // Get current date
     Date currentDate = getCurrentDate();
@@ -67,7 +74,9 @@ public class GlobalHandler {
       int day = cal.get(Calendar.DAY_OF_MONTH);
 
       if (year == currYear && month == currMonth && day == currDay) {
-        toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
+        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getDate());
+        nameMapDay.put(score.getName(), scoreNew);
+        toReturn.add(scoreNew);
         currPlace++;
       }
     }
@@ -83,6 +92,7 @@ public class GlobalHandler {
   protected List<Score> getScoresOfMonth() {
     List<Score> toReturn = new ArrayList<>();
     int currPlace = 1;
+    nameMapMonth = new HashMap<>();
 
     // Get current date
     Date currentDate = getCurrentDate();
@@ -98,7 +108,9 @@ public class GlobalHandler {
       int month = cal.get(Calendar.MONTH);
 
       if (year == currYear && month == currMonth) {
-        toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
+        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getDate());
+        nameMapMonth.put(score.getName(), scoreNew);
+        toReturn.add(scoreNew);
         currPlace++;
       }
     }
@@ -114,6 +126,7 @@ public class GlobalHandler {
   protected List<Score> getScoresOfYear() {
     List<Score> toReturn = new ArrayList<>();
     int currPlace = 1;
+    nameMapYear = new HashMap<>();
 
     // Get current date
     Date currentDate = getCurrentDate();
@@ -127,7 +140,9 @@ public class GlobalHandler {
       int year = cal.get(Calendar.YEAR);
 
       if (year == currYear) {
-        toReturn.add(new Score(score.getName(), score.getScore(), currPlace, score.getDate()));
+        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getDate());
+        nameMapYear.put(score.getName(), scoreNew);
+        toReturn.add(scoreNew);
         currPlace++;
       }
     }
@@ -213,9 +228,18 @@ public class GlobalHandler {
    * Gets the score corresponding to the given name (will be null if name isn't in the scores).
    *
    * @param name - the given name
+   * @param time - the time period to look at
    * @return the Score relating to the given name (or null)
    */
-  protected Score getScoreFromName(String name) {
-    return nameMap.get(name);
+  protected Score getScoreFromName(String name, String time) {
+    if (time.equals("year")) {
+      return nameMapYear.get(name);
+    } else if (time.equals("month")) {
+      return nameMapMonth.get(name);
+    } else if (time.equals("day")) {
+      return nameMapDay.get(name);
+    } else {
+      return nameMap.get(name);
+    }
   }
 }

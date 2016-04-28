@@ -1,14 +1,20 @@
 package states;
 
+import java.awt.Font;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import highscore.HighscoreSystem;
 
@@ -24,8 +30,54 @@ public class HighScoreState extends BasicGameState {
 
   private HighscoreSystem highscoreSystem;
 
+  private List<String[]> globalHighscores;
+  private List<String[]> globalHighscoresOfDay;
+  private List<String[]> globalHighscoresOfMonth;
+  private List<String[]> globalHighscoresOfYear;
+  private List<Integer> localHighscores;
+
+  private static final int BUTTON_WIDTH = 180;
+  private static final int BUTTON_HEIGHT = 50;
+
+  private static final int HIGHEST_NUM = 18;
+  private int highlightedNum;
+  private boolean invalidSearch;
+
+  private TrueTypeFont headerFont;
+  private TrueTypeFont entryFont;
+
+  private static final int PADDING = 15;
+  private int placeWidth;
+  private int nameWidth;
+  private int scoreWidth;
+  private int dateWidth;
+  private int tableWidth;
+
+  private double startingEntryIndex = 0;
+  private List<String[]> scoresInUse;
+  private String inUseString;
+  private boolean localScoresInUse;
+  private boolean canScrollUp;
+  private boolean canScrollDown;
+
+  private Image arrowImage;
+
+  private boolean initializedSearchField;
+  private TextField searchField;
+
   public HighScoreState (HighscoreSystem highscoreSystem) {
     this.highscoreSystem = highscoreSystem;
+
+    Font font = new Font("Arial", Font.BOLD, 50);
+    headerFont = new TrueTypeFont(font, true);
+
+    Font font2 = new Font("Arial", Font.BOLD, 20);
+    entryFont = new TrueTypeFont(font2, true);
+
+    arrowImage = Resources.getImage("blue_arrow");
+
+    scoreWidth = entryFont.getWidth("18446744073709551615") + PADDING;
+    dateWidth = entryFont.getWidth("2016-12-31") + PADDING;
   }
 
   @Override
@@ -33,59 +85,286 @@ public class HighScoreState extends BasicGameState {
       throws SlickException {
     // TODO Auto-generated method stub
 
+    // Get global highscores and local highscores
+    globalHighscores = highscoreSystem.getGlobalScores();
+    globalHighscoresOfDay = highscoreSystem.getGlobalScoresOfDay();
+    globalHighscoresOfMonth = highscoreSystem.getGlobalScoresOfMonth();
+    globalHighscoresOfYear = highscoreSystem.getGlobalScoresOfYear();
+    localHighscores = highscoreSystem.getLocalScores();
+
+    if (!initializedSearchField) {
+      Font font3 = new Font("Arial", Font.PLAIN, 18);
+      TrueTypeFont searchFont = new TrueTypeFont(font3, true);
+      searchField = new TextField(gc, searchFont, Window.width / 2 - (300 + entryFont.getWidth("Search for a name: ")) / 2 + entryFont.getWidth("Search for a name: "), 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, 300, entryFont.getLineHeight());
+      initializedSearchField = true;
+    }
+
+    searchField.setAcceptingInput(false);
+    searchField.setText("");
+
+    setTable("local");
+    canScrollUp = false;
+    canScrollDown = false;
   }
 
-  private String getScoreString(List<String[]> list, int timeFrame) {
-    StringBuilder toReturn = new StringBuilder();
+  private void setTable(String type) {
+    startingEntryIndex = 0;
+    searchField.setText("");
+    searchField.setFocus(false);
+    highlightedNum = -1;
+    invalidSearch = false;
 
-    if (timeFrame == 0) {
-      toReturn.append("-------Current Global High Scores------\n");
-    } else if (timeFrame == 1) {
-      toReturn.append("-------Current Global High Scores Of The Day------\n");
-    } else if (timeFrame == 2) {
-      toReturn.append("-------Current Global High Scores Of The Month------\n");
-    } else if (timeFrame == 3) {
-      toReturn.append("-------Current Global High Scores Of The Year------\n");
-    }
-    for (String[] score : list) {
-      toReturn.append((score[0] + ": " + score[1] + " - " + score[2] + " AT " + score[3] + "\n"));
-    }
+    if (type.equals("local")) {
+      localScoresInUse = true;
+      searchField.setAcceptingInput(false);
+      inUseString = "";
 
-    return toReturn.toString();
+      // Set widths
+      placeWidth = entryFont.getWidth(Integer.toString(localHighscores.size())) + PADDING;
+      tableWidth = placeWidth + scoreWidth;
+    } else {
+      localScoresInUse = false;
+      searchField.setAcceptingInput(true);
+      inUseString = type;
+
+      // Set scoresInUse
+      if (type.equals("year")) {
+        scoresInUse = globalHighscoresOfYear;
+      } else if (type.equals("month")) {
+        scoresInUse = globalHighscoresOfMonth;
+      } else if (type.equals("day")) {
+        scoresInUse = globalHighscoresOfDay;
+      } else {
+        scoresInUse = globalHighscores;
+      }
+
+      // Get widths
+      placeWidth = entryFont.getWidth(Integer.toString(globalHighscores.size())) + PADDING;
+      nameWidth = getWidthOfLongestName() + PADDING;
+      tableWidth = placeWidth + nameWidth + scoreWidth + dateWidth;
+    }
   }
 
-  private String getLocalScoreString(List<Integer> list) {
-    StringBuilder toReturn = new StringBuilder();
-
-    toReturn.append("-------Current Local High Scores------\n");
-    for (Integer score : list) {
-      toReturn.append(score + "\n");
+  private int getWidthOfLongestName() {
+    int maxLength = 0;
+    for (String[] score : globalHighscores) {
+      maxLength = Math.max(maxLength, entryFont.getWidth(score[1]));
     }
 
-    return toReturn.toString();
+    return maxLength;
   }
 
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    // Get global highscores and local highscores
-    List<String[]> globalHighscores = highscoreSystem.getGlobalScores();
-    List<String[]> globalHighscoresOfDay = highscoreSystem.getGlobalScoresOfDay();
-    List<String[]> globalHighscoresOfMonth = highscoreSystem.getGlobalScoresOfMonth();
-    List<String[]> globalHighscoresOfYear = highscoreSystem.getGlobalScoresOfYear();
-    List<Integer> localHighscores = highscoreSystem.getLocalScores();
+    g.drawImage(Resources.getImage("background"), 0, 0);
 
-    // Draw the string
-    g.drawString(getLocalScoreString(localHighscores) + getScoreString(globalHighscores, 0) + "\n" + getScoreString(globalHighscoresOfDay, 1) + "\n" + getScoreString(globalHighscoresOfMonth, 2) + "\n" + getScoreString(globalHighscoresOfYear, 3), 0, 0);
-    g.drawString("Hit escape to go to menu", Window.width / 2, Window.height / 2);
+    // Draw title
+    headerFont.drawString(Window.width / 2 - headerFont.getWidth("Highscores") / 2, 20, "Highscores", Color.black);
 
+    // Draw buttons
+    float buttonsX = Window.width / 2 - (BUTTON_WIDTH * 5 + 20 * 5) / 2;
+    float buttonsY = 20 + headerFont.getLineHeight() + 10;
+    Resources.getImage("buttonLocal").draw(buttonsX, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonYear").draw(buttonsX + BUTTON_WIDTH + 20, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonMonth").draw(buttonsX + BUTTON_WIDTH * 2 + 20 * 2, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonToday").draw(buttonsX + BUTTON_WIDTH * 3 + 20 * 3, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonAllTime").draw(buttonsX + BUTTON_WIDTH * 4 + 20 * 4, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+    // Draw search bar
+    entryFont.drawString(Window.width / 2 - (300 + entryFont.getWidth("Search for a name: ")) / 2, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, "Search for a name: ", Color.black);
+    g.setColor(Color.white);
+    searchField.render(gc, g);
+    searchField.setBackgroundColor(Color.white);
+    searchField.setBorderColor(Color.black);
+    searchField.setTextColor(Color.black);
+
+    // Draw 'invalid search' if applicable
+    if (invalidSearch) {
+      entryFont.drawString(Window.width / 2 - (300 + entryFont.getWidth("Search for a name: ")) / 2 + entryFont.getWidth("Search for a name: ") + 300 + 10, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, "No Results!", Color.red);
+    }
+
+    // Get some variables
+    float tableX = (Window.width - tableWidth) / 2;
+    float tableY = 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10 + entryFont.getLineHeight() + 10;
+    g.setColor(Color.black);
+
+    // Draw the highscores table (local or global)
+    if ((localScoresInUse && (localHighscores == null || localHighscores.size() == 0)) || (!localScoresInUse && (scoresInUse == null || scoresInUse.size() == 0))) {
+      String toDraw = "No Highscores!";
+      entryFont.drawString(Window.width / 2 - entryFont.getWidth(toDraw) / 2, tableY, toDraw, Color.black);
+    } else if (localScoresInUse) {
+      // Get table height
+      float tableHeight = Math.min(Window.height - 200 + 2.5f, (entryFont.getLineHeight() + 5) * localHighscores.size());
+
+      // Outline of table
+      g.drawRect(tableX, tableY, tableWidth, tableHeight);
+
+      // Separator line
+      g.drawLine(tableX + placeWidth, tableY, tableX + placeWidth, tableY + tableHeight);
+
+      // Get starting entry index
+      int entryIndex = (int) startingEntryIndex;
+
+      // Draw arrow(s)
+      if (entryIndex > 0) {
+        canScrollUp = true;
+        arrowImage.setRotation(270);
+        arrowImage.draw(tableX + tableWidth + 20, tableY, 30, 30);
+      } else {
+        canScrollUp = false;
+      }
+      if ((entryFont.getLineHeight() + 5) * (localHighscores.size() - entryIndex) > Window.height - 200 + 2.5f) {
+        canScrollDown = true;
+        arrowImage.setRotation(90);
+        arrowImage.draw(tableX + tableWidth + 20, tableY + tableHeight - 30, 30, 30);
+      } else {
+        canScrollDown = false;
+      }
+
+      // Entries
+      for (float y = tableY + 5; y < tableY + tableHeight && entryIndex < localHighscores.size(); y += entryFont.getLineHeight() + 5) {
+        // Draw place
+        float x = tableX + (placeWidth - entryFont.getWidth(Integer.toString(entryIndex + 1))) / 2;
+        entryFont.drawString(x, y, Integer.toString(entryIndex + 1), Color.black);
+
+        // Draw score
+        x = tableX + placeWidth + (scoreWidth - entryFont.getWidth(Integer.toString(localHighscores.get(entryIndex)))) / 2;
+        entryFont.drawString(x, y, Integer.toString(localHighscores.get(entryIndex)), Color.black);
+
+        // Draw separating line
+        if (y + entryFont.getLineHeight() + 5 < tableY + tableHeight) {
+          g.drawLine(tableX, y + entryFont.getLineHeight(), tableX + tableWidth, y + entryFont.getLineHeight());
+        }
+
+        entryIndex++;
+      }
+    } else {
+      // Get table height
+      float tableHeight = Math.min(Window.height - 200 + 2.5f, (entryFont.getLineHeight() + 5) * scoresInUse.size());
+
+      // Outline of table
+      g.drawRect(tableX, tableY, tableWidth, tableHeight);
+
+      // Separator lines
+      g.drawLine(tableX + placeWidth, tableY, tableX + placeWidth, tableY + tableHeight);
+      g.drawLine(tableX + placeWidth + nameWidth, tableY, tableX + placeWidth + nameWidth, tableY + tableHeight);
+      g.drawLine(tableX + placeWidth + nameWidth + scoreWidth, tableY, tableX + placeWidth + nameWidth + scoreWidth, tableY + tableHeight);
+      g.drawLine(tableX + placeWidth + nameWidth + scoreWidth + dateWidth, tableY, tableX + placeWidth + nameWidth + scoreWidth + dateWidth, tableY + tableHeight);
+
+      // Get starting entry index
+      int entryIndex = (int) startingEntryIndex;
+
+      // Draw arrow(s)
+      if (entryIndex > 0) {
+        canScrollUp = true;
+        arrowImage.setRotation(270);
+        arrowImage.draw(tableX + tableWidth + 20, tableY, 30, 30);
+      } else {
+        canScrollUp = false;
+      }
+      if ((entryFont.getLineHeight() + 5) * (scoresInUse.size() - entryIndex) > Window.height - 200 + 2.5f) {
+        canScrollDown = true;
+        arrowImage.setRotation(90);
+        arrowImage.draw(tableX + tableWidth + 20, tableY + tableHeight - 30, 30, 30);
+      } else {
+        canScrollDown = false;
+      }
+
+      // Entries
+      Color color = Color.black;
+      for (float y = tableY + 5; y < tableY + tableHeight && entryIndex < scoresInUse.size(); y += entryFont.getLineHeight() + 5) {
+        String[] score = scoresInUse.get(entryIndex);
+        if (Integer.parseInt(score[0]) == highlightedNum) {
+          color = Color.red;
+        } else {
+          color = Color.black;
+        }
+
+        // Draw place
+        float x = tableX + (placeWidth - entryFont.getWidth(score[0])) / 2;
+        entryFont.drawString(x, y, score[0], color);
+
+        // Draw name
+        x = tableX + placeWidth + (nameWidth - entryFont.getWidth(score[1])) / 2;
+        entryFont.drawString(x, y, score[1], color);
+
+        // Draw score
+        x = tableX + placeWidth + nameWidth + (scoreWidth - entryFont.getWidth(score[2])) / 2;
+        entryFont.drawString(x, y, score[2], color);
+
+        // Draw date
+        x = tableX + placeWidth + nameWidth + scoreWidth + (dateWidth - entryFont.getWidth(score[3])) / 2;
+        entryFont.drawString(x, y, score[3], color);
+
+        // Draw separating line
+        if (y + entryFont.getLineHeight() + 5 < tableY + tableHeight) {
+          g.drawLine(tableX, y + entryFont.getLineHeight(), tableX + tableWidth, y + entryFont.getLineHeight());
+        }
+
+        entryIndex++;
+      }
+    }
   }
 
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
+    // Get x and y mouse position coordinates
+    int posX = gc.getInput().getMouseX();
+    int posY = gc.getInput().getMouseY();
 
-    // go to the singleplayer game when user presses 1
+    // Check if in the correct y coordinates
+    boolean inY = false;
+    if (gc.getInput().isMouseButtonDown(0) && posY >= 20 + headerFont.getLineHeight() + 10 && posY <= 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT) {
+      inY = true;
+    }
+    int buttonsX = Window.width / 2 - (BUTTON_WIDTH * 5 + 20 * 5) / 2;
+
+    // Changing highscore displays
+    if ((gc.getInput().isKeyPressed(Input.KEY_1) && !searchField.hasFocus()) || (inY && posX >= buttonsX && posX <= buttonsX + BUTTON_WIDTH)) {
+      setTable("local");
+    }
+    if ((gc.getInput().isKeyPressed(Input.KEY_2) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH + 20 && posX <= buttonsX + BUTTON_WIDTH * 2 + 20)) {
+      setTable("year");
+    }
+    if ((gc.getInput().isKeyPressed(Input.KEY_3) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH * 2 + 20 * 2 && posX <= buttonsX + BUTTON_WIDTH * 3 + 20 * 2)) {
+      setTable("month");
+    }
+    if ((gc.getInput().isKeyPressed(Input.KEY_4) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH * 3 + 20 * 3 && posX <= buttonsX + BUTTON_WIDTH * 4 + 20 * 3)) {
+      setTable("day");
+    }
+    if ((gc.getInput().isKeyPressed(Input.KEY_5) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH * 4 + 20 * 4 && posX <= buttonsX + BUTTON_WIDTH * 5 + 20 * 4)) {
+      setTable("all-time");
+    }
+
+    // Moving up and down
+    if (gc.getInput().isKeyDown(Input.KEY_UP) && canScrollUp) {
+      startingEntryIndex -= .2;
+    } else if (gc.getInput().isKeyDown(Input.KEY_DOWN) && canScrollDown) {
+      startingEntryIndex += .2;
+    }
+
+    // Searching
+    if (gc.getInput().isKeyDown(Input.KEY_ENTER) && searchField.hasFocus() && !inUseString.equals("")) {
+      String[] score = highscoreSystem.getScoreFromName(searchField.getText(), inUseString);
+      if (score != null) {
+        invalidSearch = false;
+        int place = Integer.parseInt(score[0]);
+        if (place <= HIGHEST_NUM) {
+          startingEntryIndex = 0;
+        } else {
+          startingEntryIndex = place - HIGHEST_NUM;
+        }
+
+        highlightedNum = place;
+      } else {
+        highlightedNum = -1;
+        invalidSearch = true;
+      }
+    }
+
+    // Back to main menu
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
       s.enterState(States.MENU);
     }

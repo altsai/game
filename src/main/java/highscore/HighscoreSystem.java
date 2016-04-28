@@ -117,10 +117,11 @@ public class HighscoreSystem {
    * Gets the score associated with the given name.
    *
    * @param name - the given name
+   * @param time - the time period to look in
    * @return the score associated with the given name as a string array of size 3 (or maybe null if the name doesn't have an associated global score)
    */
-  public String[] getScoreFromName(String name) {
-    Score score = globalHandler.getScoreFromName(name);
+  public String[] getScoreFromName(String name, String time) {
+    Score score = globalHandler.getScoreFromName(name, time);
 
     String[] toReturn = null;
     if (score != null) {

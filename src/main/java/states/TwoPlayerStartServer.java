@@ -130,6 +130,7 @@ public class TwoPlayerStartServer extends BasicGameState {
       for (; a.hasMoreElements();)
       {
         InetAddress addr = a.nextElement();
+
         if (addr.isSiteLocalAddress()) {
           localAddr = addr.getHostAddress();
         }
@@ -189,7 +190,12 @@ public class TwoPlayerStartServer extends BasicGameState {
       s.getState(States.TWO_PLAYER_HOST).init(gc, s);
       s.enterState(States.TWO_PLAYER_HOST);
     }
-    // inputted server number
+
+
+    // go to the home menu state when 'esc' is pressed
+    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+      s.enterState(States.MENU);
+    }
 
   }
 

@@ -28,7 +28,7 @@ public class Main {
       printGlobalScores(system.getGlobalScoresOfDay(), 1);
       printGlobalScores(system.getGlobalScoresOfMonth(), 2);
       printGlobalScores(system.getGlobalScoresOfYear(), 3);
-      printScore(system.getScoreFromName("Ben2"));
+      //printScore(system.getScoreFromName("Ben2"));
     } catch (IOException | SQLException | ClassNotFoundException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
