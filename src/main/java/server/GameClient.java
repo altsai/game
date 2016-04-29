@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,6 +41,8 @@ public class GameClient {
   // player ID of the client
   private String playerID;
 
+  private java.sql.Connection conn;
+
   private Client client;
 
   /**
@@ -59,7 +62,7 @@ public class GameClient {
       , Set<Powerup> pickedUpPowerups
       , String playerID
       , GamePlayState gps
-      , StateBasedGame s, String address) {
+      , StateBasedGame s, String address, java.sql.Connection conn) {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
@@ -68,6 +71,18 @@ public class GameClient {
     this.s = s;
     this.address = address;
     this.pickedUpPowerups = pickedUpPowerups;
+    this.conn = conn;
+  }
+
+  public void deleteServer() {
+    try {
+      String delete = "DELETE FROM servers WHERE ip = ?";
+      PreparedStatement prep = conn.prepareStatement(delete);
+      prep.setString(1, address);
+      prep.execute();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**

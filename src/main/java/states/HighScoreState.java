@@ -39,7 +39,7 @@ public class HighScoreState extends BasicGameState {
   private static final int BUTTON_WIDTH = 180;
   private static final int BUTTON_HEIGHT = 50;
 
-  private static final int HIGHEST_NUM = 18;
+  private static final int HIGHEST_NUM = 23;
   private int highlightedNum;
   private boolean invalidSearch;
 
@@ -175,7 +175,11 @@ public class HighScoreState extends BasicGameState {
     entryFont.drawString(Window.width / 2 - (300 + entryFont.getWidth("Search for a name: ")) / 2, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, "Search for a name: ", Color.black);
     g.setColor(Color.white);
     searchField.render(gc, g);
-    searchField.setBackgroundColor(Color.white);
+    if (localScoresInUse) {
+      searchField.setBackgroundColor(Color.gray);
+    } else {
+      searchField.setBackgroundColor(Color.white);
+    }
     searchField.setBorderColor(Color.black);
     searchField.setTextColor(Color.black);
 
@@ -189,13 +193,15 @@ public class HighScoreState extends BasicGameState {
     float tableY = 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10 + entryFont.getLineHeight() + 10;
     g.setColor(Color.black);
 
+    float normalTableHeight = Window.height - tableY - entryFont.getLineHeight() - 15;
+
     // Draw the highscores table (local or global)
     if ((localScoresInUse && (localHighscores == null || localHighscores.size() == 0)) || (!localScoresInUse && (scoresInUse == null || scoresInUse.size() == 0))) {
       String toDraw = "No Highscores!";
       entryFont.drawString(Window.width / 2 - entryFont.getWidth(toDraw) / 2, tableY, toDraw, Color.black);
     } else if (localScoresInUse) {
       // Get table height
-      float tableHeight = Math.min(Window.height - 200 + 2.5f, (entryFont.getLineHeight() + 5) * localHighscores.size());
+      float tableHeight = Math.min(normalTableHeight, (entryFont.getLineHeight() + 5) * localHighscores.size());
 
       // Outline of table
       g.drawRect(tableX, tableY, tableWidth, tableHeight);
@@ -214,7 +220,7 @@ public class HighScoreState extends BasicGameState {
       } else {
         canScrollUp = false;
       }
-      if ((entryFont.getLineHeight() + 5) * (localHighscores.size() - entryIndex) > Window.height - 200 + 2.5f) {
+      if ((entryFont.getLineHeight() + 5) * (localHighscores.size() - entryIndex) > normalTableHeight) {
         canScrollDown = true;
         arrowImage.setRotation(90);
         arrowImage.draw(tableX + tableWidth + 20, tableY + tableHeight - 30, 30, 30);
@@ -241,7 +247,7 @@ public class HighScoreState extends BasicGameState {
       }
     } else {
       // Get table height
-      float tableHeight = Math.min(Window.height - 200 + 2.5f, (entryFont.getLineHeight() + 5) * scoresInUse.size());
+      float tableHeight = Math.min(normalTableHeight, (entryFont.getLineHeight() + 5) * scoresInUse.size());
 
       // Outline of table
       g.drawRect(tableX, tableY, tableWidth, tableHeight);
@@ -263,7 +269,7 @@ public class HighScoreState extends BasicGameState {
       } else {
         canScrollUp = false;
       }
-      if ((entryFont.getLineHeight() + 5) * (scoresInUse.size() - entryIndex) > Window.height - 200 + 2.5f) {
+      if ((entryFont.getLineHeight() + 5) * (scoresInUse.size() - entryIndex) > normalTableHeight) {
         canScrollDown = true;
         arrowImage.setRotation(90);
         arrowImage.draw(tableX + tableWidth + 20, tableY + tableHeight - 30, 30, 30);

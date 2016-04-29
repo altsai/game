@@ -7,6 +7,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Resources;
+
 public class ClientEndGame extends BasicGameState {
   //takes in the SinglePlayerGameState just played
   private GamePlayState gps;
@@ -29,6 +31,9 @@ public class ClientEndGame extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
+
+    g.drawImage(Resources.getImage("background"), 0, 0);
+
     g.drawString(this.gps.getLoser(), 100, 300);
     g.drawString("Hit esc to go back to Menu", 100, 200);
   }

@@ -67,6 +67,8 @@ public class TwoPlayerClient extends GamePlayState {
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
 
+    g.drawImage(Resources.getImage("background"), 0, 0);
+
     if (!this.hasClient) {
       g.drawString("Looking for host", 0, 0);;
     }
@@ -76,8 +78,6 @@ public class TwoPlayerClient extends GamePlayState {
     } else {
 
       //g.drawString("Client", 0, 0);
-
-      g.drawImage(Resources.getImage("background"), 0, 0);
 
       // Draw bounding box
       g.setColor(Color.black);
@@ -155,8 +155,10 @@ public class TwoPlayerClient extends GamePlayState {
             , this.playerID
             , this
             , s
-            , twoPlayerStartServer.getAddress());
+            , twoPlayerStartServer.getAddress(),
+            twoPlayerStartServer.getConn());
         this.client.start();
+        this.client.deleteServer();
       } catch (IOException e) {
         System.out.println(e.getMessage());
         e.printStackTrace();

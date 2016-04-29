@@ -301,6 +301,7 @@ public class GameServer {
    * Closes the server, shuts down connections.
    */
   public void close() {
+    this.deleteServer();
     this.server.close();
   }
 

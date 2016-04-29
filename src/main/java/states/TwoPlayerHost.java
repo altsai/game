@@ -119,6 +119,8 @@ public class TwoPlayerHost extends GamePlayState {
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
 
+    g.drawImage(Resources.getImage("background"), 0, 0);
+
     if (this.server == null || this.server.getConnections().length == 0) {
       g.drawString("Waiting for a client", 150, 150);
     }
@@ -128,8 +130,6 @@ public class TwoPlayerHost extends GamePlayState {
       g.drawString("ERROR CREATING SERVER", 0, 0);
     } else if (server.getConnections().length > 0) {
       //g.drawString("Host", 0, 0);
-
-      g.drawImage(Resources.getImage("background"), 0, 0);
 
       // Draw bounding box
       g.setColor(Color.black);
@@ -206,6 +206,9 @@ public class TwoPlayerHost extends GamePlayState {
         this.server.start();
         this.makeServer = true;
       } catch (IOException e) {
+        if (server != null) {
+          server.deleteServer();
+        }
         System.out.println(e.getMessage());
         e.printStackTrace();
         this.errorMakingServer = true;
@@ -460,28 +463,28 @@ public class TwoPlayerHost extends GamePlayState {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
 
-       double randomNum = random.nextDouble();
-       if (randomNum < 0.2) {
-       Bomb bomb = new Bomb(powerups, zombies);
-       this.powerups.put(bomb.getID(), bomb);
-       this.server.sendNewPowerup(bomb);
-       } else if (randomNum < 0.4 && randomNum >= 0.2) {
-       Speed speed = new Speed(powerups);
-       this.powerups.put(speed.getID(), speed);
-       this.server.sendNewPowerup(speed);
-       } else if (randomNum < 0.6 && randomNum >= 0.4) {
-       TimeStop timestop = new TimeStop(powerups, zombies, players, this);
-       this.powerups.put(timestop.getID(), timestop);
-       this.server.sendNewPowerup(timestop);
-       } else if (randomNum < 0.8 && randomNum >= 0.6) {
-       LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-       this.powerups.put(lb.getID(), lb);
-       this.server.sendNewPowerup(lb);
-       } else {
+      double randomNum = random.nextDouble();
+      if (randomNum < 0.2) {
+        Bomb bomb = new Bomb(powerups, zombies);
+        this.powerups.put(bomb.getID(), bomb);
+        this.server.sendNewPowerup(bomb);
+      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+        Speed speed = new Speed(powerups);
+        this.powerups.put(speed.getID(), speed);
+        this.server.sendNewPowerup(speed);
+      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
+        this.powerups.put(timestop.getID(), timestop);
+        this.server.sendNewPowerup(timestop);
+      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+        LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
+        this.powerups.put(lb.getID(), lb);
+        this.server.sendNewPowerup(lb);
+      } else {
         Jail jail = new Jail(powerups, zombies, players);
         this.powerups.put(jail.getID(), jail);
         this.server.sendNewPowerup(jail);
-       }
+      }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
