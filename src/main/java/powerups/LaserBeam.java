@@ -1,21 +1,22 @@
 package powerups;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.newdawn.slick.GameContainer;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.newdawn.slick.GameContainer;
+
 import server.GameServer;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class LaserBeam extends Powerup {
 
@@ -32,15 +33,17 @@ public class LaserBeam extends Powerup {
   private float direction;
   private static final float LASER_SPEED = 6.0f;
 
-
   private LaserShot laser;
 
   private GameServer server;
 
   /**
    * Single player game constructor for laser.
-   * @param p  Map of powerups
-   * @param z  Map of zombies
+   *
+   * @param p
+   *          Map of powerups
+   * @param z
+   *          Map of zombies
    */
   public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z) {
     super(p);
@@ -54,11 +57,12 @@ public class LaserBeam extends Powerup {
   /**
    * Dummy constructor that only takes in powerups.
    *
-   * This constructor is used by the client in the networked game
-   * because it serves as the "image" of the laser beam. No processing
-   * or zombie killing is done client-side.
+   * This constructor is used by the client in the networked game because it
+   * serves as the "image" of the laser beam. No processing or zombie killing is
+   * done client-side.
    *
-   * @param p  Map of Powerups
+   * @param p
+   *          Map of Powerups
    */
   public LaserBeam(Map<String, Powerup> p) {
     super(p);
@@ -71,11 +75,16 @@ public class LaserBeam extends Powerup {
 
   /**
    * Two player constructor for laser (not networked).
-   * @param p           Map of powerups
-   * @param z           Map of zombies
-   * @param player      Map of players
+   *
+   * @param p
+   *          Map of powerups
+   * @param z
+   *          Map of zombies
+   * @param player
+   *          Map of players
    */
-  public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> player) {
+  public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z,
+      Map<String, Player> player) {
     super(p);
     this.image = Resources.getImage("laserbeam");
     zombies = z;
@@ -85,12 +94,18 @@ public class LaserBeam extends Powerup {
 
   /**
    * Two Player constructor for laser (networked);
-   * @param p       Map of powerups
-   * @param z       Map of zombies
-   * @param player  Map of players
-   * @param server  GameServer to send information to the client.
+   *
+   * @param p
+   *          Map of powerups
+   * @param z
+   *          Map of zombies
+   * @param player
+   *          Map of players
+   * @param server
+   *          GameServer to send information to the client.
    */
-  public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z, Map<String, Player> player, GameServer server) {
+  public LaserBeam(Map<String, Powerup> p, Map<String, Zombie> z,
+      Map<String, Player> player, GameServer server) {
     super(p);
     this.image = Resources.getImage("laserbeam");
     zombies = z;
@@ -184,8 +199,10 @@ public class LaserBeam extends Powerup {
     direction = affectedPlayer.getLastDir();
     // TODO reset radius to larger
     laser = new LaserShot(null, direction);
-    laser.setX(affectedPlayer.getX());
-    laser.setY(affectedPlayer.getY());
+    laser.setX(affectedPlayer.getX() - laser.getRadius() / 2
+        + affectedPlayer.getRadius() / 2);
+    laser.setY(affectedPlayer.getY() - laser.getRadius() / 2
+        + affectedPlayer.getRadius() / 2);
 
     // TODO return list of zombies hit by laser
     return Lists.newArrayList();

@@ -1,5 +1,10 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -10,15 +15,11 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.particles.ParticleSystem;
 
-import com.google.common.collect.Lists;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.OnFire;
 import powerups.TimeStop;
+
+import com.google.common.collect.Lists;
 
 /**
  * Defines the Player object.
@@ -102,12 +103,13 @@ public class Player extends Entity implements PlayerAction {
    */
   private void initFire() {
     fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
-    //    File xmlFile = new File("particle/fire.xml");
+    // File xmlFile = new File("particle/fire.xml");
     try {
-      //      ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
-      //      emitter.setPosition(this.radius / 2, this.radius / 2);
-      //      fireParticles.addEmitter(emitter);
-      emitter = new FireEmitterCustom((int) this.radius / 2, (int) this.radius / 2, 30);
+      // ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
+      // emitter.setPosition(this.radius / 2, this.radius / 2);
+      // fireParticles.addEmitter(emitter);
+      emitter = new FireEmitterCustom((int) this.radius / 2,
+          (int) this.radius / 2, 30);
       fireParticles.addEmitter(emitter);
       fireParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
     } catch (Exception e) {
@@ -118,7 +120,8 @@ public class Player extends Entity implements PlayerAction {
   /**
    * Sets the current player as player1 in the game (the host).
    *
-   * @param flag  Boolean, true if player1, else false.
+   * @param flag
+   *          Boolean, true if player1, else false.
    */
   public void setPlayer1(boolean flag) {
     this.isPlayer1 = flag;
@@ -130,7 +133,7 @@ public class Player extends Entity implements PlayerAction {
   /**
    * Returns the name of the player.
    *
-   * @return  String, name of the player
+   * @return String, name of the player
    */
   public String getName() {
     return this.name;
@@ -139,7 +142,8 @@ public class Player extends Entity implements PlayerAction {
   /**
    * Sets the current player's score.
    *
-   * @param score  Integer, score of a player.
+   * @param score
+   *          Integer, score of a player.
    */
   public void setScore(int score) {
     this.score = score;
@@ -147,7 +151,9 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Sets the lives of a player.
-   * @param lives Integer, number of lives
+   * 
+   * @param lives
+   *          Integer, number of lives
    */
   public void setLives(int lives) {
     this.lives = lives;
@@ -155,6 +161,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Checks if the current player is player1.
+   * 
    * @return Boolean, true if player1, else false.
    */
   public boolean isPlayer1() {
@@ -163,6 +170,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the left boundary.
+   * 
    * @return float, left boundary
    */
   public float getLeft() {
@@ -171,6 +179,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the right boundary.
+   * 
    * @return float, right boundary
    */
   public float getRight() {
@@ -179,6 +188,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the top boundary.
+   * 
    * @return float, top boundary
    */
   public float getTop() {
@@ -187,6 +197,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the bottom boundary.
+   * 
    * @return float, bottom boundary
    */
   public float getBottom() {
@@ -196,7 +207,8 @@ public class Player extends Entity implements PlayerAction {
   /**
    * Sets the last time that a bomb is fired for the player.
    *
-   * @param time Long, last time that a bomb is fired.
+   * @param time
+   *          Long, last time that a bomb is fired.
    */
   public void setLastBombFired(long time) {
     this.lastBombFired = time;
@@ -240,7 +252,6 @@ public class Player extends Entity implements PlayerAction {
   public void incrementScore() {
     this.score++;
   }
-
 
   @Override
   public List<String> usePowerup() {
@@ -402,6 +413,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Method to return the current powerup in storage.
+   * 
    * @return Powerup, powerup used by player.
    */
   public Powerup getCurrPowerup() {
@@ -417,6 +429,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Method to check if player is immune (on fire).
+   * 
    * @return Boolean, true if immune, else false
    */
   public boolean isImmune() {
@@ -447,7 +460,7 @@ public class Player extends Entity implements PlayerAction {
     float yMulti = 1.0f;
 
     if (input.isKeyDown(keys[0])) {
-      yMulti =  -2.0f;
+      yMulti = -2.0f;
 
       double newY = this.y - speed * delta;
       upFlag = true;
@@ -464,7 +477,8 @@ public class Player extends Entity implements PlayerAction {
       if (newY <= this.bottom - this.image.getHeight()) {
         this.y += speed * delta;
       }
-    } if (input.isKeyDown(keys[2])) {
+    }
+    if (input.isKeyDown(keys[2])) {
       xMulti = 3f;
 
       double newX = this.x - speed * delta;
@@ -507,7 +521,9 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Sets the last direction that the player was facing.
-   * @param dir float, angle in degrees
+   * 
+   * @param dir
+   *          float, angle in degrees
    */
   public void setDirection(float dir) {
     this.lastDir = dir;
@@ -520,6 +536,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the last time that a bomb was fired by player.
+   * 
    * @return Long, last time that bomb was fired.
    */
   public long getLastBombFired() {
@@ -528,6 +545,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the last time that a timestop was used by player.
+   * 
    * @return Long, last time that timestop was used.
    */
   public long getLastTimeStop() {
@@ -536,6 +554,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * gets the last time that a fire powerup was used.
+   * 
    * @return Long, last time.
    */
   public long getLastFire() {
@@ -544,6 +563,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the last direction that the player was facing.
+   * 
    * @return float, direction in angle degrees.
    */
   public float getLastDir() {

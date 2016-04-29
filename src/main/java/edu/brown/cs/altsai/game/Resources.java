@@ -48,7 +48,8 @@ public class Resources {
       images.put("s_key", loadImage("img/S_key.png"));
       images.put("d_key", loadImage("img/D_key.png"));
       images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
-      images.put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
+      images
+          .put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
       images.put("button", loadImage("img/wasd_button.png"));
       images.put("buttonSingle", loadImage("img/wasd_button_singleplayer.png"));
       images.put("buttonMulti", loadImage("img/wasd_button_multiplayer.png"));
@@ -75,8 +76,9 @@ public class Resources {
           loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("bomb_explosion_2",
           loadSprite("img/wasd_bomb_animation_large_2.png", 500, 281));
-      sprites.put("laser", loadSprite("img/wasd_laser_3_small.png", 297, 105));
-      sprites.put("blackholeAnimation", loadSprite("img/wasd_blackhole_animation.png", 200, 200));
+      sprites.put("laser", loadSprite("img/wasd_laser_4_small.png", 75, 75));
+      sprites.put("blackholeAnimation",
+          loadSprite("img/wasd_blackhole_animation.png", 200, 200));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
