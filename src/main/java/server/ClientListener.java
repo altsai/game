@@ -189,7 +189,7 @@ public class ClientListener extends Listener {
     // create a new zombie to put in zombie map
     if (o instanceof ZombieNew) {
       ZombieNew zombie = (ZombieNew) o;
-      Zombie newZombie = new Zombie(this.players.get(zombie.targetID));
+      Zombie newZombie = new Zombie(this.players.get(zombie.targetID), this.players);
       newZombie.setID(zombie.id);
       this.zombies.put(zombie.id, newZombie);
     }

@@ -122,7 +122,7 @@ public class SinglePlayerGameState extends GamePlayState {
           for (int i = 0; i < this.difficultyLevel; i++) {
             // spawn targeting a random player
 
-            Zombie newZombie = new Zombie(target);
+            Zombie newZombie = new Zombie(target, this.players);
 
             // newZombie.setSpeed(ZOMBIE_BASE_SPEED
             // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
@@ -134,7 +134,7 @@ public class SinglePlayerGameState extends GamePlayState {
           }
         }
 
-        Zombie newZombie = new Zombie(target);
+        Zombie newZombie = new Zombie(target, this.players);
 
         // newZombie.setSpeed(ZOMBIE_BASE_SPEED
         // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)

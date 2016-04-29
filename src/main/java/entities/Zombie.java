@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -7,8 +8,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.particles.ParticleSystem;
 
+import com.google.common.collect.Maps;
+
 import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
 import effects.FireEmitterCustom;
 import game_objects.Circle;
 
@@ -26,39 +28,66 @@ public class Zombie extends Entity {
    * @param other
    *          Entity, an entity to follow
    */
-  public Zombie(Entity other) {
+  public Zombie(Entity other, Map<String, Player> players) {
     super(other);
+    this.allPlayers = players;
+    // change spawn to protect player
+    setSpawn();
   }
 
   private double initial_speed;
 
   // zombies keep track of a player and a specific target area of the player.
   private Circle player;
-  private Integer target;
 
   private ParticleSystem fireParticles;
   private FireEmitterCustom emitter;
 
+  private Map<String, Player> allPlayers;
+
+
+  /**
+   * Method that checks if the zombie is within a radius of the player.
+   *
+   * Used to protect players from zombie spawns.
+   *
+   * @return  boolean, true if the zombie is within radius, else false.
+   */
+  private boolean inPlayerRadius() {
+    // check the player map for multiplayer
+    for (Player p : this.allPlayers.values()) {
+      if (this.distTo(p) < 100) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Changes the spawn location of the zombie to be far from player.
+   */
+  private void setSpawn() {
+    Random r = new Random();
+    while (inPlayerRadius()) {
+      this.x = r.nextFloat();
+      this.y = r.nextFloat();
+    }
+  }
+
   @Override
   public void init(Entity other) {
+
+    // give an empty hashmap to begin with
+    this.allPlayers = Maps.newHashMap();
 
     this.player = other;
     this.setRadius(20);
 
     Random r = new Random();
 
-    // only spawn the zombie outside of a radius from the player
-    this.x = r.nextFloat() * (Window.width - 30 - (2 * this.radius)) + 15;
-
-    while (Math.abs(this.x - this.player.getX()) <= 100) {
-      this.x = r.nextFloat() * (Window.width - 30 - (2 * this.radius)) + 15;
-    }
-
-    this.y = r.nextFloat() * (Window.height - 60 - (2 * this.radius)) + 45;
-
-    while (Math.abs(this.y - this.player.getY()) <= 100) {
-      this.y = r.nextFloat() * (Window.height - 60 - (2 * this.radius)) + 45;
-    }
+    this.x = r.nextFloat();
+    this.y = r.nextFloat();
 
     this.radius = 20;
     this.image = Resources.getImage("zombie");
