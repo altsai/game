@@ -11,6 +11,7 @@ import org.newdawn.slick.particles.ParticleSystem;
 import com.google.common.collect.Maps;
 
 import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
 import effects.FireEmitterCustom;
 import game_objects.Circle;
 
@@ -70,8 +71,8 @@ public class Zombie extends Entity {
   private void setSpawn() {
     Random r = new Random();
     while (inPlayerRadius()) {
-      this.x = r.nextFloat();
-      this.y = r.nextFloat();
+      this.x = r.nextFloat() * Window.width;
+      this.y = r.nextFloat() * Window.height;
     }
   }
 
@@ -86,8 +87,8 @@ public class Zombie extends Entity {
 
     Random r = new Random();
 
-    this.x = r.nextFloat();
-    this.y = r.nextFloat();
+    this.x = r.nextFloat() * Window.width;
+    this.y = r.nextFloat() * Window.height;
 
     this.radius = 20;
     this.image = Resources.getImage("zombie");
@@ -135,6 +136,15 @@ public class Zombie extends Entity {
 
   @Override
   public void update(GameContainer gc, int delta) {
+
+    //TODO: If we want the zombie to follow the closest player
+    // instead of randomly selecting one, change here.
+
+    /*
+     * Go through the player map and find the closest one,
+     * set target to be that closest one
+     */
+
     followPlayer(delta);
 
     if (this.isOnFire()) {
