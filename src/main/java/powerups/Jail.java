@@ -77,6 +77,16 @@ public class Jail extends Powerup {
         upperLeftY = Window.height - 11 - jail_diam;
         lowerRightX = upperLeftX + jail_diam;
         lowerRightY = upperLeftY + jail_diam;
+      } else if ((lowerRightX >= Window.width - 10) && (upperLeftY < 40)) { // NEW
+        upperLeftX = Window.width - 11 - jail_diam;
+        upperLeftY = 41;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
+      } else if ((upperLeftX < 10) && (lowerRightY >= Window.height - 10)) { // NEW
+        upperLeftX = 11;
+        upperLeftY = Window.height - 11 - jail_diam;
+        lowerRightX = upperLeftX + jail_diam;
+        lowerRightY = upperLeftY + jail_diam;
       } else if (upperLeftX < 10) {
         upperLeftX = 11;
         lowerRightX = upperLeftX + jail_diam;
@@ -89,7 +99,7 @@ public class Jail extends Powerup {
         upperLeftX = Window.width - 11 - jail_diam;
         lowerRightX = upperLeftX + jail_diam;
         lowerRightY = upperLeftY + jail_diam;
-      } else if (lowerRightY > -Window.height - 10) {
+      } else if (lowerRightY > Window.height - 10) {
         upperLeftY = Window.height - 11 - jail_diam;
         lowerRightX = upperLeftX + jail_diam;
         lowerRightY = upperLeftY + jail_diam;
@@ -108,7 +118,8 @@ public class Jail extends Powerup {
         || (isUsed && bombFired)) {
 
       if (other != null) {
-        other.setBoundary(0, Window.height, 0, Window.width);
+        other.setBoundary(42, Window.height - (this.radius / 2), 12,
+            Window.width - (this.radius / 2));
       }
 
       // kill the powerup

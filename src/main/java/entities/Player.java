@@ -151,7 +151,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Sets the lives of a player.
-   * 
+   *
    * @param lives
    *          Integer, number of lives
    */
@@ -161,7 +161,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Checks if the current player is player1.
-   * 
+   *
    * @return Boolean, true if player1, else false.
    */
   public boolean isPlayer1() {
@@ -170,7 +170,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the left boundary.
-   * 
+   *
    * @return float, left boundary
    */
   public float getLeft() {
@@ -179,7 +179,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the right boundary.
-   * 
+   *
    * @return float, right boundary
    */
   public float getRight() {
@@ -188,7 +188,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the top boundary.
-   * 
+   *
    * @return float, top boundary
    */
   public float getTop() {
@@ -197,7 +197,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the bottom boundary.
-   * 
+   *
    * @return float, bottom boundary
    */
   public float getBottom() {
@@ -413,7 +413,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Method to return the current powerup in storage.
-   * 
+   *
    * @return Powerup, powerup used by player.
    */
   public Powerup getCurrPowerup() {
@@ -429,7 +429,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Method to check if player is immune (on fire).
-   * 
+   *
    * @return Boolean, true if immune, else false
    */
   public boolean isImmune() {
@@ -521,7 +521,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Sets the last direction that the player was facing.
-   * 
+   *
    * @param dir
    *          float, angle in degrees
    */
@@ -536,7 +536,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the last time that a bomb was fired by player.
-   * 
+   *
    * @return Long, last time that bomb was fired.
    */
   public long getLastBombFired() {
@@ -545,7 +545,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the last time that a timestop was used by player.
-   * 
+   *
    * @return Long, last time that timestop was used.
    */
   public long getLastTimeStop() {
@@ -554,7 +554,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * gets the last time that a fire powerup was used.
-   * 
+   *
    * @return Long, last time.
    */
   public long getLastFire() {
@@ -563,7 +563,7 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Gets the last direction that the player was facing.
-   * 
+   *
    * @return float, direction in angle degrees.
    */
   public float getLastDir() {
