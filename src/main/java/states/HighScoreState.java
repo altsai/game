@@ -34,7 +34,7 @@ public class HighScoreState extends BasicGameState {
   private List<String[]> globalHighscoresOfDay;
   private List<String[]> globalHighscoresOfMonth;
   private List<String[]> globalHighscoresOfYear;
-  private List<Integer> localHighscores;
+  private List<String[]> localHighscores;
 
   private static final int BUTTON_WIDTH = 180;
   private static final int BUTTON_HEIGHT = 50;
@@ -50,6 +50,7 @@ public class HighScoreState extends BasicGameState {
   private int placeWidth;
   private int nameWidth;
   private int scoreWidth;
+  private int timeWidth;
   private int dateWidth;
   private int tableWidth;
 
@@ -121,7 +122,8 @@ public class HighScoreState extends BasicGameState {
 
       // Set widths
       placeWidth = entryFont.getWidth(Integer.toString(localHighscores.size())) + PADDING;
-      tableWidth = placeWidth + scoreWidth;
+      timeWidth = getTimeWidthLocal() + PADDING;
+      tableWidth = placeWidth + scoreWidth + timeWidth + dateWidth;
     } else {
       localScoresInUse = false;
       searchField.setAcceptingInput(true);
@@ -140,18 +142,30 @@ public class HighScoreState extends BasicGameState {
 
       // Get widths
       placeWidth = entryFont.getWidth(Integer.toString(globalHighscores.size())) + PADDING;
-      nameWidth = getWidthOfLongestName() + PADDING;
-      tableWidth = placeWidth + nameWidth + scoreWidth + dateWidth;
+      setNameTimeWidths();
+      tableWidth = placeWidth + nameWidth + scoreWidth + timeWidth + dateWidth;
     }
   }
 
-  private int getWidthOfLongestName() {
-    int maxLength = 0;
-    for (String[] score : globalHighscores) {
-      maxLength = Math.max(maxLength, entryFont.getWidth(score[1]));
+  private int getTimeWidthLocal() {
+    int max = 0;
+    for (String[] score : localHighscores) {
+      max = Math.max(max, entryFont.getWidth(score[3]));
     }
 
-    return maxLength;
+    return max;
+  }
+
+  private void setNameTimeWidths() {
+    int maxLengthName = 0;
+    int maxLengthTime = 0;
+    for (String[] score : globalHighscores) {
+      maxLengthName = Math.max(maxLengthName, entryFont.getWidth(score[1]));
+      maxLengthTime = Math.max(maxLengthTime, entryFont.getWidth(score[3]));
+    }
+
+    nameWidth = maxLengthName + PADDING;
+    timeWidth = maxLengthTime + PADDING;
   }
 
   @Override
@@ -206,8 +220,10 @@ public class HighScoreState extends BasicGameState {
       // Outline of table
       g.drawRect(tableX, tableY, tableWidth, tableHeight);
 
-      // Separator line
+      // Separator lines
       g.drawLine(tableX + placeWidth, tableY, tableX + placeWidth, tableY + tableHeight);
+      g.drawLine(tableX + placeWidth + scoreWidth, tableY, tableX + placeWidth + scoreWidth, tableY + tableHeight);
+      g.drawLine(tableX + placeWidth + scoreWidth + timeWidth, tableY, tableX + placeWidth + scoreWidth + timeWidth, tableY + tableHeight);
 
       // Get starting entry index
       int entryIndex = (int) startingEntryIndex;
@@ -230,13 +246,23 @@ public class HighScoreState extends BasicGameState {
 
       // Entries
       for (float y = tableY + 5; y < tableY + tableHeight && entryIndex < localHighscores.size(); y += entryFont.getLineHeight() + 5) {
+        String[] score = localHighscores.get(entryIndex);
+
         // Draw place
         float x = tableX + (placeWidth - entryFont.getWidth(Integer.toString(entryIndex + 1))) / 2;
         entryFont.drawString(x, y, Integer.toString(entryIndex + 1), Color.black);
 
         // Draw score
-        x = tableX + placeWidth + (scoreWidth - entryFont.getWidth(Integer.toString(localHighscores.get(entryIndex)))) / 2;
-        entryFont.drawString(x, y, Integer.toString(localHighscores.get(entryIndex)), Color.black);
+        x = tableX + placeWidth + (scoreWidth - entryFont.getWidth(score[2])) / 2;
+        entryFont.drawString(x, y, score[2], Color.black);
+
+        // Draw time
+        x = tableX + placeWidth + scoreWidth + (timeWidth - entryFont.getWidth(score[3])) / 2;
+        entryFont.drawString(x, y, score[3], Color.black);
+
+        // Draw date
+        x = tableX + placeWidth + scoreWidth + timeWidth + (dateWidth - entryFont.getWidth(score[4])) / 2;
+        entryFont.drawString(x, y, score[4], Color.black);
 
         // Draw separating line
         if (y + entryFont.getLineHeight() + 5 < tableY + tableHeight) {
@@ -256,7 +282,8 @@ public class HighScoreState extends BasicGameState {
       g.drawLine(tableX + placeWidth, tableY, tableX + placeWidth, tableY + tableHeight);
       g.drawLine(tableX + placeWidth + nameWidth, tableY, tableX + placeWidth + nameWidth, tableY + tableHeight);
       g.drawLine(tableX + placeWidth + nameWidth + scoreWidth, tableY, tableX + placeWidth + nameWidth + scoreWidth, tableY + tableHeight);
-      g.drawLine(tableX + placeWidth + nameWidth + scoreWidth + dateWidth, tableY, tableX + placeWidth + nameWidth + scoreWidth + dateWidth, tableY + tableHeight);
+      g.drawLine(tableX + placeWidth + nameWidth + scoreWidth + timeWidth, tableY, tableX + placeWidth + nameWidth + scoreWidth + timeWidth, tableY + tableHeight);
+      g.drawLine(tableX + placeWidth + nameWidth + scoreWidth + timeWidth + dateWidth, tableY, tableX + placeWidth + nameWidth + scoreWidth + timeWidth + dateWidth, tableY + tableHeight);
 
       // Get starting entry index
       int entryIndex = (int) startingEntryIndex;
@@ -299,9 +326,13 @@ public class HighScoreState extends BasicGameState {
         x = tableX + placeWidth + nameWidth + (scoreWidth - entryFont.getWidth(score[2])) / 2;
         entryFont.drawString(x, y, score[2], color);
 
-        // Draw date
-        x = tableX + placeWidth + nameWidth + scoreWidth + (dateWidth - entryFont.getWidth(score[3])) / 2;
+        // Draw time
+        x = tableX + placeWidth + nameWidth + scoreWidth + (timeWidth - entryFont.getWidth(score[3])) / 2;
         entryFont.drawString(x, y, score[3], color);
+
+        // Draw date
+        x = tableX + placeWidth + nameWidth + scoreWidth + timeWidth + (dateWidth - entryFont.getWidth(score[4])) / 2;
+        entryFont.drawString(x, y, score[4], color);
 
         // Draw separating line
         if (y + entryFont.getLineHeight() + 5 < tableY + tableHeight) {
@@ -311,6 +342,9 @@ public class HighScoreState extends BasicGameState {
         entryIndex++;
       }
     }
+
+    // Main menu button
+    Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
   }
 
   @Override
@@ -371,7 +405,7 @@ public class HighScoreState extends BasicGameState {
     }
 
     // Back to main menu
-    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (gc.getInput().isMouseButtonDown(0) && posX >= 20 && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
       s.enterState(States.MENU);
     }
   }

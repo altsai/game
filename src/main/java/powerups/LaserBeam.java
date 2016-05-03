@@ -37,6 +37,8 @@ public class LaserBeam extends Powerup {
 
   private GameServer server;
 
+  private boolean lifeLost = false;
+
   /**
    * Single player game constructor for laser.
    *
@@ -173,8 +175,9 @@ public class LaserBeam extends Powerup {
 
       for (Player p : players.values()) {
         if (p != affectedPlayer) {
-          if (laser.isCollision(p)) {
+          if (laser.isCollision(p) && !lifeLost) {
             p.loseLife();
+            lifeLost = true;
 
             // update the client if this is networked version of laser
             if (server != null) {

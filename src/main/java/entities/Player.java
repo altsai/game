@@ -65,6 +65,8 @@ public class Player extends Entity implements PlayerAction {
   private float lastDir;
   public static final double PLAYER_SPEED = 0.3;
 
+  public static final float EMITTER_SIZE = 30;
+
   @Override
   /**
    * Initializes a player and set's starting attributes.
@@ -108,7 +110,7 @@ public class Player extends Entity implements PlayerAction {
       // emitter.setPosition(this.radius / 2, this.radius / 2);
       // fireParticles.addEmitter(emitter);
       emitter = new FireEmitterCustom((int) this.radius / 2,
-          (int) this.radius / 2, 30);
+          (int) this.radius / 2, EMITTER_SIZE);
       fireParticles.addEmitter(emitter);
       fireParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
     } catch (Exception e) {
@@ -258,6 +260,7 @@ public class Player extends Entity implements PlayerAction {
       this.lastBombFired = System.currentTimeMillis();
     }
     if (this.powerup instanceof OnFire) {
+      emitter.setSize(EMITTER_SIZE);
       this.lastFire = System.currentTimeMillis();
     }
     if (this.powerup instanceof TimeStop) {
@@ -305,6 +308,7 @@ public class Player extends Entity implements PlayerAction {
 
     if (this.isImmune()) {
       fireParticles.update(delta);
+      emitter.reduceSize(.063f);
     }
 
     if (!immune && state

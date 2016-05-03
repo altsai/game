@@ -73,6 +73,18 @@ public class FireEmitterCustom implements ParticleEmitter {
     this.yMultiplier = yMulti;
   }
 
+  public void reduceSize(float amount) {
+    this.size -= amount;
+  }
+
+  public void setSize(float size) {
+    this.size = size;
+  }
+
+  public float getSize() {
+    return this.size;
+  }
+
   /**
    * @see org.newdawn.slick.particles.ParticleEmitter#update(org.newdawn.slick.particles.ParticleSystem, int)
    */

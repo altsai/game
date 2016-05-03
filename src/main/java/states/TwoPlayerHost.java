@@ -21,12 +21,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Entity;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
 import powerups.LaserBeam;
@@ -35,6 +29,12 @@ import powerups.TimeStop;
 import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 
 public class TwoPlayerHost extends GamePlayState {
   // list of all entities in the game
@@ -129,7 +129,7 @@ public class TwoPlayerHost extends GamePlayState {
     if (this.errorMakingServer) {
       g.drawString("ERROR CREATING SERVER", 0, 0);
     } else if (server.getConnections().length > 0) {
-      //g.drawString("Host", 0, 0);
+      // g.drawString("Host", 0, 0);
 
       // Draw bounding box
       g.setColor(Color.black);
@@ -142,7 +142,8 @@ public class TwoPlayerHost extends GamePlayState {
           Resources.getImage("life").draw(15 + i * 25, 10, 20, 20);
         }
         for (int i = 0; i < this.players.get("1").getLives() + 1; i++) {
-          Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20, 20);
+          Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20,
+              20);
         }
 
         // Draw current powerups
@@ -169,7 +170,6 @@ public class TwoPlayerHost extends GamePlayState {
       } else {
 
         this.gameStart = true;
-
 
         for (Powerup p : this.powerups.values()) {
           p.render(gc, g);
@@ -461,7 +461,6 @@ public class TwoPlayerHost extends GamePlayState {
   @Override
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
-
 
       double randomNum = random.nextDouble();
       if (randomNum < 0.2) {

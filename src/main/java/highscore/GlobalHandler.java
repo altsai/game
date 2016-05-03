@@ -74,7 +74,7 @@ public class GlobalHandler {
       int day = cal.get(Calendar.DAY_OF_MONTH);
 
       if (year == currYear && month == currMonth && day == currDay) {
-        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getDate());
+        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getTime(), score.getDate());
         nameMapDay.put(score.getName(), scoreNew);
         toReturn.add(scoreNew);
         currPlace++;
@@ -108,7 +108,7 @@ public class GlobalHandler {
       int month = cal.get(Calendar.MONTH);
 
       if (year == currYear && month == currMonth) {
-        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getDate());
+        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getTime(), score.getDate());
         nameMapMonth.put(score.getName(), scoreNew);
         toReturn.add(scoreNew);
         currPlace++;
@@ -140,7 +140,7 @@ public class GlobalHandler {
       int year = cal.get(Calendar.YEAR);
 
       if (year == currYear) {
-        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getDate());
+        Score scoreNew = new Score(score.getName(), score.getScore(), currPlace, score.getTime(), score.getDate());
         nameMapYear.put(score.getName(), scoreNew);
         toReturn.add(scoreNew);
         currPlace++;
@@ -157,7 +157,7 @@ public class GlobalHandler {
    */
   private void collectScores() throws SQLException {
     // Query to get all (name, score) pairs
-    String query = "SELECT * FROM highscores ORDER BY score DESC";
+    String query = "SELECT * FROM highscores ORDER BY score DESC, time DESC";
     PreparedStatement prep = conn.prepareStatement(query);
     ResultSet rs = prep.executeQuery();
 
@@ -167,8 +167,9 @@ public class GlobalHandler {
       // Create the Score
       String name = rs.getString(1);
       int score = rs.getInt(2);
-      Date date = rs.getDate(3);
-      Score scoreObj = new Score(name, score, i, date);
+      int time = rs.getInt(3);
+      Date date = rs.getDate(4);
+      Score scoreObj = new Score(name, score, i, time, date);
 
       // Add it to the data structures
       highscores.add(scoreObj);
@@ -190,10 +191,11 @@ public class GlobalHandler {
    *
    * @param name - the given name
    * @param score - the given score
+   * @param time - the given time
    * @return a boolean indicating whether or not the addition was successful
    * @throws SQLException - if there was an error interfacing with the database
    */
-  protected boolean addScore(String name, int score) throws SQLException {
+  protected boolean addScore(String name, int score, int time) throws SQLException {
     // Query to check if name is already in the highscores
     String query = "SELECT * FROM highscores WHERE name = ?";
     PreparedStatement prep = conn.prepareStatement(query);
@@ -204,11 +206,12 @@ public class GlobalHandler {
     boolean toReturn = false;
     if (!rs.next()) {
       // SQL to insert name and score
-      String insert = "INSERT INTO highscores VALUES (?, ?, ?)";
+      String insert = "INSERT INTO highscores VALUES (?, ?, ?, ?)";
       PreparedStatement prep2 = conn.prepareStatement(insert);
       prep2.setString(1, name);
       prep2.setInt(2, score);
-      prep2.setDate(3, getCurrentDate());
+      prep2.setInt(3, time);
+      prep2.setDate(4, getCurrentDate());
       prep2.execute();
       prep2.close();
 

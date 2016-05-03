@@ -3,10 +3,16 @@ package highscore;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class HighscoreSystem {
+
+  public static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
   private LocalHandler localHandler;
   private GlobalHandler globalHandler;
@@ -17,8 +23,10 @@ public class HighscoreSystem {
    * @param filename - the name of the local highscore file
    * @param numScores - the number of scores to store
    * @throws IOException - if there was an error interfacing with the file
+   * @throws ParseException
+   * @throws NumberFormatException
    */
-  public HighscoreSystem(String filename, int numScores) throws IOException {
+  public HighscoreSystem(String filename, int numScores) throws IOException, NumberFormatException, ParseException {
     localHandler = new LocalHandler(filename, numScores);
   }
 
@@ -29,8 +37,10 @@ public class HighscoreSystem {
    * @param numScores - the number of scores to store
    * @param conn - the connection to the database
    * @throws IOException - if there was an error interfacing with the file
+   * @throws ParseException
+   * @throws NumberFormatException
    */
-  public HighscoreSystem(String filename, int numScores, Connection conn) throws IOException, SQLException {
+  public HighscoreSystem(String filename, int numScores, Connection conn) throws IOException, SQLException, NumberFormatException, ParseException {
     this.localHandler = new LocalHandler(filename, numScores);
     this.globalHandler = new GlobalHandler(conn);
   }
@@ -41,9 +51,10 @@ public class HighscoreSystem {
    * @param score - the score to be added
    * @return a boolean indicating whether or not this score is the new local best
    * @throws IOException - if there was an error interfacing with the file
+   * @throws ParseException
    */
-  public boolean addLocalScore(int score) throws IOException {
-    return localHandler.addScore(score);
+  public boolean addLocalScore(int score, int time) throws IOException, ParseException {
+    return localHandler.addScore(score, time);
   }
 
   /**
@@ -51,8 +62,8 @@ public class HighscoreSystem {
    *
    * @return the current list of highscores (ordered - highest to lowest)
    */
-  public List<Integer> getLocalScores() {
-    return localHandler.getScores();
+  public List<String[]> getLocalScores() {
+    return scoresToStrings(localHandler.getScores());
   }
 
   /**
@@ -60,18 +71,44 @@ public class HighscoreSystem {
    *
    * @param name - the given name
    * @param score - the given score
+   * @param time - the given time
    * @return a boolean indicating whether or not the (name, score) was successfully added
    * @throws SQLException - if there was an error interfacing with the database
    */
-  public boolean addGlobalScore(String name, int score) throws SQLException {
-    return globalHandler.addScore(name, score);
+  public boolean addGlobalScore(String name, int score, int time) throws SQLException {
+    return globalHandler.addScore(name, score, time);
+  }
+
+  private String timeToString(int time) {
+    String timeString = "Unrecorded Time";
+    if (time >= 60000 * 2) {
+      long seconds = TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time));
+      if (seconds >= 2 || seconds < 1) {
+        timeString = String.format("%d minutes, %d seconds", TimeUnit.MILLISECONDS.toMinutes(time), seconds);
+      } else {
+        timeString = String.format("%d minutes, %d second", TimeUnit.MILLISECONDS.toMinutes(time), seconds);
+      }
+    } else if (time >= 60000) {
+      long seconds = TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time));
+      if (seconds >= 2 || seconds < 1) {
+        timeString = String.format("%d minute, %d seconds", TimeUnit.MILLISECONDS.toMinutes(time), seconds);
+      } else {
+        timeString = String.format("%d minute, %d second", TimeUnit.MILLISECONDS.toMinutes(time), seconds);
+      }
+    } else if (time >= 1000 * 2) {
+      timeString = String.format("%d seconds", TimeUnit.MILLISECONDS.toSeconds(time));
+    } else {
+      timeString = "1 second";
+    }
+
+    return timeString;
   }
 
   private List<String[]> scoresToStrings(List<Score> scores) {
     // Fill the array with String[] of each Score
     List<String[]> toReturn = new ArrayList<>();
     for (Score score : scores) {
-      toReturn.add(new String[]{Integer.toString(score.getPlace()), score.getName(), Integer.toString(score.getScore()), score.getDate().toString()});
+      toReturn.add(new String[]{Integer.toString(score.getPlace()), score.getName(), Integer.toString(score.getScore()), timeToString(score.getTime()), FORMAT.format(score.getDate())});
     }
 
     return toReturn;
@@ -125,7 +162,7 @@ public class HighscoreSystem {
 
     String[] toReturn = null;
     if (score != null) {
-      toReturn = new String[]{Integer.toString(score.getPlace()), score.getName(), Integer.toString(score.getScore()), score.getDate().toString()};
+      toReturn = new String[]{Integer.toString(score.getPlace()), score.getName(), Integer.toString(score.getScore()), timeToString(score.getTime()), FORMAT.format(score.getDate())};
     }
 
     return toReturn;
