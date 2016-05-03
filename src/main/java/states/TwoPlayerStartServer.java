@@ -84,6 +84,13 @@ public class TwoPlayerStartServer extends BasicGameState {
       throws SlickException {
     this.serverNames = new ArrayList<>();
     this.serverAddresses = new ArrayList<>();
+    
+    // get the ipAddress of the player
+    try {
+      this.address = getIpAddress();
+    } catch (SocketException e1) {
+      this.address = "";
+    }
 
     startingEntryIndex = 0;
     canScrollUp = false;
@@ -119,7 +126,9 @@ public class TwoPlayerStartServer extends BasicGameState {
    * @throws SQLException on error with connection.
    */
   private void getServers() throws SQLException {
-    String query = "SELECT * FROM servers";
+    // select only servers with ip addresses in the same network
+    String query = "SELECT * FROM servers WHERE ip LIKE '" + 
+        this.getSubnetStart() + "%" + "';";
     PreparedStatement prep = conn.prepareStatement(query);
     ResultSet rs = prep.executeQuery();
 
@@ -143,8 +152,25 @@ public class TwoPlayerStartServer extends BasicGameState {
     prep.close();
   }
 
+  /**
+   * Returns the whole ipv4 ip address with x.x.x.x.
+   * @return String ipv4 ip address
+   */
   public String getAddress() {
     return this.address;
+  }
+
+  /**
+   * Returns the portion of ipv4 addresss that represents the network.
+   * @return String, network portion of ip (x.x.x.)
+   */
+  public String getSubnetStart() {
+    StringBuilder subnet = new StringBuilder();
+    String[] split = this.address.split(".");
+    for (int i = 0; i < split.length - 1; i++) {
+      subnet.append(split[i] + ".");
+    }
+    return subnet.toString();
   }
 
   @Override
