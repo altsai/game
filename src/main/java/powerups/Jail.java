@@ -1,21 +1,23 @@
 package powerups;
 
+import java.util.List;
+import java.util.Map;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
+
+import com.google.common.collect.Lists;
+
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
 
-import java.util.List;
-import java.util.Map;
-
-import org.newdawn.slick.GameContainer;
-
-import com.google.common.collect.Lists;
-
 public class Jail extends Powerup {
 
-  private final int JAIL_RADIUS = 150;
+  public static final int JAIL_RADIUS = 230;
   private final int JAIL_LIFETIME = 5000;
   private boolean bombFired;
 
@@ -28,6 +30,45 @@ public class Jail extends Powerup {
     image = Resources.getImage("jail");
     players = pl;
     this.powerupIndex = Powerup.JAIL;
+  }
+
+  @Override
+  public void render(GameContainer gc, Graphics g) {
+    super.render(gc, g);
+
+    if ((activationStartTime != 0) && (this instanceof Jail)) {
+      float jail_diam = JAIL_RADIUS * 2;
+      float upperLeftX = otherx - JAIL_RADIUS;
+      float upperLeftY = othery - JAIL_RADIUS;
+      float lowerRightX = upperLeftX + jail_diam;
+      float lowerRightY = upperLeftY + jail_diam;
+
+      if ((upperLeftX < 10) && (upperLeftY < 40)) {
+        g.draw(new Rectangle(11, 41, jail_diam, jail_diam));
+      } else if ((lowerRightX >= Window.width - 10)
+          && (lowerRightY >= Window.height - 10)) {
+        g.draw(new Rectangle(Window.width - 11 - jail_diam, Window.height - 11
+            - jail_diam, jail_diam, jail_diam));
+      } else if ((lowerRightX >= Window.width - 10) && (upperLeftY < 40)) { // NEW
+        g.draw(new Rectangle(Window.width - 11 - jail_diam, 41, jail_diam,
+            jail_diam));
+      } else if ((upperLeftX < 10) && (lowerRightY >= Window.height - 10)) { // NEW
+        g.draw(new Rectangle(11, Window.height - 11 - jail_diam, jail_diam,
+            jail_diam));
+      } else if (upperLeftX < 10) {
+        g.draw(new Rectangle(11, upperLeftY, jail_diam, jail_diam));
+      } else if (upperLeftY < 40) {
+        g.draw(new Rectangle(upperLeftX, 41, jail_diam, jail_diam));
+      } else if (lowerRightX > Window.width - 10) {
+        g.draw(new Rectangle(Window.width - 11 - jail_diam, upperLeftY,
+            jail_diam, jail_diam));
+      } else if (lowerRightY > Window.height - 10) {
+        g.draw(new Rectangle(upperLeftX, Window.height - 11 - jail_diam,
+            jail_diam, jail_diam));
+      } else {
+        g.draw(new Rectangle(upperLeftX, upperLeftY, jail_diam, jail_diam));
+      }
+    }
   }
 
   @Override

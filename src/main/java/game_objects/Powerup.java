@@ -10,9 +10,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Rectangle;
-
-import powerups.Jail;
 
 import com.google.common.collect.Lists;
 
@@ -103,40 +100,6 @@ public abstract class Powerup extends Circle {
   public void render(GameContainer gc, Graphics g) {
     if (this.image != null && !this.isPickedUp) {
       image.draw(this.x, this.y, this.radius, this.radius, this.color);
-    }
-
-    if ((activationStartTime != 0) && (this instanceof Jail)) {
-      float jail_diam = JAIL_RADIUS * 2;
-      float upperLeftX = otherx - JAIL_RADIUS;
-      float upperLeftY = othery - JAIL_RADIUS;
-      float lowerRightX = upperLeftX + jail_diam;
-      float lowerRightY = upperLeftY + jail_diam;
-
-      if ((upperLeftX < 10) && (upperLeftY < 40)) {
-        g.draw(new Rectangle(11, 41, jail_diam, jail_diam));
-      } else if ((lowerRightX >= Window.width - 10)
-          && (lowerRightY >= Window.height - 10)) {
-        g.draw(new Rectangle(Window.width - 11 - jail_diam, Window.height - 11
-            - jail_diam, jail_diam, jail_diam));
-      } else if ((lowerRightX >= Window.width - 10) && (upperLeftY < 40)) { // NEW
-        g.draw(new Rectangle(Window.width - 11 - jail_diam, 41, jail_diam,
-            jail_diam));
-      } else if ((upperLeftX < 10) && (lowerRightY >= Window.height - 10)) { // NEW
-        g.draw(new Rectangle(11, Window.height - 11 - jail_diam, jail_diam,
-            jail_diam));
-      } else if (upperLeftX < 10) {
-        g.draw(new Rectangle(11, upperLeftY, jail_diam, jail_diam));
-      } else if (upperLeftY < 40) {
-        g.draw(new Rectangle(upperLeftX, 41, jail_diam, jail_diam));
-      } else if (lowerRightX > Window.width - 10) {
-        g.draw(new Rectangle(Window.width - 11 - jail_diam, upperLeftY,
-            jail_diam, jail_diam));
-      } else if (lowerRightY > Window.height - 10) {
-        g.draw(new Rectangle(upperLeftX, Window.height - 11 - jail_diam,
-            jail_diam, jail_diam));
-      } else {
-        g.draw(new Rectangle(upperLeftX, upperLeftY, jail_diam, jail_diam));
-      }
     }
   }
 
