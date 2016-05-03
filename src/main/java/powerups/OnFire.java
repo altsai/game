@@ -1,15 +1,15 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
+
+import edu.brown.cs.altsai.game.Resources;
+import entities.Zombie;
+import game_objects.Powerup;
 
 /**
  * OnFire Powerup that gives the player a temporary capability of lighting
@@ -30,8 +30,9 @@ public class OnFire extends Powerup {
    */
   private final int INDIV_FIRE = 2000;
 
-  private final int FIRE_RADIUS = 35;
-  private final int FIRE_RADIUS_PLAYER = 45;
+  // 55 is the height of the flame
+  private final int FIRE_RADIUS = 55;
+  private final int FIRE_RADIUS_PLAYER = 55;
 
   /**
    * Reference to the list of Zombies in the game.

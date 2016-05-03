@@ -48,7 +48,6 @@ public class Player extends Entity implements PlayerAction {
   private int score;
   public long invincibleTime;
   private boolean isPlayer1;
-  private boolean isSingle;
   private long lastBombFired;
   private long lastTimeStop;
   private long lastFire;
@@ -84,7 +83,6 @@ public class Player extends Entity implements PlayerAction {
     this.left = 12;
     this.bottom = Window.height - (this.radius / 2);
     this.right = Window.width - (this.radius / 2);
-    this.isSingle = true;
     this.isPlayer1 = true;
     this.lastBombFired = 0;
     this.lastTimeStop = 0;
@@ -126,9 +124,6 @@ public class Player extends Entity implements PlayerAction {
    */
   public void setPlayer1(boolean flag) {
     this.isPlayer1 = flag;
-    if (flag == false) {
-      this.isSingle = false;
-    }
   }
 
   /**
@@ -299,7 +294,6 @@ public class Player extends Entity implements PlayerAction {
    * @param delta      Integer, amount of time since last update
    */
   public void update(GameContainer gc, int delta) {
-    Input input = gc.getInput();
 
     // Update animation
     if (this.isInvincible()) {
@@ -316,18 +310,6 @@ public class Player extends Entity implements PlayerAction {
       this.setState(false);
       this.image = Resources.getImage("player");
     }
-
-    // // move the player according to input and delta.
-    // // both p1 and p2 have same controls since on separate windows
-    // move(input, delta, PLAYER1_CONTROLS);
-    //
-    // // if (this.isPlayer1) {
-    // // move(input, delta, PLAYER1_CONTROLS);
-    // // } else {
-    // // move(input, delta, PLAYER2_CONTROLS);
-    // // }
-    //
-    // checkActionKey(input);
   }
 
   /**
@@ -383,22 +365,6 @@ public class Player extends Entity implements PlayerAction {
     if (input.isKeyPressed(Input.KEY_SPACE)) {
       usePowerup();
     }
-
-    // if (this.isSingle) {
-    // if (input.isKeyPressed(Input.KEY_SPACE)) {
-    // usePowerup();
-    // }
-    // } else {
-    // if (this.isPlayer1) {
-    // if (input.isKeyPressed(Input.KEY_LSHIFT)) {
-    // usePowerup();
-    // }
-    // } else {
-    // if (input.isKeyPressed(Input.KEY_RCONTROL)) {
-    // usePowerup();
-    // }
-    // }
-    // }
   }
 
   private void checkActionKeyTwoPlayerSameScreen(Input input) {
@@ -415,8 +381,6 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public void die() {
-    // TODO Auto-generated method stub
-
   }
 
   /**
