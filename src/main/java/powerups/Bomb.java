@@ -188,7 +188,7 @@ public class Bomb extends Powerup {
         // if the other player isn't invincible and is in blast radius
         if (!p.isInvincible() && withinRadius(p)) {
           // other player's speed is -10%
-          p.setSpeed(p.getSpeed() * 0.9);
+          p.setSpeed(p.getSpeed() * 0.5);
         }
       }
     }
@@ -219,7 +219,7 @@ public class Bomb extends Powerup {
     if (this.isUsed
         && (System.currentTimeMillis() - this.activationStartTime > 5000)) {
       for (Player p : this.players.values()) {
-        if (p.getID().equals(affectedPlayer.getID())) {
+        if (!p.getID().equals(affectedPlayer.getID())) {
           p.setSpeed(Player.PLAYER_SPEED);
         }
       }

@@ -7,6 +7,7 @@ public class Score {
   private String name;
   private int score;
   private int place;
+  private int time;
   private Date date;
 
   /**
@@ -14,14 +15,15 @@ public class Score {
    *
    * @param name - the name
    * @param score - the score
-   * @param year - the year
-   * @param month - the month
-   * @param day - the day
+   * @param place - the place
+   * @param time - the time
+   * @param date - the date
    */
-  protected Score(String name, int score, int place, Date date) {
+  protected Score(String name, int score, int place, int time, Date date) {
     this.name = name;
     this.score = score;
     this.place = place;
+    this.time = time;
     this.date = date;
   }
 
@@ -50,6 +52,15 @@ public class Score {
    */
   protected int getPlace() {
     return this.place;
+  }
+
+  /**
+   * Gets the time.
+   *
+   * @return the time
+   */
+  protected int getTime() {
+    return this.time;
   }
 
   /**

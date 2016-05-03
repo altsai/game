@@ -66,6 +66,8 @@ public abstract class GamePlayState extends BasicGameState {
 
   protected boolean gameEnd;
 
+  private int elapsedTime;
+
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     this.zombies = new ConcurrentHashMap<>();
@@ -80,6 +82,16 @@ public abstract class GamePlayState extends BasicGameState {
     this.spawnOn = true;
     this.loser = null;
     this.initialDelayTime = System.currentTimeMillis();
+
+    this.elapsedTime = 0;
+  }
+
+  public int getElapsedTime() {
+    return this.elapsedTime;
+  }
+
+  public void setElapsedTime(int newTime) {
+    elapsedTime = newTime;
   }
 
   @Override
@@ -126,6 +138,8 @@ public abstract class GamePlayState extends BasicGameState {
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
     if (this.gameStart) {
+      elapsedTime += delta;
+
       spawnZombie();
       spawnPowerup();
 
