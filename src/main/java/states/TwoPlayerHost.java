@@ -465,7 +465,7 @@ public class TwoPlayerHost extends GamePlayState {
 
       double randomNum = random.nextDouble();
       if (randomNum < 0.2) {
-        Bomb bomb = new Bomb(powerups, zombies);
+        Bomb bomb = new Bomb(powerups, zombies, players);
         this.powerups.put(bomb.getID(), bomb);
         this.server.sendNewPowerup(bomb);
       } else if (randomNum < 0.4 && randomNum >= 0.2) {
