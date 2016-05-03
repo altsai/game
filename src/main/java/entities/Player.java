@@ -363,6 +363,17 @@ public class Player extends Entity implements PlayerAction {
     checkActionKey(gc.getInput());
   }
 
+  public void updateAndControlTwoPlayerSameScreen(GameContainer gc, int delta) {
+    update(gc, delta);
+    if (this.isPlayer1()) {
+      move(gc.getInput(), delta, PLAYER1_CONTROLS);
+    } else {
+      move(gc.getInput(), delta, PLAYER2_CONTROLS);
+    }
+
+    checkActionKeyTwoPlayerSameScreen(gc.getInput());
+  }
+
   /**
    * Method that checks if the user has pressed an action key
    *
@@ -388,6 +399,18 @@ public class Player extends Entity implements PlayerAction {
     // }
     // }
     // }
+  }
+
+  private void checkActionKeyTwoPlayerSameScreen(Input input) {
+    if (this.isPlayer1) {
+      if (input.isKeyPressed(Input.KEY_LSHIFT)) {
+        usePowerup();
+      }
+    } else {
+      if (input.isKeyPressed(Input.KEY_RCONTROL)) {
+        usePowerup();
+      }
+    }
   }
 
   @Override

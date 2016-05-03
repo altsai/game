@@ -29,7 +29,7 @@ public class TwoPlayerEndGame extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    g.drawString(this.gps.getLoser(), 100, 300);
+    g.drawString(this.gps.getLoser() + " Lost", 100, 300);
     g.drawString("Hit esc to go back to Menu", 100, 200);
   }
 

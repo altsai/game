@@ -106,6 +106,9 @@ public class MenuState extends BasicGameState {
     } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
       s.getState(States.HIGH_SCORES).init(gc, s);
       s.enterState(States.HIGH_SCORES);
+    } else if (gc.getInput().isKeyPressed(Input.KEY_4)) {
+      s.getState(States.TWO_PLAYER).init(gc, s);
+      s.enterState(States.TWO_PLAYER);
     }
   }
 

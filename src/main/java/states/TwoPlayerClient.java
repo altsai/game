@@ -222,7 +222,8 @@ public class TwoPlayerClient extends GamePlayState {
     return;
   }
 
-  private void updatePowerups(GameContainer gc, int delta) {
+  @Override
+  protected void updatePowerups(GameContainer gc, int delta) {
 
     // DO NOT USE ENHANCED FOR LOOP HERE. IDK WHY BUT THERES A THREADING ISSUE
     // PLS DO NOT CHANGE...

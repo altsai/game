@@ -2,6 +2,7 @@ package states;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -13,6 +14,7 @@ import entities.Player;
 import entities.Zombie;
 import powerups.Bomb;
 import powerups.Jail;
+import powerups.LaserBeam;
 import powerups.Speed;
 import powerups.TimeStop;
 
@@ -33,8 +35,10 @@ public class TwoPlayerGameState extends GamePlayState {
     // instantiate two new players and add them
     Player player1 = new Player(null, "player1");
     player1.setPlayer1(true);
+    player1.setID("0");
     Player player2 = new Player(null, "player2");
     player2.setPlayer1(false);
+    player2.setID("1");
 
     player2.setImage(Resources.getImage("player2"));
     this.players.put(player1.getID(), player1);
@@ -46,17 +50,41 @@ public class TwoPlayerGameState extends GamePlayState {
   }
 
   @Override
+  public void update(GameContainer gc, StateBasedGame s, int delta)
+      throws SlickException {
+    if (this.gameStart) {
+      elapsedTime += delta;
+
+      spawnZombie();
+      spawnPowerup();
+
+      for (Player p : this.players.values()) {
+        p.updateAndControlTwoPlayerSameScreen(gc, delta);
+      }
+
+      updateAndCheckCollisions(gc, s, delta);
+      updatePowerups(gc, delta);
+
+      // go to the home menu state when 'esc' is pressed
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        s.enterState(States.MENU);
+      }
+    }
+
+  }
+
+  @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
 
     super.render(gc, s, g);
 
-    g.drawString("Player1 has " + this.players.get(0).getLives() + " lives",
+    g.drawString("Player1 has " + this.players.get("0").getLives() + " lives",
         100, 100);
-    g.drawString("Player2 has " + this.players.get(1).getLives() + " lives",
+    g.drawString("Player2 has " + this.players.get("1").getLives() + " lives",
         300, 100);
-    g.drawString("Player1 speed: " + this.players.get(0).getSpeed(), 100, 50);
-    g.drawString("Player2 speed: " + this.players.get(1).getSpeed(), 300, 50);
+    g.drawString("Player1 speed: " + this.players.get("0").getSpeed(), 100, 50);
+    g.drawString("Player2 speed: " + this.players.get("1").getSpeed(), 300, 50);
 
     g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
   }
@@ -75,7 +103,7 @@ public class TwoPlayerGameState extends GamePlayState {
       if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
 
         // have a random player to target
-        Player target = this.players.get(random.nextInt(this.players.size()));
+        Player target = this.players.get(String.valueOf(random.nextInt(this.players.size())));
 
         // at any given time there is a 30% chance of multiple spawns
         if (random.nextInt(9) < 3) {
@@ -116,21 +144,26 @@ public class TwoPlayerGameState extends GamePlayState {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
       double randomNum = random.nextDouble();
-      if (randomNum < 0.33) {
-        Bomb bomb = new Bomb(powerups, zombies);
+      if (randomNum < 0.2) {
+        Bomb bomb = new Bomb(powerups, zombies, players);
         this.powerups.put(bomb.getID(), bomb);
-      } else if (randomNum < 0.6 && randomNum >= 0.33) {
+      } else if (randomNum < 0.4 && randomNum >= 0.2) {
         Speed speed = new Speed(powerups);
         this.powerups.put(speed.getID(), speed);
-      } else if (randomNum < 0.9 && randomNum >= 0.6) {
-        TimeStop timestop = new TimeStop(powerups, zombies, this);
+      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
         this.powerups.put(timestop.getID(), timestop);
+      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+        LaserBeam lb = new LaserBeam(powerups, zombies, players);
+        this.powerups.put(lb.getID(), lb);
+      } else {
+        Jail jail = new Jail(powerups, zombies, players);
+        this.powerups.put(jail.getID(), jail);
       }
-      Jail jail = new Jail(powerups, zombies, players);
-      this.powerups.put(jail.getID(), jail);
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
+
 
   }
 

@@ -19,6 +19,8 @@ import states.MenuState;
 import states.SinglePlayerEndGameState;
 import states.SinglePlayerGameState;
 import states.TwoPlayerClient;
+import states.TwoPlayerEndGame;
+import states.TwoPlayerGameState;
 import states.TwoPlayerHost;
 import states.TwoPlayerStartServer;
 
@@ -76,6 +78,8 @@ public class Main extends StateBasedGame {
     TwoPlayerHost twoPlayerHost = new TwoPlayerHost(twoPlayerStartServer);
     TwoPlayerClient twoPlayerClient = new TwoPlayerClient(twoPlayerStartServer);
 
+    TwoPlayerGameState twoPlayerSameScreen = new TwoPlayerGameState();
+
     this.addState(singlePlayer);
     this.addState(new MenuState());
     this.addState(new SinglePlayerEndGameState(singlePlayer, highscoreSystem));
@@ -85,5 +89,7 @@ public class Main extends StateBasedGame {
     this.addState(new HostEndGame(twoPlayerHost));
     this.addState(new ClientEndGame(twoPlayerClient));
     this.addState(twoPlayerStartServer);
+    this.addState(twoPlayerSameScreen);
+    this.addState(new TwoPlayerEndGame(twoPlayerSameScreen));
   }
 }

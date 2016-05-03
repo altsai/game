@@ -66,7 +66,7 @@ public abstract class GamePlayState extends BasicGameState {
 
   protected boolean gameEnd;
 
-  private int elapsedTime;
+  protected int elapsedTime;
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
@@ -170,7 +170,7 @@ public abstract class GamePlayState extends BasicGameState {
    *          Int, change in time since last update
    * @throws SlickException
    */
-  private void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
+  protected void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
       int delta) throws SlickException {
 
     // check for player collision with every entity
@@ -215,7 +215,7 @@ public abstract class GamePlayState extends BasicGameState {
    * @param gc
    * @param delta
    */
-  private void updatePowerups(GameContainer gc, int delta) {
+  protected void updatePowerups(GameContainer gc, int delta) {
     for (String pid : powerups.keySet()) {
       powerups.get(pid).update(gc, delta);
     }

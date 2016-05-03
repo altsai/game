@@ -318,7 +318,8 @@ public class TwoPlayerHost extends GamePlayState {
    * @param delta
    *          Int, change in time since last update
    */
-  private void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
+  @Override
+  protected void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
       int delta) {
 
     // TODO: Combine all zombies in alist and send the list as a packet
@@ -386,10 +387,11 @@ public class TwoPlayerHost extends GamePlayState {
    * @param gc
    * @param delta
    */
-  private void updatePowerups(GameContainer gc, int delta) {
+  @Override
+  protected void updatePowerups(GameContainer gc, int delta) {
 
-    // DO NOT USE ENHANCED FOR LOOP HERE. IDK WHY BUT THERES A THREADING ISSUE
-    // PLS DO NOT CHANGE...
+    // Do not use powerups.values() to iterate, we need to check
+    // if the powerup is removed from the hashmap during this method.
     for (String key : this.powerups.keySet()) {
       this.powerups.get(key).update(gc, delta);
       if (this.powerups.get(key) == null) {
