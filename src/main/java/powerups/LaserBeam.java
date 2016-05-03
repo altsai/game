@@ -1,22 +1,21 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Entity;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
-import server.GameServer;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
+import server.GameServer;
 
 public class LaserBeam extends Powerup {
 
@@ -121,7 +120,7 @@ public class LaserBeam extends Powerup {
     // call super.update() to check expiration time
     super.update(gc, delta);
 
-    if (this.isUsed) {
+    if (this.isUsed && laser != null) {
 
       // TODO advance along line of attack
       float x = laser.getX();

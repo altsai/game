@@ -1,11 +1,7 @@
 package states;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -22,14 +18,6 @@ import game_objects.Powerup;
 import server.GameClient;
 
 public class TwoPlayerClient extends GamePlayState {
-  //list of all entities in the game
-  private Map<String, Zombie> zombies;
-  private Map<String, Powerup> powerups;
-
-  private Set<Powerup> pickedUpPowerups;
-
-  // players in the game
-  private Map<String, Player> players;
 
   // list of constants
 
@@ -45,11 +33,8 @@ public class TwoPlayerClient extends GamePlayState {
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
-    // make sure all collections are concurrent
-    this.zombies = new ConcurrentHashMap<>();
-    this.powerups = new ConcurrentHashMap<>();
-    this.players = new ConcurrentHashMap<>();
-    this.pickedUpPowerups = new ConcurrentHashSet<>();
+    super.init(gc, s);
+
     this.hasClient = false;
     this.gameEnd = false;
 

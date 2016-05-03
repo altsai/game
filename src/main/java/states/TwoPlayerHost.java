@@ -5,12 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.jetty.util.ConcurrentHashSet;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -37,12 +32,6 @@ import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
 
 public class TwoPlayerHost extends GamePlayState {
-  // list of all entities in the game
-  private Map<String, Zombie> zombies;
-  private Map<String, Powerup> powerups;
-  private Set<Powerup> pickedUpPowerups;
-  // players in the game
-  private Map<String, Player> players;
 
   // list of constants
   private static final int ZOMBIE_SPAWN_DELAY = 1000;
@@ -51,17 +40,6 @@ public class TwoPlayerHost extends GamePlayState {
   private static final int MAX_DIFFICULTY_LEVEL = 15;
   private static final double SPEED_MULTIPLIER = 0.1;
 
-  private Random random;
-  private int difficultyLevel;
-  private String loser;
-
-  // timers
-  private long lastZombieSpawnTime;
-  private long lastPowerupSpawnTime;
-  private long lastDifficultyIncreaseTime;
-
-  // boolean to tell if game should be spawning
-  private boolean spawnOn;
 
   private GameServer server;
   private boolean errorMakingServer;
@@ -79,14 +57,8 @@ public class TwoPlayerHost extends GamePlayState {
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
-    this.zombies = new ConcurrentHashMap<>();
-    this.powerups = new ConcurrentHashMap<>();
-    this.pickedUpPowerups = new ConcurrentHashSet<>();
-    this.players = new ConcurrentHashMap<>();
-    this.random = new Random();
-    this.spawnOn = true;
-    this.loser = null;
-    this.difficultyLevel = 1;
+    super.init(gc, s);
+
     this.makeServer = false;
 
     Player p1 = new Player(null, "player1");
@@ -97,8 +69,6 @@ public class TwoPlayerHost extends GamePlayState {
     this.player1ID = p1.getID();
 
     this.players.put(p1.getID(), p1);
-    this.lastZombieSpawnTime = System.currentTimeMillis();
-    this.lastDifficultyIncreaseTime = System.currentTimeMillis();
 
     Font font = new Font("Arial", Font.BOLD, 20);
     ttf = new TrueTypeFont(font, true);
