@@ -80,8 +80,8 @@ public class Main extends StateBasedGame {
 
     TwoPlayerGameState twoPlayerSameScreen = new TwoPlayerGameState();
 
-    this.addState(singlePlayer);
     this.addState(new MenuState());
+    this.addState(singlePlayer);
     this.addState(new SinglePlayerEndGameState(singlePlayer, highscoreSystem));
     this.addState(new HighScoreState(highscoreSystem));
     this.addState(twoPlayerHost);
