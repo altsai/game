@@ -144,6 +144,16 @@ public class Zombie extends Entity {
      * Go through the player map and find the closest one,
      * set target to be that closest one
      */
+    double dist = Double.MAX_VALUE;
+    Circle closest = this.player;
+    for (Player p : this.allPlayers.values()) {
+      if (this.distTo(p) < dist) {
+        dist = this.distTo(p);
+        closest = p;
+      }
+    }
+
+    this.player = closest;
 
     followPlayer(delta);
 

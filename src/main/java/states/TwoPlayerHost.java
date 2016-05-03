@@ -21,6 +21,12 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
 import powerups.LaserBeam;
@@ -29,12 +35,6 @@ import powerups.TimeStop;
 import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Entity;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
 
 public class TwoPlayerHost extends GamePlayState {
   // list of all entities in the game
@@ -110,7 +110,9 @@ public class TwoPlayerHost extends GamePlayState {
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
-        server.deleteServer();
+        if (server != null) {
+          server.deleteServer();
+        }
       }
     });
   }
