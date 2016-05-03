@@ -22,11 +22,7 @@ import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.Bomb;
-import powerups.Jail;
 import powerups.LaserBeam;
-import powerups.Speed;
-import powerups.TimeStop;
 import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
@@ -436,28 +432,32 @@ public class TwoPlayerHost extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      double randomNum = random.nextDouble();
-      if (randomNum < 0.2) {
-        Bomb bomb = new Bomb(powerups, zombies, players);
-        this.powerups.put(bomb.getID(), bomb);
-        this.server.sendNewPowerup(bomb);
-      } else if (randomNum < 0.4 && randomNum >= 0.2) {
-        Speed speed = new Speed(powerups);
-        this.powerups.put(speed.getID(), speed);
-        this.server.sendNewPowerup(speed);
-      } else if (randomNum < 0.6 && randomNum >= 0.4) {
-        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
-        this.powerups.put(timestop.getID(), timestop);
-        this.server.sendNewPowerup(timestop);
-      } else if (randomNum < 0.8 && randomNum >= 0.6) {
-        LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-        this.powerups.put(lb.getID(), lb);
-        this.server.sendNewPowerup(lb);
-      } else {
-        Jail jail = new Jail(powerups, zombies, players);
-        this.powerups.put(jail.getID(), jail);
-        this.server.sendNewPowerup(jail);
-      }
+//      double randomNum = random.nextDouble();
+//      if (randomNum < 0.2) {
+//        Bomb bomb = new Bomb(powerups, zombies, players);
+//        this.powerups.put(bomb.getID(), bomb);
+//        this.server.sendNewPowerup(bomb);
+//      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+//        Speed speed = new Speed(powerups);
+//        this.powerups.put(speed.getID(), speed);
+//        this.server.sendNewPowerup(speed);
+//      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+//        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
+//        this.powerups.put(timestop.getID(), timestop);
+//        this.server.sendNewPowerup(timestop);
+//      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+//        LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
+//        this.powerups.put(lb.getID(), lb);
+//        this.server.sendNewPowerup(lb);
+//      } else {
+//        Jail jail = new Jail(powerups, zombies, players);
+//        this.powerups.put(jail.getID(), jail);
+//        this.server.sendNewPowerup(jail);
+//      }
+
+      LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
+    this.powerups.put(lb.getID(), lb);
+    this.server.sendNewPowerup(lb);
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }

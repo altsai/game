@@ -1,6 +1,5 @@
 package powerups;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -226,9 +225,11 @@ public class LaserBeam extends Powerup {
 
   @Override
   public List<Entity> getChildren() {
-    List<Entity> toReturn = new ArrayList<>();
-    toReturn.add(laser);
-    return toReturn;
+    if (laser != null) {
+      return Lists.newArrayList(laser);
+    } else {
+      return Lists.newArrayList();
+    }
   }
 
 }
