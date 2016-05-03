@@ -74,7 +74,7 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 30;
-    this.lives = 10;
+    this.lives = 1;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");

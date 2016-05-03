@@ -313,8 +313,7 @@ public class TwoPlayerHost extends GamePlayState {
           if (p.getLives() == 0) {
             this.loser = p.getName() + " Lost!!!";
             this.server.sendGameEnd(this.loser);
-
-            endGame(gc, s);
+            // do not call endGame here. The server handles this
           } else {
             p.loseLife();
 

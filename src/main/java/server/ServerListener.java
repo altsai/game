@@ -127,7 +127,9 @@ public class ServerListener extends Listener {
     this.endGame = true;
     if (this.connected) {
       this.connected = false;
-      this.game.setLoser("Connection lost");
+      if (this.game.getLoser() == null) {
+        this.game.setLoser("Connection lost");
+      }
       this.gs.close();
       this.s.enterState(States.HOST_END_GAME, new FadeOutTransition(),
           new FadeInTransition());

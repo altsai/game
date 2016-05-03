@@ -8,6 +8,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
@@ -204,7 +206,9 @@ public class TwoPlayerClient extends GamePlayState {
 
   @Override
   protected void endGame(GameContainer gc, StateBasedGame s) {
-    return;
+    s.enterState(States.CLIENT_END_GAME, new FadeOutTransition(),
+        new FadeInTransition());
+    this.client.close();
   }
 
   @Override
