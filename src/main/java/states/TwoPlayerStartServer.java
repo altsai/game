@@ -97,9 +97,17 @@ public class TwoPlayerStartServer extends BasicGameState {
     canScrollDown = false;
 
     if (!initializedTextFields) {
-      serverField = new TextField(gc, searchFont, (Window.width / 2 - entryFont.getWidth("Enter server number or name to join: ") - 200) / 2 + entryFont.getWidth("Enter server number or name to join: "), 20 + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
+      serverField = new TextField(gc
+          , searchFont
+          , (Window.width / 2 - entryFont.getWidth("Enter server number or name to join: ") - 200) / 2
+          + entryFont.getWidth("Enter server number or name to join: "), 20
+          + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
 
-      serverName = new TextField(gc, searchFont, (int) (Window.width * 1.5 - entryFont.getWidth("Enter server name to create: ") - 200) / 2 + entryFont.getWidth("Enter server name to create: "), 20 + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
+      serverName = new TextField(gc
+          , searchFont
+          , (int) (Window.width * 1.5 - entryFont.getWidth("Enter server name to create: ") - 200) / 2
+          + entryFont.getWidth("Enter server name to create: "), 20
+          + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
 
       initializedTextFields = true;
     }

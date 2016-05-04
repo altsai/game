@@ -17,10 +17,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.particles.ParticleSystem;
 
-import powerups.Bomb;
-import powerups.OnFire;
-import powerups.TimeStop;
-
 import com.google.common.collect.Lists;
 
 /**
@@ -256,22 +252,24 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public List<String> usePowerup() {
-    if (this.powerup instanceof Bomb) {
-      this.lastBombFired = System.currentTimeMillis();
-    }
-    if (this.powerup instanceof OnFire) {
-      emitter.setSize(EMITTER_SIZE);
-      this.lastFire = System.currentTimeMillis();
-    }
-    if (this.powerup instanceof TimeStop) {
-      this.lastTimeStop = System.currentTimeMillis();
-    }
-    if (this.powerup != null) {
+    if (this.powerup == null) {
+      return Lists.newArrayList();
+    } else {
+      switch (this.powerup.getPowerupIndex()) {
+      case Powerup.BOMB:
+        this.lastBombFired = System.currentTimeMillis();
+        break;
+      case Powerup.ON_FIRE:
+        emitter.setSize(EMITTER_SIZE);
+        this.lastFire = System.currentTimeMillis();
+        break;
+      case Powerup.TIMESTOP:
+        this.lastTimeStop = System.currentTimeMillis();
+        break;
+      }
       List<String> output = this.powerup.activate();
       this.powerup = null;
       return output;
-    } else {
-      return Lists.newArrayList();
     }
   }
 
