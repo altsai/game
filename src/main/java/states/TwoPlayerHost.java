@@ -16,16 +16,16 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.LaserBeam;
+import server.GameServer;
+import server.Network.ZombieMove;
+import server.Network.ZombieMoveList;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.LaserBeam;
-import server.GameServer;
-import server.Network.ZombieMove;
-import server.Network.ZombieMoveList;
 
 public class TwoPlayerHost extends GamePlayState {
 
@@ -35,7 +35,6 @@ public class TwoPlayerHost extends GamePlayState {
   private static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
   private static final int MAX_DIFFICULTY_LEVEL = 15;
   private static final double SPEED_MULTIPLIER = 0.1;
-
 
   private GameServer server;
   private boolean errorMakingServer;
@@ -431,32 +430,32 @@ public class TwoPlayerHost extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-//      double randomNum = random.nextDouble();
-//      if (randomNum < 0.2) {
-//        Bomb bomb = new Bomb(powerups, zombies, players);
-//        this.powerups.put(bomb.getID(), bomb);
-//        this.server.sendNewPowerup(bomb);
-//      } else if (randomNum < 0.4 && randomNum >= 0.2) {
-//        Speed speed = new Speed(powerups);
-//        this.powerups.put(speed.getID(), speed);
-//        this.server.sendNewPowerup(speed);
-//      } else if (randomNum < 0.6 && randomNum >= 0.4) {
-//        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
-//        this.powerups.put(timestop.getID(), timestop);
-//        this.server.sendNewPowerup(timestop);
-//      } else if (randomNum < 0.8 && randomNum >= 0.6) {
-//        LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-//        this.powerups.put(lb.getID(), lb);
-//        this.server.sendNewPowerup(lb);
-//      } else {
-//        Jail jail = new Jail(powerups, zombies, players);
-//        this.powerups.put(jail.getID(), jail);
-//        this.server.sendNewPowerup(jail);
-//      }
+      // double randomNum = random.nextDouble();
+      // if (randomNum < 0.2) {
+      // Bomb bomb = new Bomb(powerups, zombies, players);
+      // this.powerups.put(bomb.getID(), bomb);
+      // this.server.sendNewPowerup(bomb);
+      // } else if (randomNum < 0.4 && randomNum >= 0.2) {
+      // Speed speed = new Speed(powerups);
+      // this.powerups.put(speed.getID(), speed);
+      // this.server.sendNewPowerup(speed);
+      // } else if (randomNum < 0.6 && randomNum >= 0.4) {
+      // TimeStop timestop = new TimeStop(powerups, zombies, players, this);
+      // this.powerups.put(timestop.getID(), timestop);
+      // this.server.sendNewPowerup(timestop);
+      // } else if (randomNum < 0.8 && randomNum >= 0.6) {
+      // LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
+      // this.powerups.put(lb.getID(), lb);
+      // this.server.sendNewPowerup(lb);
+      // } else {
+      // Jail jail = new Jail(powerups, zombies, players);
+      // this.powerups.put(jail.getID(), jail);
+      // this.server.sendNewPowerup(jail);
+      // }
 
       LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-    this.powerups.put(lb.getID(), lb);
-    this.server.sendNewPowerup(lb);
+      this.powerups.put(lb.getID(), lb);
+      this.server.sendNewPowerup(lb);
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }

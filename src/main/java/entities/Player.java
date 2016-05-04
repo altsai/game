@@ -1,7 +1,14 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
+
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -10,15 +17,11 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.particles.ParticleSystem;
 
-import com.google.common.collect.Lists;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.OnFire;
 import powerups.TimeStop;
+
+import com.google.common.collect.Lists;
 
 /**
  * Defines the Player object.
@@ -55,6 +58,7 @@ public class Player extends Entity implements PlayerAction {
   private boolean immune;
   private ParticleSystem fireParticles;
   private FireEmitterCustom emitter;
+  private Map<String, Boolean> jails;
 
   private static final int ANIMATION_FRAME_TIME = 100;
 
@@ -93,6 +97,7 @@ public class Player extends Entity implements PlayerAction {
     this.immune = false;
     this.lastDir = 0;
     this.id = UUID.randomUUID().toString();
+    jails = new ConcurrentHashMap<>();
 
     initFire();
   }
@@ -558,5 +563,22 @@ public class Player extends Entity implements PlayerAction {
    */
   public float getLastDir() {
     return lastDir;
+  }
+
+  public void removeJail(String id) {
+    jails.remove(id);
+  }
+
+  public void addJail(String id) {
+    jails.put(id, true);
+  }
+
+  public boolean isJailed() {
+    for (String s : jails.keySet()) {
+      if (jails.get(s)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

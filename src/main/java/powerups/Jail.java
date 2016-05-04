@@ -1,5 +1,11 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
+
 import java.util.List;
 import java.util.Map;
 
@@ -9,17 +15,12 @@ import org.newdawn.slick.geom.Rectangle;
 
 import com.google.common.collect.Lists;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-
 public class Jail extends Powerup {
 
   public static final int JAIL_RADIUS = 230;
   private final int JAIL_LIFETIME = 5000;
   private boolean bombFired;
+  private boolean jailAlready;
 
   private Map<String, Player> players;
 
@@ -35,9 +36,12 @@ public class Jail extends Powerup {
   @Override
   public void render(GameContainer gc, Graphics g) {
     super.render(gc, g);
+    float jail_diam = JAIL_RADIUS * 2;
 
-    if ((activationStartTime != 0) && (this instanceof Jail)) {
-      float jail_diam = JAIL_RADIUS * 2;
+    if ((activationStartTime != 0) && jailAlready) {
+      g.draw(new Rectangle(other.getLeft(), other.getTop(), jail_diam,
+          jail_diam));
+    } else if (activationStartTime != 0) {
       float upperLeftX = otherx - JAIL_RADIUS;
       float upperLeftY = othery - JAIL_RADIUS;
       float lowerRightX = upperLeftX + jail_diam;
@@ -92,15 +96,17 @@ public class Jail extends Powerup {
   public List<String> activate() {
     other = otherPlayer(affectedPlayer);
     this.isUsed = true;
+    jailAlready = other.isJailed();
     this.activationStartTime = System.currentTimeMillis();
     otherx = other.getX();
     othery = other.getY();
+    other.addJail(this.id);
 
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
 
     // check that there is another player, set it to the boundary
-    if (other != null) {
+    if ((other != null) && !jailAlready) {
       float jail_diam = JAIL_RADIUS * 2;
       float upperLeftX = otherx - JAIL_RADIUS;
       float upperLeftY = othery - JAIL_RADIUS;
@@ -159,8 +165,11 @@ public class Jail extends Powerup {
         || (isUsed && bombFired)) {
 
       if (other != null) {
-        other.setBoundary(42, Window.height - (this.radius / 2), 12,
-            Window.width - (this.radius / 2));
+        other.removeJail(this.id);
+        if (!other.isJailed()) {
+          other.setBoundary(42, Window.height - (this.radius / 2), 12,
+              Window.width - (this.radius / 2));
+        }
       }
 
       // kill the powerup
