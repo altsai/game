@@ -16,9 +16,6 @@ import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import effects.FireEmitterCustom;
 import game_objects.Powerup;
-import powerups.Bomb;
-import powerups.OnFire;
-import powerups.TimeStop;
 
 /**
  * Defines the Player object.
@@ -251,22 +248,24 @@ public class Player extends Entity implements PlayerAction {
 
   @Override
   public List<String> usePowerup() {
-    if (this.powerup instanceof Bomb) {
-      this.lastBombFired = System.currentTimeMillis();
-    }
-    if (this.powerup instanceof OnFire) {
-      emitter.setSize(EMITTER_SIZE);
-      this.lastFire = System.currentTimeMillis();
-    }
-    if (this.powerup instanceof TimeStop) {
-      this.lastTimeStop = System.currentTimeMillis();
-    }
-    if (this.powerup != null) {
+    if (this.powerup == null) {
+      return Lists.newArrayList();
+    } else {
+      switch (this.powerup.getPowerupIndex()) {
+        case Powerup.BOMB:
+          this.lastBombFired = System.currentTimeMillis();
+          break;
+        case Powerup.ON_FIRE:
+          emitter.setSize(EMITTER_SIZE);
+          this.lastFire = System.currentTimeMillis();
+          break;
+        case Powerup.TIMESTOP:
+          this.lastTimeStop = System.currentTimeMillis();
+          break;
+      }
       List<String> output = this.powerup.activate();
       this.powerup = null;
       return output;
-    } else {
-      return Lists.newArrayList();
     }
   }
 

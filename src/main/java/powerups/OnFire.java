@@ -122,7 +122,7 @@ public class OnFire extends Powerup {
   public void deactivate() {
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= FIRE_TIME) {
-      if (affectedPlayer.getLastFire() == this.activationStartTime) {
+      if (affectedPlayer.getLastFire() <= this.activationStartTime) {
         affectedPlayer.revert();
       }
 
