@@ -82,8 +82,6 @@ public abstract class GamePlayState extends BasicGameState {
     this.spawnOn = true;
     this.loser = null;
     this.initialDelayTime = System.currentTimeMillis();
-
-    this.elapsedTime = 0;
   }
 
   public int getElapsedTime() {
@@ -110,8 +108,10 @@ public abstract class GamePlayState extends BasicGameState {
       g.drawString("Game begins in: "
           + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
     } else {
-      this.gameStart = true;
-
+      if (!this.gameStart) {
+        this.elapsedTime = 0;
+        this.gameStart = true;
+      }
 
       for (Powerup p : this.powerups.values()) {
         p.render(gc, g);

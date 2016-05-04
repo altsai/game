@@ -79,7 +79,7 @@ public class HighscoreSystem {
     return globalHandler.addScore(name, score, time);
   }
 
-  private String timeToString(int time) {
+  public static String timeToString(int time) {
     String timeString = "Unrecorded Time";
     if (time >= 60000 * 2) {
       long seconds = TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time));
@@ -98,7 +98,7 @@ public class HighscoreSystem {
     } else if (time >= 1000 * 2) {
       timeString = String.format("%d seconds", TimeUnit.MILLISECONDS.toSeconds(time));
     } else {
-      timeString = "1 second";
+      timeString = "0 second";
     }
 
     return timeString;

@@ -16,6 +16,7 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import highscore.HighscoreSystem;
 import powerups.OnFire;
 
 /**
@@ -61,6 +62,7 @@ public class SinglePlayerGameState extends GamePlayState {
 
     // Draw score
     ttf.drawString(15, 10, "Score", Color.black);
+    ttf.drawString(300, 10, getTimeSurvived());
     ttf2.drawString(80, 10, Integer.toString(this.getScore()), Color.green);
 
     // Draw current power-up in the middle
@@ -76,6 +78,10 @@ public class SinglePlayerGameState extends GamePlayState {
   @Override
   public int getID() {
     return States.SINGLE_PLAYER;
+  }
+
+  public String getTimeSurvived() {
+    return HighscoreSystem.timeToString(elapsedTime);
   }
 
   /**

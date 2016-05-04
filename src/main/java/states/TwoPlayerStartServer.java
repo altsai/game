@@ -84,7 +84,7 @@ public class TwoPlayerStartServer extends BasicGameState {
       throws SlickException {
     this.serverNames = new ArrayList<>();
     this.serverAddresses = new ArrayList<>();
-    
+
     // get the ipAddress of the player
     try {
       this.address = getIpAddress();
@@ -127,7 +127,7 @@ public class TwoPlayerStartServer extends BasicGameState {
    */
   private void getServers() throws SQLException {
     // select only servers with ip addresses in the same network
-    String query = "SELECT * FROM servers WHERE ip LIKE '" + 
+    String query = "SELECT * FROM servers WHERE ip LIKE '" +
         this.getSubnetStart() + "%" + "';";
     PreparedStatement prep = conn.prepareStatement(query);
     ResultSet rs = prep.executeQuery();
@@ -289,7 +289,8 @@ public class TwoPlayerStartServer extends BasicGameState {
         InetAddress addr = a.nextElement();
 
         if (addr.isSiteLocalAddress()) {
-          localAddr = addr.getHostAddress();
+          // this returns the first one found.... maybe it'll work for all cases?
+          return addr.getHostAddress();
         }
       }
     }
