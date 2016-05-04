@@ -17,6 +17,8 @@ public class HighscoreSystem {
   private LocalHandler localHandler;
   private GlobalHandler globalHandler;
 
+  private boolean isGlobal;
+
   /**
    * Creates a new local HighscoreSystem.
    *
@@ -28,6 +30,7 @@ public class HighscoreSystem {
    */
   public HighscoreSystem(String filename, int numScores) throws IOException, NumberFormatException, ParseException {
     localHandler = new LocalHandler(filename, numScores);
+    isGlobal = false;
   }
 
   /**
@@ -43,6 +46,16 @@ public class HighscoreSystem {
   public HighscoreSystem(String filename, int numScores, Connection conn) throws IOException, SQLException, NumberFormatException, ParseException {
     this.localHandler = new LocalHandler(filename, numScores);
     this.globalHandler = new GlobalHandler(conn);
+    isGlobal = true;
+  }
+
+  /**
+   * Gets if this HighscoreSystem is a global one or not.
+   *
+   * @return a boolean indicating whether or not this HighscoreSystem is global
+   */
+  public boolean isGlobal() {
+    return isGlobal;
   }
 
   /**
@@ -97,8 +110,10 @@ public class HighscoreSystem {
       }
     } else if (time >= 1000 * 2) {
       timeString = String.format("%d seconds", TimeUnit.MILLISECONDS.toSeconds(time));
+    } else if (time >= 1000) {
+      timeString = "1 second";
     } else {
-      timeString = "0 second";
+      timeString = "0 seconds";
     }
 
     return timeString;
