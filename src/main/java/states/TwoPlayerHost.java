@@ -16,16 +16,16 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.LaserBeam;
-import server.GameServer;
-import server.Network.ZombieMove;
-import server.Network.ZombieMoveList;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import powerups.LaserBeam;
+import server.GameServer;
+import server.Network.ZombieMove;
+import server.Network.ZombieMoveList;
 
 public class TwoPlayerHost extends GamePlayState {
 
@@ -238,7 +238,7 @@ public class TwoPlayerHost extends GamePlayState {
   private void moveZombies() {
     // change this to a list of arrays?
     if (this.server.getConnections().length > 0) {
-      if (this.zombies.size() > 9) {
+      if (this.zombies.size() > 100) {
         // break up the list into smaller lists of 10 to send
         List<ZombieMove> sentList = new LinkedList<>();
         for (Zombie z : this.zombies.values()) {
@@ -247,7 +247,7 @@ public class TwoPlayerHost extends GamePlayState {
           packet.x = z.getX();
           packet.y = z.getY();
           sentList.add(packet);
-          if (sentList.size() > 9) {
+          if (sentList.size() > 100) {
             ZombieMoveList listPacket = new ZombieMoveList();
             listPacket.list = sentList;
             this.server.getConnections()[0].sendTCP(listPacket);
