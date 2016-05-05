@@ -16,7 +16,7 @@ public class ZombieFormationBody extends Zombie {
       int off, double ang) {
     super(other, players);
     offset = off;
-    angle = Math.toRadians(Math.abs(ang) % 360);
+    angle = Math.toRadians(ang % 360);
     double leadX = leader.getX() + leader.getRadius() / 2;
     double leadY = leader.getY() + leader.getRadius() / 2;
 
@@ -67,25 +67,32 @@ public class ZombieFormationBody extends Zombie {
   }
 
   private void followLeader(int delta) {
+    if (leader.getSpeed() == 0) {
+      return;
+    }
+
+    double leaderAngle = ((ZombieFormationHead) leader).getLAngle();
+    double ang = Math.toRadians((angle + leaderAngle) % 360);
+
     double leadX = leader.getX() + leader.getRadius() / 2;
     double leadY = leader.getY() + leader.getRadius() / 2;
 
     double multX = 1;
     double multY = 1;
 
-    if ((angle > 90) && (angle < 270)) {
+    if ((ang > 90) && (ang < 270)) {
       multX = -1;
     }
 
-    if ((angle > 1800) && (angle < 360)) {
+    if ((ang > 1800) && (ang < 360)) {
       multY = -1;
     }
 
     float moveX = (float) (leadX + multX * (leader.getRadius() * (offset + .5))
-        * Math.cos(angle))
+        * Math.cos(ang))
         - (this.getRadius() / 2);
     float moveY = (float) (leadY + multY * (leader.getRadius() * (offset + .5))
-        * Math.sin(angle))
+        * Math.sin(ang))
         - (this.getRadius() / 2);
     moveTo(moveX, moveY);
   }

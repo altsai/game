@@ -39,12 +39,12 @@ public class Zombie extends Entity {
   protected double initial_speed;
 
   // zombies keep track of a player and a specific target area of the player.
-  private Circle player;
+  protected Circle player;
 
   protected ParticleSystem fireParticles;
   protected FireEmitterCustom emitter;
 
-  private Map<String, Player> allPlayers;
+  protected Map<String, Player> allPlayers;
 
   /**
    * Method that checks if the zombie is within a radius of the player.
@@ -190,7 +190,7 @@ public class Zombie extends Entity {
    * @param delta
    *          Int, difference between last update time and now
    */
-  private void followPlayer(int delta) {
+  protected void followPlayer(int delta) {
 
     float playerX = this.player.getX();
     float playerY = this.player.getY();
