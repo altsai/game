@@ -72,7 +72,7 @@ public class ZombieFormationBody extends Zombie {
     }
 
     double leaderAngle = ((ZombieFormationHead) leader).getLAngle();
-    double ang = Math.toRadians((angle + leaderAngle) % 360);
+    double ang = Math.toRadians((Math.toDegrees(angle) + leaderAngle) % 360);
 
     double leadX = leader.getX() + leader.getRadius() / 2;
     double leadY = leader.getY() + leader.getRadius() / 2;
@@ -84,7 +84,9 @@ public class ZombieFormationBody extends Zombie {
       multX = -1;
     }
 
-    if ((ang > 1800) && (ang < 360)) {
+    if ((ang > 180) && (ang < 360)) {
+      multY = -1;
+    } else if ((ang > 90) && (ang < 180)) {
       multY = -1;
     }
 
