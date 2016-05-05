@@ -166,6 +166,7 @@ public class SinglePlayerGameState extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
+
       double randomNum = random.nextDouble();
       if (randomNum < .16) {
         Bomb bomb = new Bomb(powerups, zombies);
