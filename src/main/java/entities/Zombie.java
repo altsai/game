@@ -1,5 +1,10 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Circle;
+
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -9,11 +14,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Maps;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Circle;
 
 /**
  * Defines the zombie object.
@@ -36,23 +36,22 @@ public class Zombie extends Entity {
     setSpawn();
   }
 
-  private double initial_speed;
+  protected double initial_speed;
 
   // zombies keep track of a player and a specific target area of the player.
   private Circle player;
 
-  private ParticleSystem fireParticles;
-  private FireEmitterCustom emitter;
+  protected ParticleSystem fireParticles;
+  protected FireEmitterCustom emitter;
 
   private Map<String, Player> allPlayers;
-
 
   /**
    * Method that checks if the zombie is within a radius of the player.
    *
    * Used to protect players from zombie spawns.
    *
-   * @return  boolean, true if the zombie is within radius, else false.
+   * @return boolean, true if the zombie is within radius, else false.
    */
   private boolean inPlayerRadius() {
     // check the player map for multiplayer
@@ -102,14 +101,15 @@ public class Zombie extends Entity {
     initFire();
   }
 
-  private void initFire() {
+  protected void initFire() {
     fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
-    //    File xmlFile = new File("particle/fire.xml");
+    // File xmlFile = new File("particle/fire.xml");
     try {
-      //      ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
-      //      emitter.setPosition(this.radius / 2, this.radius / 2);
-      //      fireParticles.addEmitter(emitter);
-      emitter = new FireEmitterCustom((int) this.radius / 2, (int) this.radius / 2, 10);
+      // ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
+      // emitter.setPosition(this.radius / 2, this.radius / 2);
+      // fireParticles.addEmitter(emitter);
+      emitter = new FireEmitterCustom((int) this.radius / 2,
+          (int) this.radius / 2, 10);
       fireParticles.addEmitter(emitter);
       fireParticles.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
     } catch (Exception e) {
@@ -137,12 +137,12 @@ public class Zombie extends Entity {
   @Override
   public void update(GameContainer gc, int delta) {
 
-    //TODO: If we want the zombie to follow the closest player
+    // TODO: If we want the zombie to follow the closest player
     // instead of randomly selecting one, change here.
 
     /*
-     * Go through the player map and find the closest one,
-     * set target to be that closest one
+     * Go through the player map and find the closest one, set target to be that
+     * closest one
      */
     double dist = Double.MAX_VALUE;
     Circle closest = this.player;
