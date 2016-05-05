@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+import javax.swing.JOptionPane;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -32,11 +34,16 @@ public class Main extends StateBasedGame {
   private Connection conn;
   private HighscoreSystem highscoreSystem;
 
-  public Main() throws ClassNotFoundException, SQLException, IOException, NumberFormatException, ParseException {
+  public Main() throws NumberFormatException, IOException, ParseException {
     super("Survival game");
 
-    conn = instantiateConnection();
-    this.highscoreSystem = new HighscoreSystem("highscores.txt", 10, conn);
+    try {
+      conn = instantiateConnection();
+      this.highscoreSystem = new HighscoreSystem("highscores.txt", 10, conn);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Unable to connect to the internet. The game is now running in offline mode.\nTo run in online mode, fix your connection and restart the game.", "Connection Error", JOptionPane.WARNING_MESSAGE);
+      this.highscoreSystem = new HighscoreSystem("highscores.txt", 10);
+    }
   }
 
   private Connection instantiateConnection() throws SQLException,
@@ -57,7 +64,7 @@ public class Main extends StateBasedGame {
       AppGameContainer app = new AppGameContainer(new Main());
       app.setDisplayMode(Window.width, Window.height, false);
       app.start();
-    } catch (SlickException | ClassNotFoundException | SQLException
+    } catch (SlickException
         | IOException | NumberFormatException | ParseException e) {
       e.printStackTrace();
     }
@@ -80,15 +87,17 @@ public class Main extends StateBasedGame {
 
     TwoPlayerGameState twoPlayerSameScreen = new TwoPlayerGameState();
 
-    this.addState(new MenuState());
+    this.addState(new MenuState(highscoreSystem));
     this.addState(singlePlayer);
     this.addState(new SinglePlayerEndGameState(singlePlayer, highscoreSystem));
     this.addState(new HighScoreState(highscoreSystem));
-    this.addState(twoPlayerHost);
-    this.addState(twoPlayerClient);
-    this.addState(new HostEndGame(twoPlayerHost));
-    this.addState(new ClientEndGame(twoPlayerClient));
-    this.addState(twoPlayerStartServer);
+    if (highscoreSystem.isGlobal()) {
+      this.addState(twoPlayerHost);
+      this.addState(twoPlayerClient);
+      this.addState(new HostEndGame(twoPlayerHost));
+      this.addState(new ClientEndGame(twoPlayerClient));
+      this.addState(twoPlayerStartServer);
+    }
     this.addState(twoPlayerSameScreen);
     this.addState(new TwoPlayerEndGame(twoPlayerSameScreen));
   }

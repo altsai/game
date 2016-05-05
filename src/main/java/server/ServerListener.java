@@ -188,12 +188,12 @@ public class ServerListener extends Listener {
 
       List<String> removed = p.usePowerup();
 
-      if (removed.size() > 9) {
+      if (removed.size() > 49) {
         // break up the list into smaller lists of 10 to send
         List<String> idGroup = new LinkedList<>();
         for (String z : removed) {
           idGroup.add(z);
-          if (idGroup.size() > 9) {
+          if (idGroup.size() > 49) {
             ZombieDie packet = new ZombieDie();
             packet.idList = idGroup;
             this.server.getConnections()[0].sendTCP(packet);

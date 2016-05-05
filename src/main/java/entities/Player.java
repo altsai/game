@@ -1,10 +1,5 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Powerup;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -18,6 +13,11 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Lists;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
 
 /**
  * Defines the Player object.
@@ -74,7 +74,7 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 30;
-    this.lives = 10;
+    this.lives = 5;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");

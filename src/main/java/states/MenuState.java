@@ -2,6 +2,8 @@ package states;
 
 import java.awt.Font;
 
+import javax.swing.JOptionPane;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -13,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
+import highscore.HighscoreSystem;
 
 /**
  * Defines the Menu state of the game.
@@ -27,6 +30,12 @@ public class MenuState extends BasicGameState {
 
   private TrueTypeFont ttf;
   private TrueTypeFont ttf2;
+
+  private HighscoreSystem highscoreSystem;
+
+  public MenuState(HighscoreSystem highscoreSystem) {
+    this.highscoreSystem = highscoreSystem;
+  }
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
@@ -87,8 +96,12 @@ public class MenuState extends BasicGameState {
         s.enterState(States.SINGLE_PLAYER);
       } else if (posY >= Window.height / 8 + 300
           && posY <= Window.height / 8 + 300 + BUTTON_HEIGHT) {
-        s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
-        s.enterState(States.TWO_PLAYER_START_SERVER);
+        if (highscoreSystem.isGlobal()) {
+          s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
+          s.enterState(States.TWO_PLAYER_START_SERVER);
+        } else {
+          JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+        }
       } else if (posY >= Window.height / 8 + 400
           && posY <= Window.height / 8 + 400 + BUTTON_HEIGHT) {
         s.getState(States.HIGH_SCORES).init(gc, s);
@@ -101,8 +114,12 @@ public class MenuState extends BasicGameState {
       s.getState(States.SINGLE_PLAYER).init(gc, s);
       s.enterState(States.SINGLE_PLAYER);
     } else if (gc.getInput().isKeyPressed(Input.KEY_2)) {
-      s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
-      s.enterState(States.TWO_PLAYER_START_SERVER);
+      if (highscoreSystem.isGlobal()) {
+        s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
+        s.enterState(States.TWO_PLAYER_START_SERVER);
+      } else {
+        JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+      }
     } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
       s.getState(States.HIGH_SCORES).init(gc, s);
       s.enterState(States.HIGH_SCORES);

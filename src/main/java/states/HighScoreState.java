@@ -3,6 +3,8 @@ package states;
 import java.awt.Font;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -84,13 +86,13 @@ public class HighScoreState extends BasicGameState {
   @Override
   public void init(GameContainer gc, StateBasedGame s)
       throws SlickException {
-    // TODO Auto-generated method stub
-
     // Get global highscores and local highscores
-    globalHighscores = highscoreSystem.getGlobalScores();
-    globalHighscoresOfDay = highscoreSystem.getGlobalScoresOfDay();
-    globalHighscoresOfMonth = highscoreSystem.getGlobalScoresOfMonth();
-    globalHighscoresOfYear = highscoreSystem.getGlobalScoresOfYear();
+    if (highscoreSystem.isGlobal()) {
+      globalHighscores = highscoreSystem.getGlobalScores();
+      globalHighscoresOfDay = highscoreSystem.getGlobalScoresOfDay();
+      globalHighscoresOfMonth = highscoreSystem.getGlobalScoresOfMonth();
+      globalHighscoresOfYear = highscoreSystem.getGlobalScoresOfYear();
+    }
     localHighscores = highscoreSystem.getLocalScores();
 
     if (!initializedSearchField) {
@@ -366,16 +368,32 @@ public class HighScoreState extends BasicGameState {
       setTable("local");
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_2) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH + 20 && posX <= buttonsX + BUTTON_WIDTH * 2 + 20)) {
-      setTable("year");
+      if (highscoreSystem.isGlobal()) {
+        setTable("year");
+      } else {
+        JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+      }
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_3) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH * 2 + 20 * 2 && posX <= buttonsX + BUTTON_WIDTH * 3 + 20 * 2)) {
-      setTable("month");
+      if (highscoreSystem.isGlobal()) {
+        setTable("month");
+      } else {
+        JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+      }
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_4) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH * 3 + 20 * 3 && posX <= buttonsX + BUTTON_WIDTH * 4 + 20 * 3)) {
-      setTable("day");
+      if (highscoreSystem.isGlobal()) {
+        setTable("day");
+      } else {
+        JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+      }
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_5) && !searchField.hasFocus()) || (inY && posX >= buttonsX + BUTTON_WIDTH * 4 + 20 * 4 && posX <= buttonsX + BUTTON_WIDTH * 5 + 20 * 4)) {
-      setTable("all-time");
+      if (highscoreSystem.isGlobal()) {
+        setTable("all-time");
+      } else {
+        JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+      }
     }
 
     // Moving up and down

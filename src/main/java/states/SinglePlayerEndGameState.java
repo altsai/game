@@ -103,7 +103,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
       }
     }
 
-    if (bestHighscore) {
+    if (bestHighscore && highscoreSystem.isGlobal()) {
       currHeight += textFont.getLineHeight() + 10;
       String toDraw = "New best score! Enter the name you would like to be associated with this score on the global highscores board below:";
       textFont.drawString((Window.width - textFont.getWidth(toDraw)) / 2, currHeight, toDraw, Color.black);
