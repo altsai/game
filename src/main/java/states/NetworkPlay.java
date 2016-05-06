@@ -120,12 +120,14 @@ public abstract class NetworkPlay extends GamePlayState {
    * @param delta     Integer, time elapsed since last update
    */
   protected void updateChat(GameContainer gc, StateBasedGame s, int delta) {
-    if (gc.getInput().isKeyPressed(Input.KEY_T)) {
-      if (!isTyping) {
-        isTyping = true;
-        this.currentText.setFocus(true);
-        this.currentText.setText("");
-      }
+    if (gc.getInput().isKeyPressed(Input.KEY_T) && !isTyping) {
+      isTyping = true;
+      this.currentText.setFocus(true);
+      this.currentText.setText("");
+    }
+
+    if (isTyping && this.currentText.hasFocus()) {
+      gc.getInput().isKeyPressed(Input.KEY_C);
     }
 
     if (isTyping && currentText.hasFocus()) {
