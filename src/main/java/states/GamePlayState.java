@@ -15,6 +15,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
@@ -156,11 +157,15 @@ public abstract class GamePlayState extends BasicGameState {
       for (String id : zombieFormations.keySet()) {
         if (zombies.get(id) == null) {
           breakFormation = true;
-        } else {
-          for (int i = 0; i < zombieFormations.get(id).size(); i++) {
-            if (zombies.get(zombieFormations.get(id).get(i)) == null) {
-              breakFormation = true;
-            }
+        }
+
+        for (int i = 0; i < zombieFormations.get(id).size(); i++) {
+          Zombie z = zombies.get(zombieFormations.get(id).get(i));
+          if (z == null) {
+            breakFormation = true;
+          } else if (z.getTarget() instanceof BlackHole) {
+            breakFormation = false;
+            break;
           }
         }
 

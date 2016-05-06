@@ -1,5 +1,10 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Zombie;
+import entities.ZombieFormationBody;
+import game_objects.Powerup;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +15,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import game_objects.Powerup;
 import states.GamePlayState;
 
 /**
@@ -28,8 +30,6 @@ public class BlackHole extends Powerup {
    * Reference to the list of zombies in the game.
    */
   private Map<String, Zombie> zombies;
-
-
 
   /**
    * Reference to the game.
@@ -57,7 +57,8 @@ public class BlackHole extends Powerup {
    * @param gps
    *          the GamePlayState
    */
-  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z, GamePlayState gps) {
+  public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z,
+      GamePlayState gps) {
     super(p);
     // TODO animation
     zombies = z;
@@ -77,12 +78,11 @@ public class BlackHole extends Powerup {
     if (this.isUsed) {
 
       // trigger animation
-      //imageLarge.draw(this.x - 40, this.y - 40, 100, 100);
+      // imageLarge.draw(this.x - 40, this.y - 40, 100, 100);
       animation.getCurrentFrame().setRotation(currAngle);
       animation.getCurrentFrame().draw(this.x - 80, this.y - 80, 200, 200);
       animation.draw(-10000, -10000);
     }
-
 
   }
 
@@ -102,7 +102,7 @@ public class BlackHole extends Powerup {
       }
 
       // rotate image
-      //imageLarge.rotate(.05f * delta);
+      // imageLarge.rotate(.05f * delta);
       currAngle += 1;
       animation.update(delta);
     }
@@ -130,6 +130,9 @@ public class BlackHole extends Powerup {
 
     // set target of all Zombies to the BlackHole
     for (Zombie z : this.zombies.values()) {
+      if (z instanceof ZombieFormationBody) {
+        z.setSpeed(.9);
+      }
       z.setTarget(this);
     }
 
@@ -138,15 +141,16 @@ public class BlackHole extends Powerup {
 
   @Override
   public void deactivate() {
-    //    if (this.isUsed && zombies.size() == 0) {
-    //      this.game.setSpawnOn(true);
+    // if (this.isUsed && zombies.size() == 0) {
+    // this.game.setSpawnOn(true);
     //
-    //      // kill the Powerup
-    //      kill();
-    //    }
+    // // kill the Powerup
+    // kill();
+    // }
 
     // the effects only last for 3 seconds now
-    if (this.isUsed && (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION)) {
+    if (this.isUsed
+        && (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION)) {
       for (Zombie z : this.zombies.values()) {
 
         // this check is necessary in case the use uses two blackholes in a row
