@@ -1,17 +1,12 @@
 package states;
 
-import java.awt.Font;
 import java.io.IOException;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -21,11 +16,10 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
-import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import server.GameClient;
 
-public class TwoPlayerClient extends GamePlayState {
+public class TwoPlayerClient extends NetworkPlay {
 
   // list of constants
 
@@ -35,11 +29,6 @@ public class TwoPlayerClient extends GamePlayState {
   private String playerID;
   private TwoPlayerStartServer twoPlayerStartServer;
 
-  private Queue<PlayerMessage> messages;
-  private TextField currentText;
-  private boolean isTyping;
-  private boolean chatOn;
-  private TrueTypeFont ttf;
 
   public TwoPlayerClient(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
@@ -49,16 +38,8 @@ public class TwoPlayerClient extends GamePlayState {
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     super.init(gc, s);
 
-    Font font = new Font("Arial", Font.BOLD, 20);
-    ttf = new TrueTypeFont(font, true);
-
     this.hasClient = false;
     this.gameEnd = false;
-    this.messages = new ConcurrentLinkedQueue<>();
-    this.currentText = new TextField(gc, ttf, 500, 400, 400, 25);
-    this.currentText.setMaxLength(120);
-    this.isTyping = false;
-    this.chatOn = true;
 
     // add the second player to the player array
     Player p2 = new Player(null, "player2");
@@ -148,7 +129,7 @@ public class TwoPlayerClient extends GamePlayState {
         }
 
         if (this.chatOn) {
-          renderChat(gc, g);
+          renderChat(gc, g, this.playerID);
         }
 
       }
@@ -156,20 +137,24 @@ public class TwoPlayerClient extends GamePlayState {
 
   }
 
+  @Override
+  protected void updateChat(GameContainer gc, StateBasedGame s, int delta) {
+    super.updateChat(gc, s, delta);
+    if (this.isTyping) {
+      if (gc.getInput().isKeyPressed(Input.KEY_T)
+          && this.currentText.getText().length() == 0) {
+        this.isTyping = false;
 
-  private void renderChat(GameContainer gc, Graphics g) {
-    float x = 20;
-    float y = 300;
-    for (PlayerMessage m : this.messages) {
-      if (m.playerID.equals(this.playerID)) {
-        g.setColor(Color.white);
-        g.drawString("YOU: " + m.message, x, y);
-      } else {
-        g.setColor(Color.cyan);
-        g.drawString("P2: " + m.message, x, y);
+        // if user presses enter while in current text, send text.
+      } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+        String message = this.currentText.getText();
+        if (message.length() > 0) {
+          this.client.sendMessage(message);
+          this.addMessageToQueue(message, this.playerID);
+        }
+        this.isTyping = false;
+        this.currentText.setText("");
       }
-      g.setColor(Color.black);
-      y += 20;
     }
   }
 
@@ -204,18 +189,7 @@ public class TwoPlayerClient extends GamePlayState {
     if (this.gameStart && this.client.isConnected() && this.players.size() == 2) {
       // update the client player and send position to host
 
-      if (gc.getInput().isKeyPressed(Input.KEY_T)) {
-        if (!isTyping) {
-          isTyping = true;
-          this.currentText.setFocus(true);
-          this.currentText.setText("");
-        }
-      }
-
-      if (gc.getInput().isKeyPressed(Input.KEY_C)) {
-        this.chatOn = !this.chatOn;
-      }
-
+      this.updateChat(gc, s, delta);
 
       if (!isTyping) {
         // check the player ID, only control the one that client should be controlling
@@ -225,20 +199,6 @@ public class TwoPlayerClient extends GamePlayState {
           } else {
             p.update(gc, delta);
           }
-        }
-      } else {
-        if (gc.getInput().isKeyPressed(Input.KEY_T)
-            && this.currentText.getText().length() == 0) {
-          this.isTyping = false;
-
-          // if user presses enter while in current text, send text.
-        } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
-          String message = this.currentText.getText();
-          if (message.length() > 0) {
-            this.client.sendMessage(message);
-          }
-          this.isTyping = false;
-          this.currentText.setText("");
         }
       }
 
@@ -252,10 +212,8 @@ public class TwoPlayerClient extends GamePlayState {
       if (this.gameEnd) {
         endGame(gc, s);
       }
-
       updatePowerups(gc, delta);
     }
-
 
     // go to the home menu state when 'esc' is pressed
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {

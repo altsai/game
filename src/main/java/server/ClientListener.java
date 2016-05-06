@@ -36,6 +36,7 @@ import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
 import server.Network.ZombieNew;
 import states.GamePlayState;
+import states.NetworkPlay;
 import states.States;
 
 /**
@@ -321,7 +322,7 @@ public class ClientListener extends Listener {
 
       synchronized (this.messages) {
         // make sure we only hold 5 messages
-        if (this.messages.size() == 5) {
+        if (this.messages.size() == NetworkPlay.CHAT_CACHE_LENGTH) {
           this.messages.poll();
         }
         this.messages.add(message);

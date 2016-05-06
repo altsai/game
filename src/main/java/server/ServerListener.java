@@ -24,6 +24,7 @@ import server.Network.PlayerUpdate;
 import server.Network.UsePowerup;
 import server.Network.ZombieDie;
 import states.GamePlayState;
+import states.NetworkPlay;
 import states.States;
 
 /**
@@ -191,7 +192,7 @@ public class ServerListener extends Listener {
 
       synchronized (this.messages) {
         // make sure we only hold 5 messages
-        if (this.messages.size() == 5) {
+        if (this.messages.size() == NetworkPlay.CHAT_CACHE_LENGTH) {
           this.messages.poll();
         }
         this.messages.add(message);

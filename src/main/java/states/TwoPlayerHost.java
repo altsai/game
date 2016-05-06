@@ -1,22 +1,15 @@
 package states;
 
-import java.awt.Font;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -26,7 +19,6 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
-import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
@@ -37,33 +29,16 @@ import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
 
-public class TwoPlayerHost extends GamePlayState {
+public class TwoPlayerHost extends NetworkPlay {
 
-  // list of constants
-  private static final int ZOMBIE_SPAWN_DELAY = 1000;
-  private static final int POWERUP_SPAWN_DELAY = 5000;
-  private static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
-  private static final int MAX_DIFFICULTY_LEVEL = 15;
-  private static final double SPEED_MULTIPLIER = 0.1;
 
   private GameServer server;
   private boolean errorMakingServer;
   private boolean makeServer;
   private String player1ID;
 
-  // map that keep track of the last player's attributes
-  // used to decide whether or not an update is needed
-  private Map<String, Player> previousPlayers;
-  private Queue<PlayerMessage> messages;
-  private TextField currentText;
-  private boolean isTyping;
-  private boolean chatOn;
-
-
   private Connection conn;
   private TwoPlayerStartServer twoPlayerStartServer;
-
-  private TrueTypeFont ttf;
 
   public TwoPlayerHost(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
@@ -86,16 +61,7 @@ public class TwoPlayerHost extends GamePlayState {
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     super.init(gc, s);
 
-    Font font = new Font("Arial", Font.BOLD, 20);
-    ttf = new TrueTypeFont(font, true);
-
     this.makeServer = false;
-    this.previousPlayers = new ConcurrentHashMap<>();
-    this.messages = new ConcurrentLinkedQueue<>();
-    this.currentText = new TextField(gc, ttf, 500, 400, 400, 25);
-    this.currentText.setMaxLength(120);
-    this.isTyping = false;
-    this.chatOn = true;
 
     Player p1 = new Player(null, "player1");
     p1.setPlayer1(true);
@@ -104,10 +70,9 @@ public class TwoPlayerHost extends GamePlayState {
     // explicitly set the id of the first player to "0"
     p1.setID("0");
     this.player1ID = p1.getID();
+    this.playerID = p1.getID();
 
     this.players.put(p1.getID(), p1);
-
-
 
     monitorShutdown();
   }
@@ -203,7 +168,7 @@ public class TwoPlayerHost extends GamePlayState {
         }
 
         if (this.chatOn) {
-          renderChat(gc, g);
+          renderChat(gc, g, this.playerID);
         }
 
       }
@@ -211,21 +176,27 @@ public class TwoPlayerHost extends GamePlayState {
 
   }
 
-  private void renderChat(GameContainer gc, Graphics g) {
-    float x = 20;
-    float y = 300;
-    for (PlayerMessage m : this.messages) {
-      if (m.playerID.equals(this.player1ID)) {
-        g.setColor(Color.white);
-        g.drawString("YOU: " + m.message, x, y);
-      } else {
-        g.setColor(Color.cyan);
-        g.drawString("P2: " + m.message, x, y);
+  @Override
+  protected void updateChat(GameContainer gc, StateBasedGame s, int delta) {
+    super.updateChat(gc, s, delta);
+    if (this.isTyping) {
+      if (gc.getInput().isKeyPressed(Input.KEY_T)
+          && this.currentText.getText().length() == 0) {
+        this.isTyping = false;
+
+        // if user presses enter while in current text, send text.
+      } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+        String message = this.currentText.getText();
+        if (message.length() > 0) {
+          this.server.sendMessage(message);
+          this.addMessageToQueue(message, this.playerID);
+        }
+        this.isTyping = false;
+        this.currentText.setText("");
       }
-      g.setColor(Color.black);
-      y += 20;
     }
   }
+
 
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
@@ -254,17 +225,8 @@ public class TwoPlayerHost extends GamePlayState {
       spawnZombie();
       spawnPowerup();
 
-      if (gc.getInput().isKeyPressed(Input.KEY_T)) {
-        if (!isTyping) {
-          isTyping = true;
-          this.currentText.setFocus(true);
-          this.currentText.setText("");
-        }
-      }
+      this.updateChat(gc, s, delta);
 
-      if (gc.getInput().isKeyPressed(Input.KEY_C)) {
-        this.chatOn = !this.chatOn;
-      }
 
       // if not currently typing, allow movement
       if (!this.isTyping) {
@@ -274,20 +236,6 @@ public class TwoPlayerHost extends GamePlayState {
           } else {
             p.update(gc, delta);
           }
-        }
-      } else {
-        if (gc.getInput().isKeyPressed(Input.KEY_T)
-            && this.currentText.getText().length() == 0) {
-          this.isTyping = false;
-
-          // if user presses enter while in current text, send text.
-        } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
-          String message = this.currentText.getText();
-          if (message.length() > 0) {
-            this.server.sendMessage(message);
-          }
-          this.isTyping = false;
-          this.currentText.setText("");
         }
       }
 
@@ -379,35 +327,25 @@ public class TwoPlayerHost extends GamePlayState {
   protected void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
       int delta) {
 
-    // TODO: Combine all zombies in alist and send the list as a packet
-
     // check for player collision with every entity
     for (Zombie z : this.zombies.values()) {
       z.update(gc, delta);
 
       boolean onFire = z.isOnFire();
 
-      // update the zombie's position and state on the client
-      // might be able to optimize by having moveZombie take in a hashmap
-      // process into smaller lists, and then send lists instead of individual
-      // zombi
-
       // check player's lives and mark invincible as necessary
       for (Player p : this.players.values()) {
 
         if (p.isCollision(z) && !onFire) {
-
           if (p.isInvincible()) {
             continue;
           }
-
           if (p.getLives() == 0) {
             this.loser = p.getName() + " Lost!!!";
             this.server.sendGameEnd(this.loser);
             // do not call endGame here. The server handles this
           } else {
             p.loseLife();
-
             // update the player on losing a life
             this.server.updatePlayer(p.getID(), true);
           }
