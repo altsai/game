@@ -3,6 +3,7 @@ package server;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -14,6 +15,7 @@ import com.esotericsoftware.kryonet.Server;
 
 import entities.Player;
 import entities.Zombie;
+import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import server.Network.ActionStart;
 import server.Network.PlayerMove;
@@ -22,6 +24,7 @@ import server.Network.PlayerUpdate;
 import server.Network.UsePowerup;
 import server.Network.ZombieDie;
 import states.GamePlayState;
+import states.NetworkPlay;
 import states.States;
 
 /**
@@ -36,6 +39,8 @@ public class ServerListener extends Listener {
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
+  private Map<String, Player> previousPlayers;
+  private Queue<PlayerMessage> messages;
 
   // boolean checks for game state
   private boolean connected;
@@ -66,6 +71,8 @@ public class ServerListener extends Listener {
       , Map<String, Player> players
       , Map<String, Zombie> zombies
       , Map<String, Powerup> powerups
+      , Map<String, Player> previousPlayers
+      , Queue<PlayerMessage> messages
       , String player1ID
       , GamePlayState game
       , StateBasedGame s
@@ -74,6 +81,8 @@ public class ServerListener extends Listener {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
+    this.previousPlayers = previousPlayers;
+    this.messages = messages;
     this.player1ID = player1ID;
     this.game = game;
     this.s = s;
@@ -152,6 +161,9 @@ public class ServerListener extends Listener {
       if (this.players.size() == 1) {
         this.players.put(p.getID(), p);
       }
+      if (this.previousPlayers.size() == 1) {
+        this.previousPlayers.put(p.getID(), p);
+      }
     }
 
     // if given a packet of client movement, updates the client player
@@ -173,6 +185,20 @@ public class ServerListener extends Listener {
       }
     }
 
+    // if we get a message, add it to the queue
+    if (o instanceof PlayerMessage) {
+      System.out.println("received message");
+      PlayerMessage message = (PlayerMessage) o;
+
+      synchronized (this.messages) {
+        // make sure we only hold 5 messages
+        if (this.messages.size() == NetworkPlay.CHAT_CACHE_LENGTH) {
+          this.messages.poll();
+        }
+        this.messages.add(message);
+      }
+    }
+
     // the client has pressed action key, so the host must let the client
     // character use the powerup.
     // the host then must tell client what zombies are killed
@@ -188,12 +214,12 @@ public class ServerListener extends Listener {
 
       List<String> removed = p.usePowerup();
 
-      if (removed.size() > 9) {
+      if (removed.size() > 49) {
         // break up the list into smaller lists of 10 to send
         List<String> idGroup = new LinkedList<>();
         for (String z : removed) {
           idGroup.add(z);
-          if (idGroup.size() > 9) {
+          if (idGroup.size() > 49) {
             ZombieDie packet = new ZombieDie();
             packet.idList = idGroup;
             this.server.getConnections()[0].sendTCP(packet);

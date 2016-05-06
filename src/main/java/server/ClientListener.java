@@ -1,6 +1,7 @@
 package server;
 
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import org.newdawn.slick.state.StateBasedGame;
@@ -14,6 +15,7 @@ import com.google.common.collect.Maps;
 
 import entities.Player;
 import entities.Zombie;
+import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
@@ -34,6 +36,7 @@ import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
 import server.Network.ZombieNew;
 import states.GamePlayState;
+import states.NetworkPlay;
 import states.States;
 
 /**
@@ -44,11 +47,23 @@ import states.States;
  */
 public class ClientListener extends Listener {
 
+  public int zombiemove;
+  public int zombiedie;
+  public int playerupdate;
+  public int playermove;
+  public int zombieNew;
+  public int PowerupNew;
+  public int PowerupRemove;
+  public int zombieMoveList;
+
+
+
   // maps of objects that the client renders
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
   private Set<Powerup> pickedUpPowerups;
+  private Queue<PlayerMessage> messages;
 
   // boolean to determine if client is connected
   private boolean connected;
@@ -80,8 +95,9 @@ public class ClientListener extends Listener {
    * @param gc           GameClient
    */
   public ClientListener(Client client, Map<String, Player> players,
-      Map<String, Zombie> zombies, Map<String, Powerup> powerups, Set<Powerup> pickedUpPowerups,
-      String playerID, GamePlayState gps, StateBasedGame s, GameClient gc) {
+      Map<String, Zombie> zombies, Map<String, Powerup> powerups
+      , Set<Powerup> pickedUpPowerups, Queue<PlayerMessage> messages
+      , String playerID, GamePlayState gps, StateBasedGame s, GameClient gc) {
 
     this.client = client;
     this.players = players;
@@ -89,6 +105,7 @@ public class ClientListener extends Listener {
     this.powerups = powerups;
     this.playerID = playerID;
     this.pickedUpPowerups = pickedUpPowerups;
+    this.messages = messages;
     this.game = gps;
     this.s = s;
     this.gc = gc;
@@ -142,6 +159,15 @@ public class ClientListener extends Listener {
    */
   public void disconnected(Connection c) {
 
+    System.out.println(this.playermove + " playermove");
+    System.out.println(this.playerupdate + " playerupdate");
+    System.out.println(this.PowerupNew + " powerupnew");
+    System.out.println(this.PowerupRemove + " powerupremove");
+    System.out.println(this.zombiedie + " zombieDie");
+    System.out.println(this.zombiemove + " zombieMove");
+    System.out.println(this.zombieMoveList + " zombieMovelist");
+    System.out.println(this.zombieNew + " zombienew");
+
     this.endGame = true;
 
     // if we had a previous connection and the game hasn't ended due to a death
@@ -180,6 +206,7 @@ public class ClientListener extends Listener {
 
     // move the host player after receiving position update
     if (o instanceof PlayerMove) {
+      this.playermove ++;
       PlayerMove move = (PlayerMove) o;
       this.players.get(move.id).setX(move.x);
       this.players.get(move.id).setY(move.y);
@@ -188,6 +215,7 @@ public class ClientListener extends Listener {
 
     // create a new zombie to put in zombie map
     if (o instanceof ZombieNew) {
+      this.zombieNew++;
       ZombieNew zombie = (ZombieNew) o;
       Zombie newZombie = new Zombie(this.players.get(zombie.targetID), this.players);
       newZombie.setID(zombie.id);
@@ -196,6 +224,7 @@ public class ClientListener extends Listener {
 
     // update the zombie's position in map
     if (o instanceof ZombieMove) {
+      this.zombiemove++;
       ZombieMove move = (ZombieMove) o;
       Zombie selected = this.zombies.get(move.id);
       if (selected != null) {
@@ -206,6 +235,7 @@ public class ClientListener extends Listener {
 
     // update variables of a player
     if (o instanceof PlayerUpdate) {
+      this.playerupdate++;
       PlayerUpdate update = (PlayerUpdate) o;
       Player p = this.players.get(update.id);
       p.setSpeed(update.speed);
@@ -219,6 +249,7 @@ public class ClientListener extends Listener {
 
     // create new powerup to put in powerup map
     if (o instanceof PowerupNew) {
+      this.PowerupNew++;
       PowerupNew packet = (PowerupNew) o;
       switch (packet.powerupIndex) {
       case Powerup.BOMB:
@@ -262,12 +293,14 @@ public class ClientListener extends Listener {
 
     // removes a powerup from the map (expired)
     if (o instanceof PowerupRemove) {
+      this.PowerupRemove++;
       PowerupRemove packet = (PowerupRemove) o;
       this.powerups.remove(packet.id);
     }
 
     // removes zombie from map (zombie killed)
     if (o instanceof ZombieDie) {
+      this.zombiedie++;
       ZombieDie packet = (ZombieDie) o;
       for (String key : packet.idList) {
         this.zombies.remove(key);
@@ -281,6 +314,19 @@ public class ClientListener extends Listener {
       // sets the current game's loser to whatever loser the packet says
       this.game.setLoser(packet.loserString);
       this.game.setGameEnd(true);
+    }
+
+    // if we get a message, add it to the queue
+    if (o instanceof PlayerMessage) {
+      PlayerMessage message = (PlayerMessage) o;
+
+      synchronized (this.messages) {
+        // make sure we only hold 5 messages
+        if (this.messages.size() == NetworkPlay.CHAT_CACHE_LENGTH) {
+          this.messages.poll();
+        }
+        this.messages.add(message);
+      }
     }
 
     // picks up a powerup
@@ -307,6 +353,7 @@ public class ClientListener extends Listener {
 
     // packet that moves a list of zombies
     if (o instanceof ZombieMoveList) {
+      this.zombieMoveList++;
       ZombieMoveList packet = (ZombieMoveList) o;
       if (packet.list.size() > 0) {
         for (ZombieMove move : packet.list) {

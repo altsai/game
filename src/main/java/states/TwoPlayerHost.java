@@ -1,6 +1,5 @@
 package states;
 
-import java.awt.Font;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.LinkedList;
@@ -11,7 +10,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -22,19 +20,17 @@ import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import powerups.Bomb;
+import powerups.Jail;
 import powerups.LaserBeam;
+import powerups.Speed;
+import powerups.TimeStop;
 import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
 
-public class TwoPlayerHost extends GamePlayState {
+public class TwoPlayerHost extends NetworkPlay {
 
-  // list of constants
-  private static final int ZOMBIE_SPAWN_DELAY = 1000;
-  private static final int POWERUP_SPAWN_DELAY = 5000;
-  private static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
-  private static final int MAX_DIFFICULTY_LEVEL = 15;
-  private static final double SPEED_MULTIPLIER = 0.1;
 
   private GameServer server;
   private boolean errorMakingServer;
@@ -44,10 +40,21 @@ public class TwoPlayerHost extends GamePlayState {
   private Connection conn;
   private TwoPlayerStartServer twoPlayerStartServer;
 
-  private TrueTypeFont ttf;
-
   public TwoPlayerHost(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
+  }
+
+
+  /**
+   * Method that goes through all players in game and updates if needed.
+   */
+  private void updatePlayers() {
+    for (Player p : this.players.values()) {
+      if (!p.equals(this.previousPlayers.get(p.getID()))) {
+        this.server.updatePlayer(p.getID(), false);
+        this.previousPlayers.put(p.getID(), p);
+      }
+    }
   }
 
   @Override
@@ -58,15 +65,14 @@ public class TwoPlayerHost extends GamePlayState {
 
     Player p1 = new Player(null, "player1");
     p1.setPlayer1(true);
+    this.previousPlayers.put(p1.getID(), p1);
 
     // explicitly set the id of the first player to "0"
     p1.setID("0");
     this.player1ID = p1.getID();
+    this.playerID = p1.getID();
 
     this.players.put(p1.getID(), p1);
-
-    Font font = new Font("Arial", Font.BOLD, 20);
-    ttf = new TrueTypeFont(font, true);
 
     monitorShutdown();
   }
@@ -156,10 +162,41 @@ public class TwoPlayerHost extends GamePlayState {
           z.render(gc, g);
         }
 
+        // if currently typing, draw the current message
+        if (this.isTyping) {
+          this.currentText.render(gc, g);
+        }
+
+        if (this.chatOn) {
+          renderChat(gc, g, this.playerID);
+        }
+
       }
     }
 
   }
+
+  @Override
+  protected void updateChat(GameContainer gc, StateBasedGame s, int delta) {
+    super.updateChat(gc, s, delta);
+    if (this.isTyping) {
+      if (gc.getInput().isKeyPressed(Input.KEY_T)
+          && this.currentText.getText().length() == 0) {
+        this.isTyping = false;
+
+        // if user presses enter while in current text, send text.
+      } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+        String message = this.currentText.getText();
+        if (message.length() > 0) {
+          this.server.sendMessage(message);
+          this.addMessageToQueue(message, this.playerID);
+        }
+        this.isTyping = false;
+        this.currentText.setText("");
+      }
+    }
+  }
+
 
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
@@ -167,8 +204,9 @@ public class TwoPlayerHost extends GamePlayState {
 
     if (!this.makeServer) {
       try {
-        this.server = new GameServer(this.players, this.zombies, this.powerups,
-            this.player1ID, this, s, twoPlayerStartServer.getConn(),
+        this.server = new GameServer(this.players, this.zombies
+            , this.powerups, this.previousPlayers, this.messages
+            , this.player1ID, this, s, twoPlayerStartServer.getConn(),
             twoPlayerStartServer.getAddress());
         this.server.start();
         this.makeServer = true;
@@ -187,13 +225,17 @@ public class TwoPlayerHost extends GamePlayState {
       spawnZombie();
       spawnPowerup();
 
-      // update player positions, make sure to be only able to control host
-      // player
-      for (Player p : this.players.values()) {
-        if (p.getID().equals(this.player1ID)) {
-          p.updateAndControlNetworked(gc, delta);
-        } else {
-          p.update(gc, delta);
+      this.updateChat(gc, s, delta);
+
+
+      // if not currently typing, allow movement
+      if (!this.isTyping) {
+        for (Player p : this.players.values()) {
+          if (p.getID().equals(this.player1ID)) {
+            p.updateAndControlNetworked(gc, delta);
+          } else {
+            p.update(gc, delta);
+          }
         }
       }
 
@@ -203,9 +245,7 @@ public class TwoPlayerHost extends GamePlayState {
       this.server.sendHostPosition();
 
       // send info about both updated players to the client
-      for (Player p : this.players.values()) {
-        this.server.updatePlayer(p.getID(), false);
-      }
+      this.updatePlayers();
 
       // check collisions
       updateAndCheckCollisions(gc, s, delta);
@@ -220,12 +260,12 @@ public class TwoPlayerHost extends GamePlayState {
           this.server.removeZombie(removedZombies);
         }
       }
-    }
 
-    // go to the home menu state when 'esc' is pressed
-    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
-      this.server.close();
-      s.enterState(States.MENU);
+      // go to the home menu state when 'esc' is pressed
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        this.server.close();
+        s.enterState(States.MENU);
+      }
     }
 
   }
@@ -287,35 +327,25 @@ public class TwoPlayerHost extends GamePlayState {
   protected void updateAndCheckCollisions(GameContainer gc, StateBasedGame s,
       int delta) {
 
-    // TODO: Combine all zombies in alist and send the list as a packet
-
     // check for player collision with every entity
     for (Zombie z : this.zombies.values()) {
       z.update(gc, delta);
 
       boolean onFire = z.isOnFire();
 
-      // update the zombie's position and state on the client
-      // might be able to optimize by having moveZombie take in a hashmap
-      // process into smaller lists, and then send lists instead of individual
-      // zombi
-
       // check player's lives and mark invincible as necessary
       for (Player p : this.players.values()) {
 
         if (p.isCollision(z) && !onFire) {
-
           if (p.isInvincible()) {
             continue;
           }
-
           if (p.getLives() == 0) {
             this.loser = p.getName() + " Lost!!!";
             this.server.sendGameEnd(this.loser);
             // do not call endGame here. The server handles this
           } else {
             p.loseLife();
-
             // update the player on losing a life
             this.server.updatePlayer(p.getID(), true);
           }
@@ -334,7 +364,6 @@ public class TwoPlayerHost extends GamePlayState {
           p.collectPowerup(powerup);
           this.pickedUpPowerups.add(powerup);
           this.server.sendPowerupPickup(p, powerup);
-          // this.server.removePowerup(powerup.getID());
         }
       }
     }
@@ -430,32 +459,28 @@ public class TwoPlayerHost extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      // double randomNum = random.nextDouble();
-      // if (randomNum < 0.2) {
-      // Bomb bomb = new Bomb(powerups, zombies, players);
-      // this.powerups.put(bomb.getID(), bomb);
-      // this.server.sendNewPowerup(bomb);
-      // } else if (randomNum < 0.4 && randomNum >= 0.2) {
-      // Speed speed = new Speed(powerups);
-      // this.powerups.put(speed.getID(), speed);
-      // this.server.sendNewPowerup(speed);
-      // } else if (randomNum < 0.6 && randomNum >= 0.4) {
-      // TimeStop timestop = new TimeStop(powerups, zombies, players, this);
-      // this.powerups.put(timestop.getID(), timestop);
-      // this.server.sendNewPowerup(timestop);
-      // } else if (randomNum < 0.8 && randomNum >= 0.6) {
-      // LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-      // this.powerups.put(lb.getID(), lb);
-      // this.server.sendNewPowerup(lb);
-      // } else {
-      // Jail jail = new Jail(powerups, zombies, players);
-      // this.powerups.put(jail.getID(), jail);
-      // this.server.sendNewPowerup(jail);
-      // }
-
-      LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-      this.powerups.put(lb.getID(), lb);
-      this.server.sendNewPowerup(lb);
+      double randomNum = random.nextDouble();
+      if (randomNum < 0.2) {
+        Bomb bomb = new Bomb(powerups, zombies, players);
+        this.powerups.put(bomb.getID(), bomb);
+        this.server.sendNewPowerup(bomb);
+      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+        Speed speed = new Speed(powerups);
+        this.powerups.put(speed.getID(), speed);
+        this.server.sendNewPowerup(speed);
+      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
+        this.powerups.put(timestop.getID(), timestop);
+        this.server.sendNewPowerup(timestop);
+      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+        LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
+        this.powerups.put(lb.getID(), lb);
+        this.server.sendNewPowerup(lb);
+      } else {
+        Jail jail = new Jail(powerups, zombies, players);
+        this.powerups.put(jail.getID(), jail);
+        this.server.sendNewPowerup(jail);
+      }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }

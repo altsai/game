@@ -19,7 +19,7 @@ import entities.Zombie;
 import game_objects.Powerup;
 import server.GameClient;
 
-public class TwoPlayerClient extends GamePlayState {
+public class TwoPlayerClient extends NetworkPlay {
 
   // list of constants
 
@@ -28,6 +28,7 @@ public class TwoPlayerClient extends GamePlayState {
   private boolean hasClient;
   private String playerID;
   private TwoPlayerStartServer twoPlayerStartServer;
+
 
   public TwoPlayerClient(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
@@ -122,9 +123,39 @@ public class TwoPlayerClient extends GamePlayState {
           z.render(gc, g);
         }
 
+        // if currently typing, draw the current message
+        if (this.isTyping) {
+          this.currentText.render(gc, g);
+        }
+
+        if (this.chatOn) {
+          renderChat(gc, g, this.playerID);
+        }
+
       }
     }
 
+  }
+
+  @Override
+  protected void updateChat(GameContainer gc, StateBasedGame s, int delta) {
+    super.updateChat(gc, s, delta);
+    if (this.isTyping) {
+      if (gc.getInput().isKeyPressed(Input.KEY_T)
+          && this.currentText.getText().length() == 0) {
+        this.isTyping = false;
+
+        // if user presses enter while in current text, send text.
+      } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+        String message = this.currentText.getText();
+        if (message.length() > 0) {
+          this.client.sendMessage(message);
+          this.addMessageToQueue(message, this.playerID);
+        }
+        this.isTyping = false;
+        this.currentText.setText("");
+      }
+    }
   }
 
   @Override
@@ -139,6 +170,7 @@ public class TwoPlayerClient extends GamePlayState {
             , this.zombies
             , this.powerups
             , this.pickedUpPowerups
+            , this.messages
             , this.playerID
             , this
             , s
@@ -157,12 +189,16 @@ public class TwoPlayerClient extends GamePlayState {
     if (this.gameStart && this.client.isConnected() && this.players.size() == 2) {
       // update the client player and send position to host
 
-      // check the player ID, only control the one that client should be controlling
-      for (Player p : this.players.values()) {
-        if (p.getID().equals(this.playerID)) {
-          p.updateAndControlNetworked(gc, delta);
-        } else {
-          p.update(gc, delta);
+      this.updateChat(gc, s, delta);
+
+      if (!isTyping) {
+        // check the player ID, only control the one that client should be controlling
+        for (Player p : this.players.values()) {
+          if (p.getID().equals(this.playerID)) {
+            p.updateAndControlNetworked(gc, delta);
+          } else {
+            p.update(gc, delta);
+          }
         }
       }
 
@@ -176,10 +212,8 @@ public class TwoPlayerClient extends GamePlayState {
       if (this.gameEnd) {
         endGame(gc, s);
       }
-
       updatePowerups(gc, delta);
     }
-
 
     // go to the home menu state when 'esc' is pressed
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
@@ -216,8 +250,10 @@ public class TwoPlayerClient extends GamePlayState {
 
     // DO NOT USE ENHANCED FOR LOOP HERE. IDK WHY BUT THERES A THREADING ISSUE
     // PLS DO NOT CHANGE...
-    for (String key : this.powerups.keySet()) {
-      this.powerups.get(key).update(gc, delta);
+    synchronized (this.powerups) {
+      for (String key : this.powerups.keySet()) {
+        this.powerups.get(key).update(gc, delta);
+      }
     }
   }
 
