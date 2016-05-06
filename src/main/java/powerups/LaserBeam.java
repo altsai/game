@@ -29,7 +29,7 @@ public class LaserBeam extends Powerup {
   private Map<String, Player> players;
 
   private float direction;
-  private static final float LASER_SPEED = 6.0f;
+  private static final float LASER_SPEED = 10.0f;
 
   private LaserShot laser;
 

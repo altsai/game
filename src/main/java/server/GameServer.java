@@ -39,6 +39,7 @@ public class GameServer {
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
+  private Map<String, Player> previousPlayers;
 
   // player that the host controls
   private String player1ID;
@@ -64,6 +65,7 @@ public class GameServer {
   public GameServer(Map<String, Player> players
       , Map<String, Zombie> zombies
       , Map<String, Powerup> powerups
+      , Map<String, Player> previousPlayers
       , String player1ID
       , GamePlayState game
       , StateBasedGame s
@@ -72,6 +74,7 @@ public class GameServer {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
+    this.previousPlayers = previousPlayers;
     this.player1ID = player1ID;
     this.game = game;
     this.s = s;
@@ -100,6 +103,7 @@ public class GameServer {
             , this.players
             , this.zombies
             , this.powerups
+            , this.previousPlayers
             , this.player1ID
             , this.game
             , this.s
@@ -243,12 +247,12 @@ public class GameServer {
    * @param id    ID of the zombie to be removed.
    */
   public void removeZombie(List<String> id) {
-    if (id.size() > 9) {
+    if (id.size() > 49) {
       // break up the list into smaller lists of 10 to send
       List<String> idGroup = new LinkedList<>();
       for (String z : id) {
         idGroup.add(z);
-        if (idGroup.size() > 9) {
+        if (idGroup.size() > 49) {
           ZombieDie packet = new ZombieDie();
           packet.idList = idGroup;
           sendTCP(packet);

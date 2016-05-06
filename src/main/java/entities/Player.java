@@ -563,6 +563,31 @@ public class Player extends Entity implements PlayerAction {
     return lastDir;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + (int) (lastBombFired ^ (lastBombFired >>> 32));
+    result = prime * result + lives;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Player) {
+    Player other = (Player) obj;
+    return (this.lastBombFired == other.lastBombFired
+        && this.id == other.id
+        && this.speed == other.speed
+        && this.top == other.top
+        && this.left == other.left
+        && this.right == other.right
+        && this.bottom == other.bottom);
+    } else {
+      return false;
+    }
+  }
+
   public void removeJail(String id) {
     jails.remove(id);
   }

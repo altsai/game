@@ -36,6 +36,7 @@ public class ServerListener extends Listener {
   private Map<String, Zombie> zombies;
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
+  private Map<String, Player> previousPlayers;
 
   // boolean checks for game state
   private boolean connected;
@@ -66,6 +67,7 @@ public class ServerListener extends Listener {
       , Map<String, Player> players
       , Map<String, Zombie> zombies
       , Map<String, Powerup> powerups
+      , Map<String, Player> previousPlayers
       , String player1ID
       , GamePlayState game
       , StateBasedGame s
@@ -74,6 +76,7 @@ public class ServerListener extends Listener {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
+    this.previousPlayers = previousPlayers;
     this.player1ID = player1ID;
     this.game = game;
     this.s = s;
@@ -151,6 +154,9 @@ public class ServerListener extends Listener {
 
       if (this.players.size() == 1) {
         this.players.put(p.getID(), p);
+      }
+      if (this.previousPlayers.size() == 1) {
+        this.previousPlayers.put(p.getID(), p);
       }
     }
 

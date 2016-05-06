@@ -216,8 +216,10 @@ public class TwoPlayerClient extends GamePlayState {
 
     // DO NOT USE ENHANCED FOR LOOP HERE. IDK WHY BUT THERES A THREADING ISSUE
     // PLS DO NOT CHANGE...
-    for (String key : this.powerups.keySet()) {
-      this.powerups.get(key).update(gc, delta);
+    synchronized (this.powerups) {
+      for (String key : this.powerups.keySet()) {
+        this.powerups.get(key).update(gc, delta);
+      }
     }
   }
 

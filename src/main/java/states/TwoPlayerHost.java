@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -22,7 +24,11 @@ import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import powerups.Bomb;
+import powerups.Jail;
 import powerups.LaserBeam;
+import powerups.Speed;
+import powerups.TimeStop;
 import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
@@ -41,6 +47,8 @@ public class TwoPlayerHost extends GamePlayState {
   private boolean makeServer;
   private String player1ID;
 
+  protected Map<String, Player> previousPlayers;
+
   private Connection conn;
   private TwoPlayerStartServer twoPlayerStartServer;
 
@@ -50,14 +58,55 @@ public class TwoPlayerHost extends GamePlayState {
     this.twoPlayerStartServer = twoPlayerStartServer;
   }
 
+
+//  /**
+//   * Class that keeps track of the player attributes.
+//   * @author Boning
+//   *
+//   */
+//  private static class PlayerAttributes {
+//    public String id;
+//    public double speed;
+//    public int score;
+//    public float top;
+//    public float left;
+//    public float bottom;
+//    public float right;
+//    public long lastBombFired;
+//  }
+
+//  private PlayerAttributes saveAttributes(Player p) {
+//    PlayerAttributes previous = new PlayerAttributes();
+//    previous.id = p.getID();
+//    previous.speed = p.getSpeed();
+//    previous.score = p.getScore();
+//    previous.top = p.getTop();
+//    previous.bottom = p.getBottom();
+//    previous.left = p.getLeft();
+//    previous.right = p.getRight();
+//    previous.lastBombFired = p.getLastBombFired();
+//    return previous;
+//  }
+
+  private void updatePlayers() {
+    for (Player p : this.players.values()) {
+      if (!p.equals(this.previousPlayers.get(p.getID()))) {
+        this.server.updatePlayer(p.getID(), false);
+        this.previousPlayers.put(p.getID(), p);
+      }
+    }
+  }
+
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     super.init(gc, s);
 
     this.makeServer = false;
+    this.previousPlayers = new ConcurrentHashMap<>();
 
     Player p1 = new Player(null, "player1");
     p1.setPlayer1(true);
+    this.previousPlayers.put(p1.getID(), p1);
 
     // explicitly set the id of the first player to "0"
     p1.setID("0");
@@ -167,8 +216,9 @@ public class TwoPlayerHost extends GamePlayState {
 
     if (!this.makeServer) {
       try {
-        this.server = new GameServer(this.players, this.zombies, this.powerups,
-            this.player1ID, this, s, twoPlayerStartServer.getConn(),
+        this.server = new GameServer(this.players, this.zombies
+            , this.powerups, this.previousPlayers
+            , this.player1ID, this, s, twoPlayerStartServer.getConn(),
             twoPlayerStartServer.getAddress());
         this.server.start();
         this.makeServer = true;
@@ -203,9 +253,7 @@ public class TwoPlayerHost extends GamePlayState {
       this.server.sendHostPosition();
 
       // send info about both updated players to the client
-      for (Player p : this.players.values()) {
-        this.server.updatePlayer(p.getID(), false);
-      }
+      this.updatePlayers();
 
       // check collisions
       updateAndCheckCollisions(gc, s, delta);
@@ -430,32 +478,28 @@ public class TwoPlayerHost extends GamePlayState {
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
-      // double randomNum = random.nextDouble();
-      // if (randomNum < 0.2) {
-      // Bomb bomb = new Bomb(powerups, zombies, players);
-      // this.powerups.put(bomb.getID(), bomb);
-      // this.server.sendNewPowerup(bomb);
-      // } else if (randomNum < 0.4 && randomNum >= 0.2) {
-      // Speed speed = new Speed(powerups);
-      // this.powerups.put(speed.getID(), speed);
-      // this.server.sendNewPowerup(speed);
-      // } else if (randomNum < 0.6 && randomNum >= 0.4) {
-      // TimeStop timestop = new TimeStop(powerups, zombies, players, this);
-      // this.powerups.put(timestop.getID(), timestop);
-      // this.server.sendNewPowerup(timestop);
-      // } else if (randomNum < 0.8 && randomNum >= 0.6) {
-      // LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-      // this.powerups.put(lb.getID(), lb);
-      // this.server.sendNewPowerup(lb);
-      // } else {
-      // Jail jail = new Jail(powerups, zombies, players);
-      // this.powerups.put(jail.getID(), jail);
-      // this.server.sendNewPowerup(jail);
-      // }
-
-      LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
-      this.powerups.put(lb.getID(), lb);
-      this.server.sendNewPowerup(lb);
+      double randomNum = random.nextDouble();
+      if (randomNum < 0.2) {
+        Bomb bomb = new Bomb(powerups, zombies, players);
+        this.powerups.put(bomb.getID(), bomb);
+        this.server.sendNewPowerup(bomb);
+      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+        Speed speed = new Speed(powerups);
+        this.powerups.put(speed.getID(), speed);
+        this.server.sendNewPowerup(speed);
+      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+        TimeStop timestop = new TimeStop(powerups, zombies, players, this);
+        this.powerups.put(timestop.getID(), timestop);
+        this.server.sendNewPowerup(timestop);
+      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+        LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
+        this.powerups.put(lb.getID(), lb);
+        this.server.sendNewPowerup(lb);
+      } else {
+        Jail jail = new Jail(powerups, zombies, players);
+        this.powerups.put(jail.getID(), jail);
+        this.server.sendNewPowerup(jail);
+      }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
