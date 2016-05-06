@@ -154,6 +154,7 @@ public class TwoPlayerClient extends NetworkPlay {
         }
         this.isTyping = false;
         this.currentText.setText("");
+        this.currentText.setFocus(false);
       }
     }
   }

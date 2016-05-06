@@ -192,6 +192,7 @@ public class TwoPlayerHost extends NetworkPlay {
           this.addMessageToQueue(message, this.playerID);
         }
         this.isTyping = false;
+        this.currentText.setFocus(false);
         this.currentText.setText("");
       }
     }
