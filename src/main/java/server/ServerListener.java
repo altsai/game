@@ -3,6 +3,7 @@ package server;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -14,6 +15,7 @@ import com.esotericsoftware.kryonet.Server;
 
 import entities.Player;
 import entities.Zombie;
+import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import server.Network.ActionStart;
 import server.Network.PlayerMove;
@@ -37,6 +39,7 @@ public class ServerListener extends Listener {
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
   private Map<String, Player> previousPlayers;
+  private Queue<PlayerMessage> messages;
 
   // boolean checks for game state
   private boolean connected;
@@ -68,6 +71,7 @@ public class ServerListener extends Listener {
       , Map<String, Zombie> zombies
       , Map<String, Powerup> powerups
       , Map<String, Player> previousPlayers
+      , Queue<PlayerMessage> messages
       , String player1ID
       , GamePlayState game
       , StateBasedGame s
@@ -77,6 +81,7 @@ public class ServerListener extends Listener {
     this.zombies = zombies;
     this.powerups = powerups;
     this.previousPlayers = previousPlayers;
+    this.messages = messages;
     this.player1ID = player1ID;
     this.game = game;
     this.s = s;
@@ -176,6 +181,20 @@ public class ServerListener extends Listener {
       p.setScore(update.score);
       if (update.loseLife) {
         p.loseLife();
+      }
+    }
+
+    // if we get a message, add it to the queue
+    if (o instanceof PlayerMessage) {
+      System.out.println("received message");
+      PlayerMessage message = (PlayerMessage) o;
+
+      synchronized (this.messages) {
+        // make sure we only hold 5 messages
+        if (this.messages.size() == 5) {
+          this.messages.poll();
+        }
+        this.messages.add(message);
       }
     }
 

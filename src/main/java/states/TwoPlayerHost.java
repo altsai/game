@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -14,6 +16,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -23,6 +26,7 @@ import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
+import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
@@ -47,7 +51,14 @@ public class TwoPlayerHost extends GamePlayState {
   private boolean makeServer;
   private String player1ID;
 
-  protected Map<String, Player> previousPlayers;
+  // map that keep track of the last player's attributes
+  // used to decide whether or not an update is needed
+  private Map<String, Player> previousPlayers;
+  private Queue<PlayerMessage> messages;
+  private TextField currentText;
+  private boolean isTyping;
+  private boolean chatOn;
+
 
   private Connection conn;
   private TwoPlayerStartServer twoPlayerStartServer;
@@ -59,35 +70,9 @@ public class TwoPlayerHost extends GamePlayState {
   }
 
 
-//  /**
-//   * Class that keeps track of the player attributes.
-//   * @author Boning
-//   *
-//   */
-//  private static class PlayerAttributes {
-//    public String id;
-//    public double speed;
-//    public int score;
-//    public float top;
-//    public float left;
-//    public float bottom;
-//    public float right;
-//    public long lastBombFired;
-//  }
-
-//  private PlayerAttributes saveAttributes(Player p) {
-//    PlayerAttributes previous = new PlayerAttributes();
-//    previous.id = p.getID();
-//    previous.speed = p.getSpeed();
-//    previous.score = p.getScore();
-//    previous.top = p.getTop();
-//    previous.bottom = p.getBottom();
-//    previous.left = p.getLeft();
-//    previous.right = p.getRight();
-//    previous.lastBombFired = p.getLastBombFired();
-//    return previous;
-//  }
-
+  /**
+   * Method that goes through all players in game and updates if needed.
+   */
   private void updatePlayers() {
     for (Player p : this.players.values()) {
       if (!p.equals(this.previousPlayers.get(p.getID()))) {
@@ -101,8 +86,16 @@ public class TwoPlayerHost extends GamePlayState {
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     super.init(gc, s);
 
+    Font font = new Font("Arial", Font.BOLD, 20);
+    ttf = new TrueTypeFont(font, true);
+
     this.makeServer = false;
     this.previousPlayers = new ConcurrentHashMap<>();
+    this.messages = new ConcurrentLinkedQueue<>();
+    this.currentText = new TextField(gc, ttf, 500, 400, 400, 25);
+    this.currentText.setMaxLength(120);
+    this.isTyping = false;
+    this.chatOn = true;
 
     Player p1 = new Player(null, "player1");
     p1.setPlayer1(true);
@@ -114,8 +107,7 @@ public class TwoPlayerHost extends GamePlayState {
 
     this.players.put(p1.getID(), p1);
 
-    Font font = new Font("Arial", Font.BOLD, 20);
-    ttf = new TrueTypeFont(font, true);
+
 
     monitorShutdown();
   }
@@ -205,9 +197,34 @@ public class TwoPlayerHost extends GamePlayState {
           z.render(gc, g);
         }
 
+        // if currently typing, draw the current message
+        if (this.isTyping) {
+          this.currentText.render(gc, g);
+        }
+
+        if (this.chatOn) {
+          renderChat(gc, g);
+        }
+
       }
     }
 
+  }
+
+  private void renderChat(GameContainer gc, Graphics g) {
+    float x = 20;
+    float y = 300;
+    for (PlayerMessage m : this.messages) {
+      if (m.playerID.equals(this.player1ID)) {
+        g.setColor(Color.white);
+        g.drawString("YOU: " + m.message, x, y);
+      } else {
+        g.setColor(Color.cyan);
+        g.drawString("P2: " + m.message, x, y);
+      }
+      g.setColor(Color.black);
+      y += 20;
+    }
   }
 
   @Override
@@ -217,7 +234,7 @@ public class TwoPlayerHost extends GamePlayState {
     if (!this.makeServer) {
       try {
         this.server = new GameServer(this.players, this.zombies
-            , this.powerups, this.previousPlayers
+            , this.powerups, this.previousPlayers, this.messages
             , this.player1ID, this, s, twoPlayerStartServer.getConn(),
             twoPlayerStartServer.getAddress());
         this.server.start();
@@ -237,13 +254,40 @@ public class TwoPlayerHost extends GamePlayState {
       spawnZombie();
       spawnPowerup();
 
-      // update player positions, make sure to be only able to control host
-      // player
-      for (Player p : this.players.values()) {
-        if (p.getID().equals(this.player1ID)) {
-          p.updateAndControlNetworked(gc, delta);
-        } else {
-          p.update(gc, delta);
+      if (gc.getInput().isKeyPressed(Input.KEY_T)) {
+        if (!isTyping) {
+          isTyping = true;
+          this.currentText.setFocus(true);
+          this.currentText.setText("");
+        }
+      }
+
+      if (gc.getInput().isKeyPressed(Input.KEY_C)) {
+        this.chatOn = !this.chatOn;
+      }
+
+      // if not currently typing, allow movement
+      if (!this.isTyping) {
+        for (Player p : this.players.values()) {
+          if (p.getID().equals(this.player1ID)) {
+            p.updateAndControlNetworked(gc, delta);
+          } else {
+            p.update(gc, delta);
+          }
+        }
+      } else {
+        if (gc.getInput().isKeyPressed(Input.KEY_T)
+            && this.currentText.getText().length() == 0) {
+          this.isTyping = false;
+
+          // if user presses enter while in current text, send text.
+        } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+          String message = this.currentText.getText();
+          if (message.length() > 0) {
+            this.server.sendMessage(message);
+          }
+          this.isTyping = false;
+          this.currentText.setText("");
         }
       }
 
@@ -268,12 +312,12 @@ public class TwoPlayerHost extends GamePlayState {
           this.server.removeZombie(removedZombies);
         }
       }
-    }
 
-    // go to the home menu state when 'esc' is pressed
-    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
-      this.server.close();
-      s.enterState(States.MENU);
+      // go to the home menu state when 'esc' is pressed
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        this.server.close();
+        s.enterState(States.MENU);
+      }
     }
 
   }
@@ -382,7 +426,6 @@ public class TwoPlayerHost extends GamePlayState {
           p.collectPowerup(powerup);
           this.pickedUpPowerups.add(powerup);
           this.server.sendPowerupPickup(p, powerup);
-          // this.server.removePowerup(powerup.getID());
         }
       }
     }

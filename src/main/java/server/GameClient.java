@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import org.newdawn.slick.state.StateBasedGame;
@@ -12,6 +13,7 @@ import com.esotericsoftware.minlog.Log;
 
 import entities.Player;
 import entities.Zombie;
+import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import server.Network.ActionStart;
 import server.Network.PlayerMove;
@@ -30,6 +32,7 @@ public class GameClient {
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
   private Set<Powerup> pickedUpPowerups;
+  private Queue<PlayerMessage> messages;
 
   // game state of client game
   private GamePlayState game;
@@ -60,12 +63,14 @@ public class GameClient {
       , Map<String, Zombie> zombies
       , Map<String, Powerup> powerups
       , Set<Powerup> pickedUpPowerups
+      , Queue<PlayerMessage> messages
       , String playerID
       , GamePlayState gps
       , StateBasedGame s, String address, java.sql.Connection conn) {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
+    this.messages = messages;
     this.playerID = playerID;
     this.game = gps;
     this.s = s;
@@ -104,19 +109,13 @@ public class GameClient {
             , this.zombies
             , this.powerups
             , this.pickedUpPowerups
+            , this.messages
             , this.playerID
             , this.game
             , this.s
             , this));
 
-    // catch this excpeiton when making the server in the twoplayerseverstate
     this.client.start();
-
-    // uncomment to start LAN search
-    //List<InetAddress> IPs = this.client.discoverHosts(Network.TCPPORT, 3000);
-
-    //InetAddress address = this.client.discoverHost(Network.TCPPORT, 10000);
-    //System.out.println(address);
 
     this.client.connect(5000, address, Network.TCPPORT, Network.UDPPORT);
   }
@@ -127,6 +126,18 @@ public class GameClient {
    */
   public boolean isConnected() {
     return this.client.isConnected();
+  }
+
+  /**
+   * Sends a text packet to the server for chatting.
+   * @param message   String, text to be sent
+   */
+  public void sendMessage(String message) {
+    System.out.println("sent message");
+    PlayerMessage packet = new PlayerMessage();
+    packet.message = message;
+    packet.playerID = this.playerID;
+    this.client.sendTCP(packet);
   }
 
   /**

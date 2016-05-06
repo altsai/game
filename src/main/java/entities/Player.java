@@ -573,6 +573,14 @@ public class Player extends Entity implements PlayerAction {
   }
 
   @Override
+  /**
+   * Player equality to check if two players are equal.
+   *
+   * Used mainly in networking to check if a player should
+   * be updated because it is lacking vital information.
+   *
+   * @param obj     Object
+   */
   public boolean equals(Object obj) {
     if (obj instanceof Player) {
     Player other = (Player) obj;

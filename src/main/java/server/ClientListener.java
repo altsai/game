@@ -1,6 +1,7 @@
 package server;
 
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import org.newdawn.slick.state.StateBasedGame;
@@ -14,6 +15,7 @@ import com.google.common.collect.Maps;
 
 import entities.Player;
 import entities.Zombie;
+import game_objects.PlayerMessage;
 import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
@@ -60,6 +62,7 @@ public class ClientListener extends Listener {
   private Map<String, Powerup> powerups;
   private Map<String, Player> players;
   private Set<Powerup> pickedUpPowerups;
+  private Queue<PlayerMessage> messages;
 
   // boolean to determine if client is connected
   private boolean connected;
@@ -91,8 +94,9 @@ public class ClientListener extends Listener {
    * @param gc           GameClient
    */
   public ClientListener(Client client, Map<String, Player> players,
-      Map<String, Zombie> zombies, Map<String, Powerup> powerups, Set<Powerup> pickedUpPowerups,
-      String playerID, GamePlayState gps, StateBasedGame s, GameClient gc) {
+      Map<String, Zombie> zombies, Map<String, Powerup> powerups
+      , Set<Powerup> pickedUpPowerups, Queue<PlayerMessage> messages
+      , String playerID, GamePlayState gps, StateBasedGame s, GameClient gc) {
 
     this.client = client;
     this.players = players;
@@ -100,6 +104,7 @@ public class ClientListener extends Listener {
     this.powerups = powerups;
     this.playerID = playerID;
     this.pickedUpPowerups = pickedUpPowerups;
+    this.messages = messages;
     this.game = gps;
     this.s = s;
     this.gc = gc;
@@ -308,6 +313,19 @@ public class ClientListener extends Listener {
       // sets the current game's loser to whatever loser the packet says
       this.game.setLoser(packet.loserString);
       this.game.setGameEnd(true);
+    }
+
+    // if we get a message, add it to the queue
+    if (o instanceof PlayerMessage) {
+      PlayerMessage message = (PlayerMessage) o;
+
+      synchronized (this.messages) {
+        // make sure we only hold 5 messages
+        if (this.messages.size() == 5) {
+          this.messages.poll();
+        }
+        this.messages.add(message);
+      }
     }
 
     // picks up a powerup

@@ -5,6 +5,8 @@ import java.util.List;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
+import game_objects.PlayerMessage;
+
 /**
  * Keeps commonalitites to both server and client.
  * @author bl48
@@ -40,6 +42,7 @@ public class Network {
     kryo.register(PowerupPickup.class);
     kryo.register(UsePowerup.class);
     kryo.register(ZombieMoveList.class);
+    kryo.register(PlayerMessage.class);
   }
 
   /**
