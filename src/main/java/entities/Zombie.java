@@ -86,8 +86,8 @@ public class Zombie extends Entity {
 
     Random r = new Random();
 
-    this.x = r.nextFloat() * Window.width;
-    this.y = r.nextFloat() * Window.height;
+    this.x = r.nextFloat() * (Window.width - 30 - (2 * 20)) + 15;
+    this.y = r.nextFloat() * (Window.height - 60 - (2 * 20)) + 45;
 
     this.radius = 20;
     this.image = Resources.getImage("zombie");
