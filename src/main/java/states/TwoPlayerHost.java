@@ -290,13 +290,13 @@ public class TwoPlayerHost extends NetworkPlay {
           if (sentList.size() > 100) {
             ZombieMoveList listPacket = new ZombieMoveList();
             listPacket.list = sentList;
-            this.server.getConnections()[0].sendTCP(listPacket);
+            this.server.getConnections()[0].sendUDP(listPacket);
             sentList.clear();
           }
         }
         ZombieMoveList listPacket = new ZombieMoveList();
         listPacket.list = sentList;
-        this.server.getConnections()[0].sendTCP(listPacket);
+        this.server.getConnections()[0].sendUDP(listPacket);
 
       } else {
 
@@ -310,7 +310,7 @@ public class TwoPlayerHost extends NetworkPlay {
         }
         ZombieMoveList listPacket = new ZombieMoveList();
         listPacket.list = sentList;
-        this.server.getConnections()[0].sendTCP(listPacket);
+        this.server.getConnections()[0].sendUDP(listPacket);
       }
     }
   }
