@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.newdawn.slick.GameContainer;
 
+import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 
 public class ZombieFormationBody extends Zombie {
@@ -67,7 +68,10 @@ public class ZombieFormationBody extends Zombie {
   }
 
   private void followLeader(int delta) {
-    if (leader.getSpeed() == 0) {
+    if (this.getTarget() instanceof BlackHole) {
+      followPlayer(delta);
+      return;
+    } else if (leader.getSpeed() == 0) {
       return;
     }
 
