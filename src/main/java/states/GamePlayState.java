@@ -1,5 +1,6 @@
 package states;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -35,6 +36,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected Map<String, Zombie> zombies;
   protected Map<String, Powerup> powerups;
   protected Set<Powerup> pickedUpPowerups;
+  protected Map<String, List<String>> zombieFormations;
 
   // players in the game
   protected Map<String, Player> players;
@@ -74,6 +76,7 @@ public abstract class GamePlayState extends BasicGameState {
     this.powerups = new ConcurrentHashMap<>();
     this.players = new ConcurrentHashMap<>();
     this.pickedUpPowerups = new ConcurrentHashSet<>();
+    this.zombieFormations = new ConcurrentHashMap<>();
 
     this.lastZombieSpawnTime = System.currentTimeMillis();
     this.lastDifficultyIncreaseTime = System.currentTimeMillis();
@@ -105,7 +108,7 @@ public abstract class GamePlayState extends BasicGameState {
 
     long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
     if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
-      //this.setElapsedTime(0);
+      // this.setElapsedTime(0);
       g.drawString("Game begins in: "
           + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
     } else {
@@ -149,6 +152,25 @@ public abstract class GamePlayState extends BasicGameState {
         p.updateAndControl(gc, delta);
       }
 
+      boolean breakFormation = false;
+      for (String id : zombieFormations.keySet()) {
+        if (zombies.get(id) == null) {
+          breakFormation = true;
+        } else {
+          for (int i = 0; i < zombieFormations.get(id).size(); i++) {
+            if (zombies.get(zombieFormations.get(id).get(i)) == null) {
+              breakFormation = true;
+            }
+          }
+        }
+
+        if (breakFormation) {
+          breakFormation(id);
+        }
+
+        breakFormation = false;
+      }
+
       updateAndCheckCollisions(gc, s, delta);
       updatePowerups(gc, delta);
 
@@ -158,6 +180,32 @@ public abstract class GamePlayState extends BasicGameState {
       }
     }
 
+  }
+
+  private void breakFormation(String id) {
+    if (zombies.get(id) != null) {
+      replaceZombie(zombies.get(id));
+    }
+
+    for (int i = 0; i < zombieFormations.get(id).size(); i++) {
+      if (zombies.get(zombieFormations.get(id).get(i)) != null) {
+        replaceZombie(zombies.get(zombieFormations.get(id).get(i)));
+      }
+    }
+
+    zombieFormations.remove(id);
+  }
+
+  private void replaceZombie(Zombie z) {
+    Player target = this.players.get(String.valueOf(random.nextInt(this.players
+        .size())));
+
+    Zombie zomb = new Zombie(target, players);
+    zomb.setSpeed(ZOMBIE_BASE_SPEED);
+    zomb.setX(z.getX());
+    zomb.setY(z.getY());
+    this.zombies.put(zomb.getID(), zomb);
+    zombies.remove(z.getID());
   }
 
   @Override
