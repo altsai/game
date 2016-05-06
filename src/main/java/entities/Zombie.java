@@ -70,8 +70,8 @@ public class Zombie extends Entity {
   private void setSpawn() {
     Random r = new Random();
     while (inPlayerRadius()) {
-      this.x = r.nextFloat() * Window.width;
-      this.y = r.nextFloat() * Window.height;
+      this.x = r.nextFloat() * (Window.width - 30 - (2 * 20)) + 15;
+      this.y = r.nextFloat() * (Window.height - 60 - (2 * 20)) + 45;
     }
   }
 
