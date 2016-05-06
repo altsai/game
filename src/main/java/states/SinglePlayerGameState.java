@@ -11,18 +11,19 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
-import highscore.HighscoreSystem;
 import powerups.BlackHole;
 import powerups.Bomb;
 import powerups.LaserBeam;
 import powerups.OnFire;
 import powerups.Speed;
 import powerups.TimeStop;
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Player;
+import entities.ZombieFormationBody;
+import entities.ZombieFormationHead;
+import game_objects.Powerup;
+import highscore.HighscoreSystem;
 
 /**
  * Defines the Single Player game state.
@@ -118,54 +119,67 @@ public class SinglePlayerGameState extends GamePlayState {
     // spawns)
     if (this.spawnOn) {
 
-      if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
-
-        // have a random player to target
-        Player target = this.players.get(String.valueOf(random
-            .nextInt(this.players.size())));
-
-        // at any given time there is a 30% chance of multiple spawns
-        if (random.nextInt(9) < 3) {
-          for (int i = 0; i < this.difficultyLevel; i++) {
-            // spawn targeting a random player
-
-            Zombie newZombie = new Zombie(target, this.players);
-
-            // newZombie.setSpeed(ZOMBIE_BASE_SPEED
-            // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-            // * ZOMBIE_BASE_SPEED);
-            newZombie.setSpeed(ZOMBIE_BASE_SPEED);
-            this.zombies.put(newZombie.getID(), newZombie); // add to hashmap
-            // instead of add to
-            // list
-          }
-        }
-
-        Zombie newZombie = new Zombie(target, this.players);
-
-        // newZombie.setSpeed(ZOMBIE_BASE_SPEED
-        // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-        // * ZOMBIE_BASE_SPEED);
-        newZombie.setSpeed(ZOMBIE_BASE_SPEED);
-        this.zombies.put(newZombie.getID(), newZombie);
-
-        this.lastZombieSpawnTime = System.currentTimeMillis();
-      }
-
-      if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
-        if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > 10000) {
-
-          this.difficultyLevel++;
-          this.lastDifficultyIncreaseTime = System.currentTimeMillis();
-        }
-      }
+      // if (System.currentTimeMillis() - this.lastZombieSpawnTime >=
+      // ZOMBIE_SPAWN_DELAY) {
+      //
+      // // have a random player to target
+      Player target = this.players.get(String.valueOf(random
+          .nextInt(this.players.size())));
+      //
+      // // at any given time there is a 30% chance of multiple spawns
+      // if (random.nextInt(9) < 3) {
+      // for (int i = 0; i < this.difficultyLevel; i++) {
+      // // spawn targeting a random player
+      //
+      // Zombie newZombie = new Zombie(target, this.players);
+      //
+      // // newZombie.setSpeed(ZOMBIE_BASE_SPEED
+      // // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+      // // * ZOMBIE_BASE_SPEED);
+      // newZombie.setSpeed(ZOMBIE_BASE_SPEED);
+      // this.zombies.put(newZombie.getID(), newZombie); // add to hashmap
+      // // instead of add to
+      // // list
+      // }
+      // }
+      //
+      // Zombie newZombie = new Zombie(target, this.players);
+      //
+      // // newZombie.setSpeed(ZOMBIE_BASE_SPEED
+      // // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+      // // * ZOMBIE_BASE_SPEED);
+      // newZombie.setSpeed(ZOMBIE_BASE_SPEED);
+      // this.zombies.put(newZombie.getID(), newZombie);
+      //
+      // this.lastZombieSpawnTime = System.currentTimeMillis();
+      // }
+      //
+      // if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
+      // if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime >
+      // 10000) {
+      //
+      // this.difficultyLevel++;
+      // this.lastDifficultyIncreaseTime = System.currentTimeMillis();
+      // }
+      // }
+      ZombieFormationHead z = new ZombieFormationHead(target, players);
+      z.setSpeed(ZOMBIE_BASE_SPEED);
+      this.zombies.put(z.getID(), z);
+      ZombieFormationBody b1 = new ZombieFormationBody(z, players, 1, 135.0);
+      zombies.put(b1.getID(), b1);
+      ZombieFormationBody b2 = new ZombieFormationBody(z, players, 2, 135.0);
+      zombies.put(b2.getID(), b2);
+      ZombieFormationBody b3 = new ZombieFormationBody(z, players, 1, 225.0);
+      zombies.put(b3.getID(), b3);
+      ZombieFormationBody b4 = new ZombieFormationBody(z, players, 2, 225.0);
+      zombies.put(b4.getID(), b4);
+      spawnOn = false;
     }
   }
 
   @Override
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
-
       double randomNum = random.nextDouble();
       if (randomNum < .16) {
         Bomb bomb = new Bomb(powerups, zombies);
