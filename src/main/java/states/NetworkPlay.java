@@ -128,7 +128,7 @@ public abstract class NetworkPlay extends GamePlayState {
       }
     }
 
-    if (!this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_C)) {
+    if (!isTyping && !this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_C)) {
       this.chatOn = !this.chatOn;
     }
   }

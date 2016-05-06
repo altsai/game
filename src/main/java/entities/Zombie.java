@@ -1,10 +1,5 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Circle;
-
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -14,6 +9,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Maps;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Circle;
 
 /**
  * Defines the zombie object.
@@ -56,7 +56,7 @@ public class Zombie extends Entity {
   private boolean inPlayerRadius() {
     // check the player map for multiplayer
     for (Player p : this.allPlayers.values()) {
-      if (this.distTo(p) < 100) {
+      if (this.distTo(p) < 200) {
         return true;
       }
     }
@@ -86,8 +86,8 @@ public class Zombie extends Entity {
 
     Random r = new Random();
 
-    this.x = r.nextFloat() * Window.width;
-    this.y = r.nextFloat() * Window.height;
+    this.x = r.nextFloat() * (Window.width - 30 - (2 * 20)) + 15;
+    this.y = r.nextFloat() * (Window.height - 60 - (2 * 20)) + 45;
 
     this.radius = 20;
     this.image = Resources.getImage("zombie");
