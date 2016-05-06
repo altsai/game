@@ -74,7 +74,7 @@ public class Player extends Entity implements PlayerAction {
     this.x = 500;
     this.y = 500;
     this.radius = 30;
-    this.lives = 50;
+    this.lives = 5;
     this.powerup = null;
     this.score = 0;
     this.image = Resources.getImage("player");
@@ -583,14 +583,14 @@ public class Player extends Entity implements PlayerAction {
    */
   public boolean equals(Object obj) {
     if (obj instanceof Player) {
-    Player other = (Player) obj;
-    return (this.lastBombFired == other.lastBombFired
-        && this.id == other.id
-        && this.speed == other.speed
-        && this.top == other.top
-        && this.left == other.left
-        && this.right == other.right
-        && this.bottom == other.bottom);
+      Player other = (Player) obj;
+      return (this.lastBombFired == other.lastBombFired
+          && this.id == other.id
+          && this.speed == other.speed
+          && this.top == other.top
+          && this.left == other.left
+          && this.right == other.right
+          && this.bottom == other.bottom);
     } else {
       return false;
     }
