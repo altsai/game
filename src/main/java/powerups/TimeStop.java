@@ -131,7 +131,7 @@ public class TimeStop extends Powerup {
 
     if (this.isUsed
         && System.currentTimeMillis() - this.activationStartTime >= FREEZE_TIME) {
-      if (affectedPlayer.getLastTimeStop() == this.activationStartTime) {
+      if (affectedPlayer.getLastTimeStop() <= this.activationStartTime) {
         // tell the game to start spawning again
         this.game.setSpawnOn(true);
 
