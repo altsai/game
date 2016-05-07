@@ -24,5 +24,6 @@ public class States {
   public static final int CLIENT_END_GAME = 10;
   public static final int TWO_PLAYER_NAME_SERVER = 11;
   public static final int TWO_PLAYER_NAME_CLIENT = 12;
+  public static final int ABOUT = 13;
 
 }

@@ -1,5 +1,6 @@
 package states;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -12,6 +13,7 @@ import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
+import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
 import powerups.LaserBeam;
@@ -27,6 +29,11 @@ import powerups.TimeStop;
 public class TwoPlayerGameState extends GamePlayState {
   // string for now, we'll add names to players later, so then it'll be a player
   private String winner;
+
+  private static final int BUTTON_WIDTH = 280;
+  private static final int BUTTON_HEIGHT = 67;
+  private static final int PAUSE_MENU_HEIGHT = 300;
+  private static final int PAUSE_MENU_WIDTH = 300;
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
@@ -65,8 +72,22 @@ public class TwoPlayerGameState extends GamePlayState {
       updateAndCheckCollisions(gc, s, delta);
       updatePowerups(gc, delta);
 
-      // go to the home menu state when 'esc' is pressed
-      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+      // Get x and y mouse position coordinates
+      int posX = gc.getInput().getMouseX();
+      int posY = gc.getInput().getMouseY();
+      boolean inX = false;
+
+      if (pauseMenu && gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
+        inX = true;
+      }
+
+      // bring up/down pause menu
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
+        pauseMenu = !pauseMenu;
+      }
+
+      // back to main menu
+      if (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
         s.enterState(States.MENU);
       }
     }
@@ -79,14 +100,27 @@ public class TwoPlayerGameState extends GamePlayState {
 
     super.render(gc, s, g);
 
-    g.drawString("Player1 has " + this.players.get("0").getLives() + " lives",
-        100, 100);
-    g.drawString("Player2 has " + this.players.get("1").getLives() + " lives",
-        300, 100);
-    g.drawString("Player1 speed: " + this.players.get("0").getSpeed(), 100, 50);
-    g.drawString("Player2 speed: " + this.players.get("1").getSpeed(), 300, 50);
+    // Draw lives
+    for (int i = 0; i < this.players.get("0").getLives() + 1; i++) {
+      Resources.getImage("life").draw(15 + i * 25, 10, 20, 20);
+    }
+    for (int i = 0; i < this.players.get("1").getLives() + 1; i++) {
+      Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20, 20);
+    }
 
-    g.drawString("Hit esc to go to menu", Window.width / 2, Window.height / 2);
+    // Draw current powerups
+    g.setColor(Color.black);
+    g.drawRect(Window.width / 4 - 15, 6, 30, 30);
+    g.drawRect(3 * Window.width / 4 - 15, 6, 30, 30);
+    g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
+    Powerup currPowerup1 = this.players.get("0").getCurrPowerup();
+    Powerup currPowerup2 = this.players.get("1").getCurrPowerup();
+    if (currPowerup1 != null) {
+      currPowerup1.getImage().draw(Window.width / 4 - 9, 11, 20, 20);
+    }
+    if (currPowerup2 != null) {
+      currPowerup2.getImage().draw(3 * Window.width / 4 - 9, 11, 20, 20);
+    }
   }
 
   @Override
