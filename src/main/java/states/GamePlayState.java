@@ -200,6 +200,11 @@ public abstract class GamePlayState extends BasicGameState {
           }
         }
 
+        if ((zombies.get(id) != null)
+            && (zombies.get(id).getTarget() instanceof BlackHole)) {
+          breakFormation = false;
+        }
+
         if (breakFormation) {
           breakFormation(id);
         }
