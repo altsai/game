@@ -33,7 +33,7 @@ public class ZombieWall {
       zfbIds.add(b2.getID());
 
       yPos -= 20;
-      atCap = yPos < 61;
+      atCap = yPos < 60;
       n += 1;
     }
 
