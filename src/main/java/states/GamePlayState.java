@@ -175,45 +175,52 @@ public abstract class GamePlayState extends BasicGameState {
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
     if (this.gameStart) {
-      elapsedTime += delta;
 
-      spawnZombie();
-      spawnPowerup();
 
-      for (Player p : this.players.values()) {
-        p.updateAndControl(gc, delta);
-      }
+      if (!this.pauseMenu) {
 
-      boolean breakFormation = false;
-      for (String id : zombieFormations.keySet()) {
-        if (zombies.get(id) == null) {
-          breakFormation = true;
+        elapsedTime += delta;
+
+        spawnZombie();
+        spawnPowerup();
+
+        for (Player p : this.players.values()) {
+          p.updateAndControl(gc, delta);
         }
 
-        for (int i = 0; i < zombieFormations.get(id).size(); i++) {
-          Zombie z = zombies.get(zombieFormations.get(id).get(i));
-          if (z == null) {
+        boolean breakFormation = false;
+        for (String id : zombieFormations.keySet()) {
+          if (zombies.get(id) == null) {
             breakFormation = true;
-          } else if (z.getTarget() instanceof BlackHole) {
-            breakFormation = false;
-            break;
           }
-        }
 
-        if ((zombies.get(id) != null)
-            && (zombies.get(id).getTarget() instanceof BlackHole)) {
+          for (int i = 0; i < zombieFormations.get(id).size(); i++) {
+            Zombie z = zombies.get(zombieFormations.get(id).get(i));
+            if (z == null) {
+              breakFormation = true;
+            } else if (z.getTarget() instanceof BlackHole) {
+              breakFormation = false;
+              break;
+            }
+          }
+
+          if ((zombies.get(id) != null)
+              && (zombies.get(id).getTarget() instanceof BlackHole)) {
+            breakFormation = false;
+          }
+
+          if (breakFormation) {
+            breakFormation(id);
+          }
+
           breakFormation = false;
         }
 
-        if (breakFormation) {
-          breakFormation(id);
-        }
-
-        breakFormation = false;
+        updateAndCheckCollisions(gc, s, delta);
+        updatePowerups(gc, delta);
+      } else {
+        updatePowerupsPaused(gc, delta);
       }
-
-      updateAndCheckCollisions(gc, s, delta);
-      updatePowerups(gc, delta);
 
       // Get x and y mouse position coordinates
       int posX = gc.getInput().getMouseX();
@@ -235,6 +242,12 @@ public abstract class GamePlayState extends BasicGameState {
       }
     }
 
+  }
+
+  protected void updatePowerupsPaused(GameContainer gc, int delta) {
+    for (Powerup p : this.powerups.values()) {
+      p.updatePaused(gc, delta);
+    }
   }
 
   private void breakFormation(String id) {
