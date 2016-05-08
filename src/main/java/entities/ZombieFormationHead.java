@@ -1,5 +1,6 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Window;
 import game_objects.Circle;
 
 import java.util.Map;
@@ -11,6 +12,7 @@ public class ZombieFormationHead extends Zombie {
   private boolean independent;
   private double xTarg;
   private double yTarg;
+  private boolean right;
 
   public ZombieFormationHead(Entity other, Map<String, Player> players) {
     super(other, players);
@@ -18,11 +20,12 @@ public class ZombieFormationHead extends Zombie {
   }
 
   public ZombieFormationHead(Entity other, Map<String, Player> players,
-      boolean i, double x, double y) {
+      double x, double y) {
     super(other, players);
-    independent = i;
+    independent = true;
     xTarg = x;
     yTarg = y;
+    right = true;
   }
 
   @Override
@@ -64,12 +67,16 @@ public class ZombieFormationHead extends Zombie {
   }
 
   public void moveToPoint(int delta) {
-    double thisX = this.x - this.getRadius() / 2;
-    double thisY = this.x - this.getRadius() / 2;
-    directionAngle = Math.toDegrees(Math.atan2(yTarg - thisY, xTarg - thisX));
-
-    if (directionAngle < 0) {
-      directionAngle += 360;
+    if (right) {
+      if ((this.x + this.speed) >= Window.width - 30) {
+        right = false;
+      }
+      this.moveTo((float) (this.x + this.speed), this.y);
+    } else {
+      if ((this.x - this.speed) <= 10) {
+        right = true;
+      }
+      this.moveTo((float) (this.x - this.speed), this.y);
     }
 
     if (this.isOnFire()) {

@@ -21,6 +21,7 @@ import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.ZombieArrow;
+import entities.ZombieWall;
 import game_objects.Powerup;
 import highscore.HighscoreSystem;
 
@@ -162,6 +163,9 @@ public class SinglePlayerGameState extends GamePlayState {
       // }
       // }
       new ZombieArrow(target, players, ZOMBIE_BASE_SPEED, zombies,
+          zombieFormations);
+
+      new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,
           zombieFormations);
 
       spawnOn = false;
