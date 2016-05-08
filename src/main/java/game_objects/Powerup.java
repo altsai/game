@@ -38,6 +38,8 @@ public abstract class Powerup extends Circle {
   protected Map<String, Powerup> powerups;
   protected int powerupIndex;
   protected Player other;
+  protected long pauseStartTime;
+  protected boolean paused;
 
   protected float activationx;
   protected float activationy;
@@ -126,6 +128,8 @@ public abstract class Powerup extends Circle {
    *          Integer, change in time since last update
    */
   public void update(GameContainer gc, int delta) {
+    this.paused = false;
+    this.pauseStartTime = 0;
     if (!this.isPickedUp
         && System.currentTimeMillis() - this.spawnStartTime > EXPIRATION_DURATION) {
       this.kill();
@@ -133,6 +137,18 @@ public abstract class Powerup extends Circle {
 
     // also call deactivate for the specific powerup. Deactivate checks if
     // the effects should wear off.
+  }
+
+  public void updatePaused(GameContainer gc, int delta) {
+    if (this.paused = false) {
+      this.pauseStartTime = System.currentTimeMillis();
+    }
+    this.paused = true;
+    this.spawnStartTime += (System.currentTimeMillis() - this.pauseStartTime);
+
+    if (this.activationStartTime != 0) {
+      this.activationStartTime += (System.currentTimeMillis() - this.activationStartTime);
+    }
   }
 
   /**
