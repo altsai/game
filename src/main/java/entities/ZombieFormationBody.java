@@ -28,9 +28,10 @@ public class ZombieFormationBody extends Zombie {
       multX = -1;
     }
 
-    if ((ang > 180) && (ang < 360)) {
-      multY = -1;
-    } else if ((ang > 90) && (ang < 180)) {
+    // if ((ang > 180) && (ang < 360)) {
+    // multY = -1;
+    // } else
+    if ((ang > 90) && (ang < 180)) {
       multY = -1;
     }
 
@@ -88,9 +89,7 @@ public class ZombieFormationBody extends Zombie {
       multX = -1;
     }
 
-    if ((ang > 180) && (ang < 360)) {
-      multY = -1;
-    } else if ((ang > 90) && (ang < 180)) {
+    if ((ang > 90) && (ang < 180)) {
       multY = -1;
     }
 

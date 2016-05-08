@@ -1,8 +1,6 @@
 package states;
 
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -22,8 +20,7 @@ import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
-import entities.ZombieFormationBody;
-import entities.ZombieFormationHead;
+import entities.ZombieArrow;
 import game_objects.Powerup;
 import highscore.HighscoreSystem;
 
@@ -164,24 +161,8 @@ public class SinglePlayerGameState extends GamePlayState {
       // this.lastDifficultyIncreaseTime = System.currentTimeMillis();
       // }
       // }
-      ZombieFormationHead z = new ZombieFormationHead(target, players);
-      z.setSpeed(ZOMBIE_BASE_SPEED);
-      this.zombies.put(z.getID(), z);
-      ZombieFormationBody b1 = new ZombieFormationBody(z, players, 1, 135.0);
-      zombies.put(b1.getID(), b1);
-      ZombieFormationBody b2 = new ZombieFormationBody(z, players, 2, 135.0);
-      zombies.put(b2.getID(), b2);
-      ZombieFormationBody b3 = new ZombieFormationBody(z, players, 1, 225.0);
-      zombies.put(b3.getID(), b3);
-      ZombieFormationBody b4 = new ZombieFormationBody(z, players, 2, 225.0);
-      zombies.put(b4.getID(), b4);
-
-      List<String> zfbIds = new ArrayList<>();
-      zfbIds.add(b1.getID());
-      zfbIds.add(b2.getID());
-      zfbIds.add(b3.getID());
-      zfbIds.add(b4.getID());
-      zombieFormations.put(z.getID(), zfbIds);
+      new ZombieArrow(target, players, ZOMBIE_BASE_SPEED, zombies,
+          zombieFormations);
 
       spawnOn = false;
     }
