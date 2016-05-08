@@ -70,11 +70,14 @@ public class MenuState extends BasicGameState {
     Resources.getImage("buttonMulti").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
         Window.height / 8 + 300, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    Resources.getImage("buttonRank").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
+    Resources.getImage("buttonMultiOffline").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
         Window.height / 8 + 400, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    Resources.getImage("buttonAbout").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
+    Resources.getImage("buttonRank").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
         Window.height / 8 + 500, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+    Resources.getImage("buttonAbout").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
+        Window.height / 8 + 600, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   }
 
@@ -104,8 +107,16 @@ public class MenuState extends BasicGameState {
         }
       } else if (posY >= Window.height / 8 + 400
           && posY <= Window.height / 8 + 400 + BUTTON_HEIGHT) {
+        s.getState(States.TWO_PLAYER).init(gc, s);
+        s.enterState(States.TWO_PLAYER);
+      } else if (posY >= Window.height / 8 + 500
+          && posY <= Window.height / 8 + 500 + BUTTON_HEIGHT) {
         s.getState(States.HIGH_SCORES).init(gc, s);
         s.enterState(States.HIGH_SCORES);
+      } else if (posY >= Window.height / 8 + 600
+          && posY <= Window.height / 8 + 600 + BUTTON_HEIGHT) {
+        s.getState(States.ABOUT).init(gc, s);
+        s.enterState(States.ABOUT);
       }
     }
 
@@ -121,11 +132,14 @@ public class MenuState extends BasicGameState {
         JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
-      s.getState(States.HIGH_SCORES).init(gc, s);
-      s.enterState(States.HIGH_SCORES);
-    } else if (gc.getInput().isKeyPressed(Input.KEY_4)) {
       s.getState(States.TWO_PLAYER).init(gc, s);
       s.enterState(States.TWO_PLAYER);
+    } else if (gc.getInput().isKeyPressed(Input.KEY_4)) {
+      s.getState(States.HIGH_SCORES).init(gc, s);
+      s.enterState(States.HIGH_SCORES);
+    } else if (gc.getInput().isKeyPressed(Input.KEY_5)) {
+      s.getState(States.ABOUT).init(gc, s);
+      s.enterState(States.ABOUT);
     }
   }
 

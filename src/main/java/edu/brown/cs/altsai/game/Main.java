@@ -14,6 +14,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import highscore.HighscoreSystem;
+import states.AboutState;
 import states.ClientEndGame;
 import states.HighScoreState;
 import states.HostEndGame;
@@ -100,5 +101,6 @@ public class Main extends StateBasedGame {
     }
     this.addState(twoPlayerSameScreen);
     this.addState(new TwoPlayerEndGame(twoPlayerSameScreen));
+    this.addState(new AboutState());
   }
 }

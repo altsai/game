@@ -61,6 +61,9 @@ public class Resources {
       images.put("buttonToday", loadImage("img/wasd_button_today.png"));
       images.put("buttonAllTime", loadImage("img/wasd_button_alltime.png"));
       images.put("buttonMainMenu", loadImage("img/wasd_button_main_menu.png"));
+      images.put("buttonMainMenuLarge", loadImage("img/wasd_button_main_menu_large.png"));
+      images.put("buttonResume", loadImage("img/wasd_button_resume.png"));
+      images.put("buttonMultiOffline", loadImage("img/wasd_button_multiplayer_offline.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("injuredAnimation",

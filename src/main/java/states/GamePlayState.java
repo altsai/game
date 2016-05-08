@@ -1,5 +1,6 @@
 package states;
 
+import java.awt.Font;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -12,16 +13,17 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import powerups.BlackHole;
 
 /**
  * Provides a template for gameplay state objects.
@@ -71,6 +73,13 @@ public abstract class GamePlayState extends BasicGameState {
 
   protected int elapsedTime;
 
+  protected boolean pauseMenu;
+  protected TrueTypeFont ttf;
+  private static final int BUTTON_WIDTH = 280;
+  private static final int BUTTON_HEIGHT = 67;
+  private static final int PAUSE_MENU_HEIGHT = 300;
+  private static final int PAUSE_MENU_WIDTH = 300;
+
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     this.zombies = new ConcurrentHashMap<>();
@@ -86,6 +95,10 @@ public abstract class GamePlayState extends BasicGameState {
     this.spawnOn = true;
     this.loser = null;
     this.initialDelayTime = System.currentTimeMillis();
+
+    this.pauseMenu = false;
+    Font font = new Font("Arial", Font.BOLD, 50);
+    ttf = new TrueTypeFont(font, true);
   }
 
   public int getElapsedTime() {
@@ -136,6 +149,24 @@ public abstract class GamePlayState extends BasicGameState {
         z.render(gc, g);
       }
 
+      // Pause menu
+      if (pauseMenu) {
+        // Background rectangle
+        g.setColor(Color.black);
+        float currY = (Window.height - PAUSE_MENU_HEIGHT) / 2;
+        g.fillRoundRect((Window.width - PAUSE_MENU_WIDTH) / 2, currY, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT, 10);
+
+        // Title
+        currY += 20;
+        ttf.drawString((Window.width - ttf.getWidth("PAUSED")) / 2, currY, "PAUSED", Color.white);
+
+        // Buttons
+        currY += (20 + ttf.getLineHeight());
+        Resources.getImage("buttonResume").draw((Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH, BUTTON_HEIGHT);
+        currY += (20 + BUTTON_HEIGHT);
+        Resources.getImage("buttonMainMenuLarge").draw((Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH, BUTTON_HEIGHT);
+      }
+
     }
 
   }
@@ -184,8 +215,22 @@ public abstract class GamePlayState extends BasicGameState {
       updateAndCheckCollisions(gc, s, delta);
       updatePowerups(gc, delta);
 
-      // go to the home menu state when 'esc' is pressed
-      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+      // Get x and y mouse position coordinates
+      int posX = gc.getInput().getMouseX();
+      int posY = gc.getInput().getMouseY();
+      boolean inX = false;
+
+      if (pauseMenu && gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
+        inX = true;
+      }
+
+      // bring up/down pause menu
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
+        pauseMenu = !pauseMenu;
+      }
+
+      // back to main menu
+      if (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
         s.enterState(States.MENU);
       }
     }
