@@ -25,8 +25,8 @@ import edu.brown.cs.altsai.game.Window;
  */
 public class MenuState extends BasicGameState {
 
-  private static final int BUTTON_WIDTH = 375;
-  private static final int BUTTON_HEIGHT = 142;
+  private static final int BUTTON_WIDTH = 250;
+  private static final int BUTTON_HEIGHT = 95;
 
   private TrueTypeFont ttf;
   private TrueTypeFont ttf2;
@@ -57,23 +57,23 @@ public class MenuState extends BasicGameState {
 
     // Draw buttons
     Resources.getImage("buttonSingle").draw(
-        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 200,
+        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 200,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonMulti").draw(
-        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 300,
+        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 300,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonMultiOffline").draw(
-        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 400,
+        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 400,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonRank").draw(
-        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 500,
+        Window.width / 2 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 200,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonAbout").draw(
-        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 600,
+        Window.width / 2 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 300,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
   }
