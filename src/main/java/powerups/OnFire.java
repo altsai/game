@@ -1,15 +1,15 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Zombie;
+import game_objects.Powerup;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
-
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import game_objects.Powerup;
 
 /**
  * OnFire Powerup that gives the player a temporary capability of lighting
@@ -71,30 +71,30 @@ public class OnFire extends Powerup {
         Zombie z = zombies.get(zid);
 
         // if has been on fire for two seconds
-        if ((onFireTimes.get(zid) != null)
-            && ((System.currentTimeMillis() - onFireTimes.get(zid)) >= INDIV_FIRE)) {
-          zombies.remove(zid);
-          onFireTimes.remove(zid);
-          affectedPlayer.incrementScore();
-          continue;
+        if (onFireTimes.get(zid) != null) {
+          if (System.currentTimeMillis() - onFireTimes.get(zid) >= INDIV_FIRE) {
+            zombies.remove(zid);
+            onFireTimes.remove(zid);
+            affectedPlayer.incrementScore();
+            continue;
+          } else {
+            for (String ozid : zombies.keySet()) {
+              Zombie other = zombies.get(ozid);
+              if ((!ozid.equals(zid)) && (z.distTo(other) <= FIRE_RADIUS)) {
+                other.setState(true);
+                onFireTimes.put(ozid, System.currentTimeMillis());
+              }
+            }
+          }
         }
 
         // if collides with the player
-        if (z.distTo(affectedPlayer) <= FIRE_RADIUS_PLAYER && (onFireTimes.get(zid) == null)) {
+        if (z.distTo(affectedPlayer) <= FIRE_RADIUS_PLAYER
+            && (onFireTimes.get(zid) == null)) {
           z.setState(true);
           onFireTimes.put(zid, System.currentTimeMillis());
         }
 
-        // if on fire and collides with another zombie
-        if (onFireTimes.get(zid) != null) {
-          for (String ozid : zombies.keySet()) {
-            Zombie other = zombies.get(ozid);
-            if ((!ozid.equals(zid)) && (z.distTo(other) <= FIRE_RADIUS)) {
-              other.setState(true);
-              onFireTimes.put(ozid, System.currentTimeMillis());
-            }
-          }
-        }
       }
     }
 
