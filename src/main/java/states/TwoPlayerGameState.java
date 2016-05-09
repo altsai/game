@@ -60,6 +60,8 @@ public class TwoPlayerGameState extends GamePlayState {
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
     if (this.gameStart) {
+
+      if (!this.pauseMenu) {
       elapsedTime += delta;
 
       spawnZombie();
@@ -72,10 +74,15 @@ public class TwoPlayerGameState extends GamePlayState {
       updateAndCheckCollisions(gc, s, delta);
       updatePowerups(gc, delta);
 
+      } else {
+        this.updatePowerupsPaused(gc, delta);
+      }
+
       // Get x and y mouse position coordinates
       int posX = gc.getInput().getMouseX();
       int posY = gc.getInput().getMouseY();
       boolean inX = false;
+
 
       if (pauseMenu && gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
         inX = true;

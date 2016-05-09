@@ -36,31 +36,31 @@ public class Resources {
       images.put("player", loadImage("img/player_1.png"));
       images.put("player2", loadImage("img/player_2.png"));
       images.put("zombie", loadImage("img/zombie.png"));
-      images.put("life", loadImage("img/wasd_life.png"));
-      images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
+      images.put("life", loadImage("img/heart.png"));
       images.put("bomb", loadImage("img/bomb_icon.png"));
       images.put("speed", loadImage("img/speed_icon.png"));
       images.put("timestop", loadImage("img/timestop_icon.png"));
       images.put("background", loadImage("img/background.png"));
-      images.put("w_key", loadImage("img/W_key.png"));
-      images.put("a_key", loadImage("img/A_key.png"));
-      images.put("s_key", loadImage("img/S_key.png"));
-      images.put("d_key", loadImage("img/D_key.png"));
+      images.put("backgroundMainMenu", loadImage("img/background_main_menu.png"));
       images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
-      images.put("button", loadImage("img/wasd_button.png"));
-      images.put("buttonSingle", loadImage("img/wasd_button_singleplayer.png"));
-      images.put("buttonMulti", loadImage("img/wasd_button_multiplayer.png"));
-      images.put("buttonRank", loadImage("img/wasd_button_rankings.png"));
-      images.put("buttonAbout", loadImage("img/wasd_button_about.png"));
-      images.put("buttonLocal", loadImage("img/wasd_button_local.png"));
-      images.put("buttonYear", loadImage("img/wasd_button_year.png"));
-      images.put("buttonMonth", loadImage("img/wasd_button_month.png"));
-      images.put("buttonToday", loadImage("img/wasd_button_today.png"));
-      images.put("buttonAllTime", loadImage("img/wasd_button_alltime.png"));
-      images.put("buttonMainMenu", loadImage("img/wasd_button_main_menu.png"));
-      images.put("buttonMainMenuLarge", loadImage("img/wasd_button_main_menu_large.png"));
-      images.put("buttonResume", loadImage("img/wasd_button_resume.png"));
-      images.put("buttonMultiOffline", loadImage("img/wasd_button_multiplayer_offline.png"));
+
+      images.put("button", loadImage("img/buttons/buttonrounded1.png"));
+      images.put("buttonSingle", loadImage("img/buttons/spg_button.png"));
+      images.put("buttonMulti", loadImage("img/buttons/omulti_button.png"));
+      images.put("buttonRank", loadImage("img/buttons/rankings_button.png"));
+      images.put("buttonAbout", loadImage("img/buttons/about_button.png"));
+      images.put("buttonLocal", loadImage("img//buttons/local_button.png"));
+      images.put("buttonYear", loadImage("img/buttons/gyear_button.png"));
+      images.put("buttonMonth", loadImage("img/buttons/gmonth_button.png"));
+      images.put("buttonToday", loadImage("img/buttons/gtoday_button.png"));
+      images.put("buttonAllTime", loadImage("img/buttons/gall_button.png"));
+      images.put("buttonMainMenu",
+          loadImage("img/buttons/main_small_button.png"));
+      images.put("buttonMainMenuLarge",
+          loadImage("img/buttons/main_button.png"));
+      images.put("buttonResume", loadImage("img/buttons/resume_button.png"));
+      images.put("buttonMultiOffline",
+          loadImage("img/buttons/offmulti_button.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_animation.png", 200, 200));
       sprites.put("injuredAnimation",
