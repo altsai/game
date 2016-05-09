@@ -45,6 +45,9 @@ public class Resources {
       images.put("backgroundMainMenuSmall", loadImage("img/background_main_menu_small.png"));
       images.put("gray_arrow", loadImage("img/gray_arrow.png"));
 
+
+      images.put("aboutPage", loadImage("img/aboutpage.png"));
+
       images.put("button", loadImage("img/buttons/buttonrounded1.png"));
       images.put("buttonSingle", loadImage("img/buttons/spg_button.png"));
       images.put("buttonMulti", loadImage("img/buttons/omulti_button.png"));
