@@ -129,7 +129,7 @@ public class SinglePlayerGameState extends GamePlayState {
             .nextInt(this.players.size())));
         int prob = random.nextInt(20);
         if (prob < 2) {
-          new ZombieArrow(target, players, ZOMBIE_BASE_SPEED, zombies,
+          new ZombieArrow(target, players, ZOMBIE_BASE_SPEED * 1.5, zombies,
               zombieFormations);
         } else if (prob == 2) {
           new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,

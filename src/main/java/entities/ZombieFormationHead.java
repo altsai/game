@@ -71,12 +71,12 @@ public class ZombieFormationHead extends Zombie {
       if ((this.x + this.speed) >= Window.width - 30) {
         right = false;
       }
-      this.moveTo((float) (this.x + this.speed), this.y);
+      this.moveTo((float) (this.x + this.speed * .75), this.y);
     } else {
       if ((this.x - this.speed) <= 10) {
         right = true;
       }
-      this.moveTo((float) (this.x - this.speed), this.y);
+      this.moveTo((float) (this.x - this.speed * .75), this.y);
     }
 
     if (this.isOnFire()) {
