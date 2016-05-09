@@ -107,6 +107,8 @@ public class TimeStop extends Powerup {
     this.isUsed = true;
     this.activationStartTime = System.currentTimeMillis();
 
+    game.setTimeStopped(true);
+
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
 
@@ -134,6 +136,7 @@ public class TimeStop extends Powerup {
       if (affectedPlayer.getLastTimeStop() <= this.activationStartTime) {
         // tell the game to start spawning again
         this.game.setSpawnOn(true);
+        game.setTimeStopped(false);
 
         // reset Zombie speeds
         for (String zid : zombies.keySet()) {
