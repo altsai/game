@@ -63,13 +63,9 @@ public class Resources {
       images.put("buttonResume", loadImage("img/buttons/resume_button.png"));
       images.put("buttonMultiOffline",
           loadImage("img/buttons/offmulti_button.png"));
-      images.put("background", loadImage("img/background1-.png"));
+      images.put("background", loadImage("img/preview1.png"));
+      images.put("logo", loadImage("img/logo-4-1.png"));
 
-      images.put("key", loadImage("img/blank_key.png"));
-      images.put("w_key", loadImage("img/W_key.png"));
-      images.put("a_key", loadImage("img/A_key.png"));
-      images.put("s_key", loadImage("img/S_key.png"));
-      images.put("d_key", loadImage("img/D_key.png"));
       images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
       images.put("blackholeLarge", loadImage("img/wasd_blackhole_large_2.png"));
       images.put("particle", loadImage("img/particle.png"));

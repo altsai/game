@@ -6,7 +6,6 @@ import java.awt.Font;
 
 import javax.swing.JOptionPane;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -52,17 +51,9 @@ public class MenuState extends BasicGameState {
       throws SlickException {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
-    // Draw title
-    Resources.getImage("w_key").draw(Window.width / 2 - 85 - 100,
-        Window.height / 8, 128, 102);
-    Resources.getImage("a_key").draw(Window.width / 2 - 85 * 2 - 100,
-        Window.height / 8 + 85, 128, 102);
-    Resources.getImage("s_key").draw(Window.width / 2 - 85 - 100,
-        Window.height / 8 + 85, 128, 102);
-    Resources.getImage("d_key").draw(Window.width / 2 - 100,
-        Window.height / 8 + 85, 128, 102);
-    ttf.drawString(Window.width / 2 + 125 - 100, Window.height / 8 + 115,
-        "To Live", Color.black);
+    // // Draw title
+    // Resources.getImage("logo").draw(Window.width / 2 - 85 - 100,
+    // Window.height / 8, 887, 313);
 
     // Draw buttons
     Resources.getImage("buttonSingle").draw(
