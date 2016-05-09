@@ -36,7 +36,8 @@ public class Resources {
       images.put("player", loadImage("img/player_1.png"));
       images.put("player2", loadImage("img/player_2.png"));
       images.put("zombie", loadImage("img/zombie.png"));
-      images.put("life", loadImage("img/heart.png"));
+      images.put("life1", loadImage("img/heart_green.png"));
+      images.put("life2", loadImage("img/heart_orange.png"));
       images.put("bomb", loadImage("img/bomb_icon.png"));
       images.put("speed", loadImage("img/speed_icon.png"));
       images.put("timestop", loadImage("img/timestop_icon.png"));

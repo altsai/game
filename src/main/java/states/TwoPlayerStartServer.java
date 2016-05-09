@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -49,8 +47,6 @@ public class TwoPlayerStartServer extends BasicGameState {
   private TrueTypeFont headerFont;
   private TrueTypeFont entryFont;
   private TrueTypeFont searchFont;
-
-  private boolean invalidNumber;
 
   private static final int PADDING = 15;
   private int numberWidth;
@@ -114,8 +110,6 @@ public class TwoPlayerStartServer extends BasicGameState {
 
       initializedTextFields = true;
     }
-
-    invalidNumber = false;
 
     serverField.setAcceptingInput(true);
     serverField.setText("");
@@ -204,11 +198,6 @@ public class TwoPlayerStartServer extends BasicGameState {
     serverField.setBackgroundColor(Color.white);
     serverField.setBorderColor(Color.black);
     serverField.setTextColor(Color.black);
-
-    // Draw 'invalid number' if applicable
-    if (invalidNumber) {
-      entryFont.drawString((Window.width - 200 - entryFont.getWidth("Enter server number or name to join: ")) / 4 + entryFont.getWidth("Enter server number or name to join: ") + 200 + 10, currHeight, "No Results!", Color.red);
-    }
 
     // Get some variables
     float tableX = (Window.width / 2 - tableWidth) / 2;
@@ -361,7 +350,7 @@ public class TwoPlayerStartServer extends BasicGameState {
           s.getState(States.TWO_PLAYER_CLIENT).init(gc, s);
           s.enterState(States.TWO_PLAYER_CLIENT);
         } else {
-          JOptionPane.showMessageDialog(null, "Oops! That's not a valid number!");
+          Window.showMessage("Invalid Number", "Oops! That's not a valid number!");
         }
       } catch (NumberFormatException e) {
         if (serverNames.contains(input)) {
@@ -369,7 +358,7 @@ public class TwoPlayerStartServer extends BasicGameState {
           s.getState(States.TWO_PLAYER_CLIENT).init(gc, s);
           s.enterState(States.TWO_PLAYER_CLIENT);
         } else {
-          JOptionPane.showMessageDialog(null, "Oops! That's not a valid name!");
+          Window.showMessage("Invalid Name", "Oops! That's not a valid name!");
         }
       }
     }
@@ -385,7 +374,7 @@ public class TwoPlayerStartServer extends BasicGameState {
           s.getState(States.TWO_PLAYER_HOST).init(gc, s);
           s.enterState(States.TWO_PLAYER_HOST);
         } else {
-          JOptionPane.showMessageDialog(null, "Oops! That server name is already taken!");
+          Window.showMessage("Name Taken", "Oops! That server name is already taken!");
         }
       } catch (SocketException | SQLException e) {
         e.printStackTrace();

@@ -65,7 +65,7 @@ public class SinglePlayerGameState extends GamePlayState {
 
     // Draw lives
     for (int i = 0; i < this.players.get("0").getLives() + 1; i++) {
-      Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20, 20);
+      Resources.getImage("life1").draw(Window.width - 35 - i * 25, 10, 20, 20);
     }
 
     // Draw score

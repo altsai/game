@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-import javax.swing.JOptionPane;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -135,7 +133,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
         if (highscoreSystem.addGlobalScore(nameField.getText(), spgs.getScore(), spgs.getElapsedTime())) {
           s.enterState(States.MENU);
         } else {
-          JOptionPane.showMessageDialog(null, "Oops! Someone in the global highscores board already has that name!");
+          Window.showMessage("Name Taken", "Oops! Someone in the global highscores board already has that name!");
         }
       } catch (SQLException e) {
         e.printStackTrace();
