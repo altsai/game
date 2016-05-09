@@ -47,6 +47,7 @@ public class Resources {
 
 
       images.put("aboutPage", loadImage("img/aboutpage.png"));
+      images.put("aboutPageSmall", loadImage("img/aboutpage_small.png"));
 
       images.put("button", loadImage("img/buttons/buttonrounded1.png"));
       images.put("buttonSingle", loadImage("img/buttons/spg_button.png"));

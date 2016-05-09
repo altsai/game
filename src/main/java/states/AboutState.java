@@ -39,7 +39,11 @@ public class AboutState extends BasicGameState {
     Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH,
         BUTTON_HEIGHT);
 
-    Resources.getImage("aboutPage").draw(0, 0, Window.width, Window.height);
+    if (Window.width == 1390) {
+      Resources.getImage("aboutPage").draw(0, 0);
+    } else {
+      Resources.getImage("aboutPageSmall").draw(0, 0);
+    }
   }
 
   @Override
@@ -52,7 +56,7 @@ public class AboutState extends BasicGameState {
     // Back to main menu
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (gc.getInput().isMouseButtonDown(0) && posX >= 20
-            && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
+        && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
       s.enterState(States.MENU);
     }
   }
