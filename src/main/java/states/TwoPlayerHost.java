@@ -281,7 +281,6 @@ public class TwoPlayerHost extends NetworkPlay {
   }
 
   private void moveZombies() {
-    // change this to a list of arrays?
     if (this.server.getConnections().length > 0) {
       if (this.zombies.size() > 100) {
         // break up the list into smaller lists of 10 to send

@@ -17,13 +17,13 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.BlackHole;
 
 /**
  * Provides a template for gameplay state objects.
@@ -243,7 +243,7 @@ public abstract class GamePlayState extends BasicGameState {
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (inX
             && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-            + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
+                + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
             / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
       pauseMenu = !pauseMenu;
     }
@@ -251,9 +251,9 @@ public abstract class GamePlayState extends BasicGameState {
     // back to main menu
     if (inX
         && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
+            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
         && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
+            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
       s.enterState(States.MENU);
     }
   }
@@ -376,6 +376,10 @@ public abstract class GamePlayState extends BasicGameState {
 
   public void setTimeStopped(boolean t) {
     timeStopped = t;
+  }
+
+  public boolean isTimeStopped() {
+    return timeStopped;
   }
 
   public boolean isGameEnd() {

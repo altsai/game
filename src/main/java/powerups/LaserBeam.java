@@ -167,7 +167,7 @@ public class LaserBeam extends Powerup {
       }
 
       // update client if this is networked version of laser
-      if (server != null) {
+      if (server != null && !removedZombies.isEmpty()) {
         server.removeZombie(removedZombies);
       }
 

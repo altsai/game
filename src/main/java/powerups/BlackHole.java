@@ -167,7 +167,9 @@ public class BlackHole extends Powerup {
         }
       }
 
-      this.game.setSpawnOn(true);
+      if (!game.isTimeStopped()) {
+        this.game.setSpawnOn(true);
+      }
 
       kill();
     }
@@ -179,7 +181,13 @@ public class BlackHole extends Powerup {
         .size())));
 
     Zombie zomb = new Zombie(target, players);
-    zomb.setSpeed(.9);
+
+    if (game.isTimeStopped()) {
+      zomb.setSpeed(0);
+    } else {
+      zomb.setSpeed(.9);
+    }
+
     zomb.setX(z.getX());
     zomb.setY(z.getY());
     this.zombies.put(zomb.getID(), zomb);
