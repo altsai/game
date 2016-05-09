@@ -17,13 +17,13 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.BlackHole;
 
 /**
  * Provides a template for gameplay state objects.
