@@ -8,6 +8,10 @@ import java.util.Random;
 import edu.brown.cs.altsai.game.Window;
 
 public class ZombieWall {
+
+  public final static int GAP_WIDTH = 3;
+
+
   public ZombieWall(Entity target, Map<String, Player> players, double speed,
       Map<String, Zombie> zombies, Map<String, List<String>> zombieFormations) {
     float x = 13.0f;
@@ -33,7 +37,7 @@ public class ZombieWall {
       if (n == gap) {
         // pick a random side to fill in (so the other side gets the gap)
         if (r.nextInt(2) == 0) {
-          while (Math.abs(n - gap) <= 3) {
+          while (Math.abs(n - gap) <= GAP_WIDTH) {
             ZombieFormationBody b1 = new ZombieFormationBody(z, players, n, 270.0);
             zombies.put(b1.getID(), b1);
             zfbIds.add(b1.getID());
@@ -42,7 +46,7 @@ public class ZombieWall {
             atCap = yPos < 60;
           }
         } else {
-          while (Math.abs(n - gap) <= 2) {
+          while (Math.abs(n - gap) <= GAP_WIDTH) {
             n++;
             yPos -= 20;
             atCap = yPos < 60;
