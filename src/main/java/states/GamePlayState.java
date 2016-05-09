@@ -127,7 +127,7 @@ public abstract class GamePlayState extends BasicGameState {
 
     long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
     if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
-      // this.setElapsedTime(0);
+      this.setElapsedTime(0);
       g.drawString("Game begins in: "
           + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
     } else {
