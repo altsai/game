@@ -119,6 +119,20 @@ public class BlackHole extends Powerup {
     // turn off spawning of new Zombies
     this.game.setSpawnOn(false);
 
+    for (String s : zombieFormations.keySet()) {
+      if (zombies.get(s) != null) {
+        replaceZombie(zombies.get(s));
+      }
+
+      for (int i = 0; i < zombieFormations.get(s).size(); i++) {
+        if (zombies.get(zombieFormations.get(s).get(i)) != null) {
+          replaceZombie(zombies.get(zombieFormations.get(s).get(i)));
+        }
+      }
+
+      zombieFormations.remove(s);
+    }
+
     // set target of all Zombies to the BlackHole
     for (Zombie z : this.zombies.values()) {
       if (z instanceof ZombieFormationBody) {
@@ -150,20 +164,6 @@ public class BlackHole extends Powerup {
         if (z.getTarget() == this) {
           z.setTarget(this.affectedPlayer);
         }
-      }
-
-      for (String s : zombieFormations.keySet()) {
-        if (zombies.get(s) != null) {
-          replaceZombie(zombies.get(s));
-        }
-
-        for (int i = 0; i < zombieFormations.get(s).size(); i++) {
-          if (zombies.get(zombieFormations.get(s).get(i)) != null) {
-            replaceZombie(zombies.get(zombieFormations.get(s).get(i)));
-          }
-        }
-
-        zombieFormations.remove(s);
       }
 
       this.game.setSpawnOn(true);
