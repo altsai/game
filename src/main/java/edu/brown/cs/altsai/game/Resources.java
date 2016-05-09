@@ -33,48 +33,52 @@ public class Resources {
 
     // load in all the files that are initially needed
     try {
-      images.put("player", loadImage("img/wasd_to_live_hero_small.png"));
-      images.put("player2", loadImage("img/player2.png"));
-      images.put("zombie", loadImage("img/wasd_zombie_v3_small.png"));
-      images.put("life", loadImage("img/wasd_life.png"));
-      images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
-      images.put("bomb", loadImage("img/wasd_bomb.png"));
-      images.put("speed", loadImage("img/wasd_speed.png"));
-      images.put("timestop", loadImage("img/wasd_timestop.png"));
-      images.put("background", loadImage("img/wasd_background_blue_2.png"));
+      images.put("player", loadImage("img/player1-2.png"));
+      images.put("player2", loadImage("img/player2-2.png"));
+      images.put("zombie", loadImage("img/enemyROUNDRED1.png"));
+      images.put("life", loadImage("img/heart.png"));
+      // images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
+      images.put("bomb", loadImage("img/powerup-icon-bombred1.png"));
+      images.put("speed", loadImage("img/powerup-icon-speedwhite2.png"));
+      images.put("timestop", loadImage("img/powerup-icon-timestopwhite1.png"));
+      images.put("blackhole", loadImage("img/powerup-icon-blkholewhite1.png"));
+      images.put("fire", loadImage("img/powerup-icon-firewhite3.png"));
+      images.put("jail", loadImage("img/powerup-icon-jailwhite2.png"));
+      // images.put("firezombie", loadImage("img/firezombie.png"));
+      images.put("laserbeam", loadImage("img/powerup-icon-laserwhite2.png"));
+      images.put("button", loadImage("img/buttons/buttonrounded1.png"));
+      images.put("buttonSingle", loadImage("img/buttons/spg_button.png"));
+      images.put("buttonMulti", loadImage("img/buttons/omulti_button.png"));
+      images.put("buttonRank", loadImage("img/buttons/rankings_button.png"));
+      images.put("buttonAbout", loadImage("img/buttons/about_button.png"));
+      images.put("buttonLocal", loadImage("img//buttons/local_button.png"));
+      images.put("buttonYear", loadImage("img/buttons/gyear_button.png"));
+      images.put("buttonMonth", loadImage("img/buttons/gmonth_button.png"));
+      images.put("buttonToday", loadImage("img/buttons/gtoday_button.png"));
+      images.put("buttonAllTime", loadImage("img/buttons/gall_button.png"));
+      images.put("buttonMainMenu",
+          loadImage("img/buttons/main_small_button.png"));
+      images.put("buttonMainMenuLarge",
+          loadImage("img/buttons/main_button.png"));
+      images.put("buttonResume", loadImage("img/buttons/resume_button.png"));
+      images.put("buttonMultiOffline",
+          loadImage("img/buttons/offmulti_button.png"));
+      images.put("background", loadImage("img/background1-.png"));
+
       images.put("key", loadImage("img/blank_key.png"));
       images.put("w_key", loadImage("img/W_key.png"));
       images.put("a_key", loadImage("img/A_key.png"));
       images.put("s_key", loadImage("img/S_key.png"));
       images.put("d_key", loadImage("img/D_key.png"));
       images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
+      images.put("blackholeLarge", loadImage("img/wasd_blackhole_large_2.png"));
+      images.put("particle", loadImage("img/particle.png"));
       images
-      .put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
-      images.put("button", loadImage("img/wasd_button.png"));
-      images.put("buttonSingle", loadImage("img/wasd_button_singleplayer.png"));
-      images.put("buttonMulti", loadImage("img/wasd_button_multiplayer.png"));
-      images.put("buttonRank", loadImage("img/wasd_button_rankings.png"));
-      images.put("buttonAbout", loadImage("img/wasd_button_about.png"));
-      images.put("buttonLocal", loadImage("img/wasd_button_local.png"));
-      images.put("buttonYear", loadImage("img/wasd_button_year.png"));
-      images.put("buttonMonth", loadImage("img/wasd_button_month.png"));
-      images.put("buttonToday", loadImage("img/wasd_button_today.png"));
-      images.put("buttonAllTime", loadImage("img/wasd_button_alltime.png"));
-      images.put("buttonMainMenu", loadImage("img/wasd_button_main_menu.png"));
-      images.put("buttonMainMenuLarge", loadImage("img/wasd_button_main_menu_large.png"));
-      images.put("buttonResume", loadImage("img/wasd_button_resume.png"));
-      images.put("buttonMultiOffline", loadImage("img/wasd_button_multiplayer_offline.png"));
+          .put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("injuredAnimation",
           loadSprite("img/wasd_injured_sprite.png", 30, 30));
-      images.put("blackhole", loadImage("img/wasd_blackhole.png"));
-      images.put("blackholeLarge", loadImage("img/wasd_blackhole_large_2.png"));
-      images.put("fire", loadImage("img/wasd_fire.png"));
-      images.put("jail", loadImage("img/jail.png"));
-      images.put("firezombie", loadImage("img/firezombie.png"));
-      images.put("laserbeam", loadImage("img/laserbeam.png"));
-      images.put("particle", loadImage("img/particle.png"));
       images.put("particle_black", loadImage("img/particle_black.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));

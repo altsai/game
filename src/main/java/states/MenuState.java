@@ -1,5 +1,7 @@
 package states;
 
+import highscore.HighscoreSystem;
+
 import java.awt.Font;
 
 import javax.swing.JOptionPane;
@@ -15,7 +17,6 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
-import highscore.HighscoreSystem;
 
 /**
  * Defines the Menu state of the game.
@@ -25,8 +26,8 @@ import highscore.HighscoreSystem;
  */
 public class MenuState extends BasicGameState {
 
-  private static final int BUTTON_WIDTH = 280;
-  private static final int BUTTON_HEIGHT = 67;
+  private static final int BUTTON_WIDTH = 375;
+  private static final int BUTTON_HEIGHT = 142;
 
   private TrueTypeFont ttf;
   private TrueTypeFont ttf2;
@@ -52,32 +53,37 @@ public class MenuState extends BasicGameState {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     // Draw title
-    Resources.getImage("w_key").draw(Window.width / 2 - 85 - 100, Window.height / 8, 128,
-        102);
+    Resources.getImage("w_key").draw(Window.width / 2 - 85 - 100,
+        Window.height / 8, 128, 102);
     Resources.getImage("a_key").draw(Window.width / 2 - 85 * 2 - 100,
         Window.height / 8 + 85, 128, 102);
-    Resources.getImage("s_key").draw(Window.width / 2 - 85 - 100, Window.height / 8 + 85,
-        128, 102);
+    Resources.getImage("s_key").draw(Window.width / 2 - 85 - 100,
+        Window.height / 8 + 85, 128, 102);
     Resources.getImage("d_key").draw(Window.width / 2 - 100,
         Window.height / 8 + 85, 128, 102);
-    ttf.drawString(Window.width / 2 + 125 - 100, Window.height / 8 + 115, "To Live",
-        Color.black);
+    ttf.drawString(Window.width / 2 + 125 - 100, Window.height / 8 + 115,
+        "To Live", Color.black);
 
     // Draw buttons
-    Resources.getImage("buttonSingle").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 200, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonSingle").draw(
+        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 200,
+        BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    Resources.getImage("buttonMulti").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 300, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonMulti").draw(
+        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 300,
+        BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    Resources.getImage("buttonMultiOffline").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 400, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonMultiOffline").draw(
+        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 400,
+        BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    Resources.getImage("buttonRank").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 500, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonRank").draw(
+        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 500,
+        BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    Resources.getImage("buttonAbout").draw(Window.width / 2 - BUTTON_WIDTH / 2 - 20,
-        Window.height / 8 + 600, BUTTON_WIDTH, BUTTON_HEIGHT);
+    Resources.getImage("buttonAbout").draw(
+        Window.width / 2 - BUTTON_WIDTH / 2 - 20, Window.height / 8 + 600,
+        BUTTON_WIDTH, BUTTON_HEIGHT);
 
   }
 
@@ -90,7 +96,8 @@ public class MenuState extends BasicGameState {
     int posY = gc.getInput().getMouseY();
 
     // Check if they are clicking in the button area
-    if (gc.getInput().isMousePressed(0) && posX >= Window.width / 2 - BUTTON_WIDTH / 2 - 20
+    if (gc.getInput().isMousePressed(0)
+        && posX >= Window.width / 2 - BUTTON_WIDTH / 2 - 20
         && posX <= Window.width / 2 - BUTTON_WIDTH / 2 - 20 + BUTTON_WIDTH) {
       if (posY >= Window.height / 8 + 200
           && posY <= Window.height / 8 + 200 + BUTTON_HEIGHT) {
@@ -103,7 +110,11 @@ public class MenuState extends BasicGameState {
           s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
           s.enterState(States.TWO_PLAYER_START_SERVER);
         } else {
-          JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+          JOptionPane
+              .showMessageDialog(
+                  null,
+                  "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
+                  "Connection Error", JOptionPane.ERROR_MESSAGE);
         }
       } else if (posY >= Window.height / 8 + 400
           && posY <= Window.height / 8 + 400 + BUTTON_HEIGHT) {
@@ -129,7 +140,11 @@ public class MenuState extends BasicGameState {
         s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
         s.enterState(States.TWO_PLAYER_START_SERVER);
       } else {
-        JOptionPane.showMessageDialog(null, "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane
+            .showMessageDialog(
+                null,
+                "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
+                "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     } else if (gc.getInput().isKeyDown(Input.KEY_3)) {
       s.getState(States.TWO_PLAYER).init(gc, s);
