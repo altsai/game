@@ -13,7 +13,7 @@ public class ZombieWall {
     float x = 13.0f;
     float y = (float) ((Window.height - 50) / 2.0) + 40;
     ZombieFormationHead z = new ZombieFormationHead(target, players,
-        Window.width - 40, y - 15);
+        Window.width - 40, y - 5);
     z.setSpeed(speed);
     z.setX(x);
     z.setY(y);

@@ -17,13 +17,13 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.BlackHole;
 
 /**
  * Provides a template for gameplay state objects.
@@ -155,17 +155,23 @@ public abstract class GamePlayState extends BasicGameState {
         // Background rectangle
         g.setColor(Color.black);
         float currY = (Window.height - PAUSE_MENU_HEIGHT) / 2;
-        g.fillRoundRect((Window.width - PAUSE_MENU_WIDTH) / 2, currY, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT, 10);
+        g.fillRoundRect((Window.width - PAUSE_MENU_WIDTH) / 2, currY,
+            PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT, 10);
 
         // Title
         currY += 20;
-        ttf.drawString((Window.width - ttf.getWidth("PAUSED")) / 2, currY, "PAUSED", Color.white);
+        ttf.drawString((Window.width - ttf.getWidth("PAUSED")) / 2, currY,
+            "PAUSED", Color.white);
 
         // Buttons
         currY += (20 + ttf.getLineHeight());
-        Resources.getImage("buttonResume").draw((Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Resources.getImage("buttonResume").draw(
+            (Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH,
+            BUTTON_HEIGHT);
         currY += (20 + BUTTON_HEIGHT);
-        Resources.getImage("buttonMainMenuLarge").draw((Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Resources.getImage("buttonMainMenuLarge").draw(
+            (Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH,
+            BUTTON_HEIGHT);
       }
 
     }
@@ -225,21 +231,30 @@ public abstract class GamePlayState extends BasicGameState {
     int posY = gc.getInput().getMouseY();
     boolean inX = false;
 
-    if (pauseMenu && gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
+    if (pauseMenu && gc.getInput().isMouseButtonDown(0)
+        && posX >= (Window.width - BUTTON_WIDTH) / 2
+        && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
       inX = true;
     }
 
     // bring up/down pause menu
-    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
+    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
+        || (inX
+            && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
+                + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
+            / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
       pauseMenu = !pauseMenu;
     }
 
     // back to main menu
-    if (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
+    if (inX
+        && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
+            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20
+        && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
+            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
       s.enterState(States.MENU);
     }
   }
-
 
   protected void updatePowerupsPaused(GameContainer gc, int delta) {
     for (Powerup p : this.powerups.values()) {
@@ -264,6 +279,10 @@ public abstract class GamePlayState extends BasicGameState {
   private void replaceZombie(Zombie z) {
     Player target = this.players.get(String.valueOf(random.nextInt(this.players
         .size())));
+
+    if (z.isOnFire()) {
+      return;
+    }
 
     Zombie zomb = new Zombie(target, players);
     zomb.setSpeed(ZOMBIE_BASE_SPEED);

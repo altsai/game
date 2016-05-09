@@ -9,6 +9,7 @@ public class ZombieArrow {
       Map<String, Zombie> zombies, Map<String, List<String>> zombieFormations) {
     ZombieFormationHead z = new ZombieFormationHead(target, players);
     z.setSpeed(speed);
+    z.setInitSpeed(speed);
     zombies.put(z.getID(), z);
     ZombieFormationBody b1 = new ZombieFormationBody(z, players, 1, 135.0);
     zombies.put(b1.getID(), b1);
