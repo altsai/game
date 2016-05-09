@@ -12,7 +12,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import powerups.BlackHole;
-import powerups.TimeStop;
+import powerups.OnFire;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
@@ -180,12 +180,12 @@ public class SinglePlayerGameState extends GamePlayState {
       // } else if (randomNum < 0.32 && randomNum >= 0.16) {
       // Speed speed = new Speed(powerups);
       // this.powerups.put(speed.getID(), speed);
-      // } else if (randomNum < 0.48 && randomNum >= 0.32) {
-      TimeStop timestop = new TimeStop(powerups, zombies, this);
-      this.powerups.put(timestop.getID(), timestop);
+      // // } else if (randomNum < 0.48 && randomNum >= 0.32) {
+      // TimeStop timestop = new TimeStop(powerups, zombies, this);
+      // this.powerups.put(timestop.getID(), timestop);
       // } else if (randomNum < 0.64 && randomNum >= 0.48) {
-      // OnFire onfire = new OnFire(powerups, zombies);
-      // this.powerups.put(onfire.getID(), onfire);
+      OnFire onfire = new OnFire(powerups, zombies, onFireTimes);
+      this.powerups.put(onfire.getID(), onfire);
       // } else if (randomNum < .80 && randomNum >= .64) {
       BlackHole blackhole = new BlackHole(powerups, zombies, this,
           zombieFormations, players);

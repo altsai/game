@@ -40,6 +40,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected Map<String, Powerup> powerups;
   protected Set<Powerup> pickedUpPowerups;
   protected Map<String, List<String>> zombieFormations;
+  protected Map<String, Long> onFireTimes;
 
   // players in the game
   protected Map<String, Player> players;
@@ -89,6 +90,7 @@ public abstract class GamePlayState extends BasicGameState {
     this.players = new ConcurrentHashMap<>();
     this.pickedUpPowerups = new ConcurrentHashSet<>();
     this.zombieFormations = new ConcurrentHashMap<>();
+    this.onFireTimes = new ConcurrentHashMap<>();
 
     this.lastZombieSpawnTime = System.currentTimeMillis();
     this.lastDifficultyIncreaseTime = System.currentTimeMillis();
@@ -380,6 +382,10 @@ public abstract class GamePlayState extends BasicGameState {
 
   public boolean isTimeStopped() {
     return timeStopped;
+  }
+
+  public boolean inOnFire(String id) {
+    return (onFireTimes.get(id) != null);
   }
 
   public boolean isGameEnd() {

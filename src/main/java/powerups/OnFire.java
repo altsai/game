@@ -52,12 +52,13 @@ public class OnFire extends Powerup {
    * @param z
    *          the list of Zombies
    */
-  public OnFire(Map<String, Powerup> p, Map<String, Zombie> z) {
+  public OnFire(Map<String, Powerup> p, Map<String, Zombie> z,
+      Map<String, Long> oft) {
     super(p);
     // TODO set animation
     zombies = z;
     image = Resources.getImage("fire");
-    onFireTimes = new ConcurrentHashMap<>();
+    onFireTimes = oft;
     this.powerupIndex = Powerup.ON_FIRE;
   }
 

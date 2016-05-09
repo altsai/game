@@ -147,13 +147,6 @@ public class BlackHole extends Powerup {
 
   @Override
   public void deactivate() {
-    // if (this.isUsed && zombies.size() == 0) {
-    // this.game.setSpawnOn(true);
-    //
-    // // kill the Powerup
-    // kill();
-    // }
-
     // the effects only last for 3 seconds now
     if (this.isUsed
         && (System.currentTimeMillis() - this.activationStartTime > EFFECT_DURATION)) {
@@ -186,6 +179,11 @@ public class BlackHole extends Powerup {
       zomb.setSpeed(0);
     } else {
       zomb.setSpeed(.9);
+    }
+
+    if (game.inOnFire(z.getID())) {
+      zomb.setState(true);
+      zomb.setID(z.getID());
     }
 
     zomb.setX(z.getX());

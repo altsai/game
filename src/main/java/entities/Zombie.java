@@ -190,6 +190,10 @@ public class Zombie extends Entity {
     initial_speed = s;
   }
 
+  public void setZombID(String i) {
+    id = i;
+  }
+
   /**
    * Method that calculates the coordinates to follow when chasing player.
    *
