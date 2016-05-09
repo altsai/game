@@ -164,7 +164,7 @@ public class SinglePlayerGameState extends GamePlayState {
       }
 
       if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
-        if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > 10000) {
+        if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > INC_DIFFICULTY_TIME * 1000) {
 
           this.difficultyLevel++;
           this.lastDifficultyIncreaseTime = System.currentTimeMillis();
