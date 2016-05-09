@@ -41,23 +41,23 @@ public class MenuState extends BasicGameState {
 
     // Draw buttons
     Resources.getImage("buttonSingle").draw(
-        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 200,
+        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 260,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonMulti").draw(
-        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 300,
+        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 360,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonMultiOffline").draw(
-        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 400,
+        Window.width / 4 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 460,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonRank").draw(
-        Window.width / 2 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 200,
+        Window.width / 2 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 260,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
     Resources.getImage("buttonAbout").draw(
-        Window.width / 2 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 300,
+        Window.width / 2 - BUTTON_WIDTH / 2 - 35, Window.height / 8 + 360,
         BUTTON_WIDTH, BUTTON_HEIGHT);
 
   }
@@ -70,39 +70,35 @@ public class MenuState extends BasicGameState {
     int posX = gc.getInput().getMouseX();
     int posY = gc.getInput().getMouseY();
 
-    // Check if they are clicking in the button area
-    if (gc.getInput().isMousePressed(0)
-        && posX >= Window.width / 2 - BUTTON_WIDTH / 2 - 20
-        && posX <= Window.width / 2 - BUTTON_WIDTH / 2 - 20 + BUTTON_WIDTH) {
-      if (posY >= Window.height / 8 + 200
-          && posY <= Window.height / 8 + 200 + BUTTON_HEIGHT) {
-        // restart a new game every time we enter a game state from menu
-        s.getState(States.SINGLE_PLAYER).init(gc, s);
-        s.enterState(States.SINGLE_PLAYER);
-      } else if (posY >= Window.height / 8 + 300
-          && posY <= Window.height / 8 + 300 + BUTTON_HEIGHT) {
-        if (highscoreSystem.isGlobal()) {
-          s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
-          s.enterState(States.TWO_PLAYER_START_SERVER);
-        } else {
-          JOptionPane
-          .showMessageDialog(
-              null,
-              "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
-              "Connection Error", JOptionPane.ERROR_MESSAGE);
+    // Button presses
+    if (gc.getInput().isMousePressed(0)) {
+      if (posX >= Window.width / 4 - BUTTON_WIDTH / 2 - 35 && posX <= Window.width / 4 - BUTTON_WIDTH / 2 - 35 + BUTTON_WIDTH) {
+        if (posY >= Window.height / 8 + 260 && posY <= Window.height / 8 + 260 + BUTTON_HEIGHT) {
+          s.getState(States.SINGLE_PLAYER).init(gc, s);
+          s.enterState(States.SINGLE_PLAYER);
+        } else if (posY >= Window.height / 8 + 360 && posY <= Window.height / 8 + 360 + BUTTON_HEIGHT) {
+          if (highscoreSystem.isGlobal()) {
+            s.getState(States.TWO_PLAYER_START_SERVER).init(gc, s);
+            s.enterState(States.TWO_PLAYER_START_SERVER);
+          } else {
+            JOptionPane
+            .showMessageDialog(
+                null,
+                "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
+                "Connection Error", JOptionPane.ERROR_MESSAGE);
+          }
+        } else if (posY >= Window.height / 8 + 460 && posY <= Window.height / 8 + 460 + BUTTON_HEIGHT) {
+          s.getState(States.TWO_PLAYER).init(gc, s);
+          s.enterState(States.TWO_PLAYER);
         }
-      } else if (posY >= Window.height / 8 + 400
-          && posY <= Window.height / 8 + 400 + BUTTON_HEIGHT) {
-        s.getState(States.TWO_PLAYER).init(gc, s);
-        s.enterState(States.TWO_PLAYER);
-      } else if (posY >= Window.height / 8 + 500
-          && posY <= Window.height / 8 + 500 + BUTTON_HEIGHT) {
-        s.getState(States.HIGH_SCORES).init(gc, s);
-        s.enterState(States.HIGH_SCORES);
-      } else if (posY >= Window.height / 8 + 600
-          && posY <= Window.height / 8 + 600 + BUTTON_HEIGHT) {
-        s.getState(States.ABOUT).init(gc, s);
-        s.enterState(States.ABOUT);
+      } else if (posX >= Window.width / 2 - BUTTON_WIDTH / 2 - 35 && posX <= Window.width / 2 - BUTTON_WIDTH / 2 - 35 + BUTTON_WIDTH) {
+        if (posY >= Window.height / 8 + 260 && posY <= Window.height / 8 + 260 + BUTTON_HEIGHT) {
+          s.getState(States.HIGH_SCORES).init(gc, s);
+          s.enterState(States.HIGH_SCORES);
+        } else if (posY >= Window.height / 8 + 360 && posY <= Window.height / 8 + 360 + BUTTON_HEIGHT) {
+          s.getState(States.ABOUT).init(gc, s);
+          s.enterState(States.ABOUT);
+        }
       }
     }
 

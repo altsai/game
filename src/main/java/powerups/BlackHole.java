@@ -1,17 +1,20 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Player;
+import entities.Zombie;
+import entities.ZombieFormationBody;
+import game_objects.Powerup;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import entities.ZombieFormationBody;
-import game_objects.Powerup;
 import states.GamePlayState;
 
 /**
@@ -27,6 +30,9 @@ public class BlackHole extends Powerup {
    * Reference to the list of zombies in the game.
    */
   private Map<String, Zombie> zombies;
+
+  private Map<String, List<String>> zombieFormations;
+  private Map<String, Player> players;
 
   /**
    * Reference to the game.
@@ -50,7 +56,7 @@ public class BlackHole extends Powerup {
    *          the GamePlayState
    */
   public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z,
-      GamePlayState gps) {
+      GamePlayState gps, Map<String, List<String>> zf, Map<String, Player> pl) {
     super(p);
     // TODO animation
     zombies = z;
@@ -58,6 +64,8 @@ public class BlackHole extends Powerup {
     image = Resources.getImage("blackhole");
     imageLarge = Resources.getImage("blackholeLarge");
     this.powerupIndex = Powerup.BLACK_HOLE;
+    zombieFormations = zf;
+    players = pl;
   }
 
   @Override
@@ -144,10 +152,38 @@ public class BlackHole extends Powerup {
           z.setTarget(this.affectedPlayer);
         }
       }
+
+      for (String s : zombieFormations.keySet()) {
+        if (zombies.get(s) != null) {
+          replaceZombie(zombies.get(s));
+        }
+
+        for (int i = 0; i < zombieFormations.get(s).size(); i++) {
+          if (zombies.get(zombieFormations.get(s).get(i)) != null) {
+            replaceZombie(zombies.get(zombieFormations.get(s).get(i)));
+          }
+        }
+
+        zombieFormations.remove(s);
+      }
+
       this.game.setSpawnOn(true);
 
       kill();
     }
+  }
+
+  private void replaceZombie(Zombie z) {
+    Random random = new Random();
+    Player target = this.players.get(String.valueOf(random.nextInt(this.players
+        .size())));
+
+    Zombie zomb = new Zombie(target, players);
+    zomb.setSpeed(.9);
+    zomb.setX(z.getX());
+    zomb.setY(z.getY());
+    this.zombies.put(zomb.getID(), zomb);
+    zombies.remove(z.getID());
   }
 
 }
