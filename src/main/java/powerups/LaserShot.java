@@ -14,6 +14,9 @@ public class LaserShot extends Entity {
   private Animation animation;
 
   private static final int ANIMATION_FRAME_TIME = 50;
+  public static final float LASER_SHOT_RADIUS = 75;
+  public static final float LASER_OFFSET = 20;
+  public static final float ANIMATION_SIZE = 120;
 
   private float angle;
 
@@ -21,11 +24,11 @@ public class LaserShot extends Entity {
     super(other);
     // setImage(Resources.getImage("lasershot"));
     // image.setRotation(-angle);
-    setRadius(75);
+    setRadius(LASER_SHOT_RADIUS);
 
     this.angle = angle;
 
-    this.spriteSheet = Resources.getSprite("laser");
+    this.spriteSheet = Resources.getSprite("lasershot");
     this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
     animation.setPingPong(true);
   }
@@ -34,27 +37,40 @@ public class LaserShot extends Entity {
   public void render(GameContainer gc, Graphics g) {
     super.render(gc, g);
 
-    animation.getCurrentFrame().setRotation(-angle);
-    animation.getCurrentFrame().draw(this.getX(), this.getY(), 75, 75);
+    if (angle > 0 && angle < 90) {
+      animation.getCurrentFrame().setRotation(angle + 90);
+    } else if (angle > 90 && angle < 180) {
+      animation.getCurrentFrame().setRotation(angle - 90);
+    } else if (angle > 180 && angle < 270) {
+      animation.getCurrentFrame().setRotation(angle + 90);
+    } else if (angle > 270) {
+      animation.getCurrentFrame().setRotation(angle - 90);
+    } else if (angle == 90 || angle == 270) {
+      animation.getCurrentFrame().setRotation(angle);
+    } else if (angle == 180) {
+      animation.getCurrentFrame().setRotation(0);
+    } else {
+      animation.getCurrentFrame().setRotation(angle + 180);
+    }
+
+    animation.getCurrentFrame().draw(this.getX(), this.getY() - LASER_OFFSET
+        , ANIMATION_SIZE, ANIMATION_SIZE);
+
     animation.draw(-10000, -10000);
   }
 
   @Override
   public void init(Entity other) {
-    // TODO Auto-generated method stub
-
   }
 
   @Override
   public void update(GameContainer gc, int delta) {
-    // TODO Auto-generated method stub
     animation.update(delta);
 
   }
 
   @Override
   public void die() {
-    // TODO Auto-generated method stub
 
   }
 

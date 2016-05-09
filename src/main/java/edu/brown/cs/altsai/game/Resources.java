@@ -76,6 +76,7 @@ public class Resources {
       images.put("laserbeam", loadImage("img/laserbeam.png"));
       images.put("particle", loadImage("img/particle.png"));
       images.put("particle_black", loadImage("img/particle_black.png"));
+      sprites.put("lasershot", loadSprite("img/lasershot.png", 120, 120));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_explosion.png", 196, 190));
       sprites.put("bomb_explosion_2",

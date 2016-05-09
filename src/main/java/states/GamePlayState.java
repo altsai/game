@@ -174,75 +174,71 @@ public abstract class GamePlayState extends BasicGameState {
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
-    if (this.gameStart) {
+    if (this.gameStart && !this.pauseMenu) {
 
+      elapsedTime += delta;
 
-      if (!this.pauseMenu) {
+      spawnZombie();
+      spawnPowerup();
 
-        elapsedTime += delta;
+      for (Player p : this.players.values()) {
+        p.updateAndControl(gc, delta);
+      }
 
-        spawnZombie();
-        spawnPowerup();
-
-        for (Player p : this.players.values()) {
-          p.updateAndControl(gc, delta);
+      boolean breakFormation = false;
+      for (String id : zombieFormations.keySet()) {
+        if (zombies.get(id) == null) {
+          breakFormation = true;
         }
 
-        boolean breakFormation = false;
-        for (String id : zombieFormations.keySet()) {
-          if (zombies.get(id) == null) {
+        for (int i = 0; i < zombieFormations.get(id).size(); i++) {
+          Zombie z = zombies.get(zombieFormations.get(id).get(i));
+          if (z == null) {
             breakFormation = true;
-          }
-
-          for (int i = 0; i < zombieFormations.get(id).size(); i++) {
-            Zombie z = zombies.get(zombieFormations.get(id).get(i));
-            if (z == null) {
-              breakFormation = true;
-            } else if (z.getTarget() instanceof BlackHole) {
-              breakFormation = false;
-              break;
-            }
-          }
-
-          if ((zombies.get(id) != null)
-              && (zombies.get(id).getTarget() instanceof BlackHole)) {
+          } else if (z.getTarget() instanceof BlackHole) {
             breakFormation = false;
+            break;
           }
+        }
 
-          if (breakFormation) {
-            breakFormation(id);
-          }
-
+        if ((zombies.get(id) != null)
+            && (zombies.get(id).getTarget() instanceof BlackHole)) {
           breakFormation = false;
         }
 
-        updateAndCheckCollisions(gc, s, delta);
-        updatePowerups(gc, delta);
-      } else {
-        updatePowerupsPaused(gc, delta);
+        if (breakFormation) {
+          breakFormation(id);
+        }
+
+        breakFormation = false;
       }
 
-      // Get x and y mouse position coordinates
-      int posX = gc.getInput().getMouseX();
-      int posY = gc.getInput().getMouseY();
-      boolean inX = false;
-
-      if (pauseMenu && gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
-        inX = true;
-      }
-
-      // bring up/down pause menu
-      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
-        pauseMenu = !pauseMenu;
-      }
-
-      // back to main menu
-      if (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
-        s.enterState(States.MENU);
-      }
+      updateAndCheckCollisions(gc, s, delta);
+      updatePowerups(gc, delta);
+    } else {
+      updatePowerupsPaused(gc, delta);
     }
 
+    // Get x and y mouse position coordinates
+    int posX = gc.getInput().getMouseX();
+    int posY = gc.getInput().getMouseY();
+    boolean inX = false;
+
+    if (pauseMenu && gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
+      inX = true;
+    }
+
+    // bring up/down pause menu
+    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
+      pauseMenu = !pauseMenu;
+    }
+
+    // back to main menu
+    if (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
+      s.enterState(States.MENU);
+    }
   }
+
 
   protected void updatePowerupsPaused(GameContainer gc, int delta) {
     for (Powerup p : this.powerups.values()) {
