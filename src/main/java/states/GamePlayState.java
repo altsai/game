@@ -68,6 +68,7 @@ public abstract class GamePlayState extends BasicGameState {
 
   // boolean to tell if game should be spawning
   protected boolean spawnOn;
+  protected boolean timeStopped;
   protected String playerID;
 
   protected boolean gameEnd;
@@ -100,6 +101,7 @@ public abstract class GamePlayState extends BasicGameState {
     this.pauseMenu = false;
     Font font = new Font("Arial", Font.BOLD, 50);
     ttf = new TrueTypeFont(font, true);
+    timeStopped = false;
   }
 
   public int getElapsedTime() {
@@ -280,7 +282,7 @@ public abstract class GamePlayState extends BasicGameState {
     Player target = this.players.get(String.valueOf(random.nextInt(this.players
         .size())));
 
-    if (z.isOnFire()) {
+    if (z.isOnFire() || timeStopped) {
       return;
     }
 
@@ -366,6 +368,10 @@ public abstract class GamePlayState extends BasicGameState {
 
   public void setGameEnd(boolean flat) {
     this.gameEnd = flat;
+  }
+
+  public void setTimeStopped(boolean t) {
+    timeStopped = t;
   }
 
   public boolean isGameEnd() {
