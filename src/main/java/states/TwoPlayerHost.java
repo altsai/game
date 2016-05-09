@@ -67,6 +67,10 @@ public class TwoPlayerHost extends NetworkPlay {
     p1.setPlayer1(true);
     this.previousPlayers.put(p1.getID(), p1);
 
+    // player 1 is 1/3 to right of screen, halfway vertically
+    p1.setX(Window.width / 3);
+    p1.setY(Window.height / 2);
+
     // explicitly set the id of the first player to "0"
     p1.setID("0");
     this.player1ID = p1.getID();

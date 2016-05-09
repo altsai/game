@@ -1,10 +1,5 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Powerup;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -18,6 +13,11 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Lists;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
 
 /**
  * Defines the Player object.
