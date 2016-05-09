@@ -68,7 +68,7 @@ public class TwoPlayerClient extends NetworkPlay {
       //g.drawString("Client", 0, 0);
 
       // Draw bounding box
-      g.setColor(Color.black);
+      g.setColor(Color.gray);
       g.drawRoundRect(10, 40, Window.width - 20, Window.height - 50, 10);
       g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
 
@@ -82,7 +82,7 @@ public class TwoPlayerClient extends NetworkPlay {
         }
 
         // Draw current powerups
-        g.setColor(Color.black);
+        g.setColor(Color.gray);
         g.drawRect(Window.width / 4 - 15, 6, 30, 30);
         g.drawRect(3 * Window.width / 4 - 15, 6, 30, 30);
         g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));

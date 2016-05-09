@@ -116,7 +116,7 @@ public abstract class GamePlayState extends BasicGameState {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     // Draw bounding box
-    g.setColor(Color.black);
+    g.setColor(Color.gray);
     g.drawRoundRect(10, 40, Window.width - 20, Window.height - 50, 10);
     g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
 

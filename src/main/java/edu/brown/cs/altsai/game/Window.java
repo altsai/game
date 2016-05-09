@@ -8,6 +8,8 @@ package edu.brown.cs.altsai.game;
  */
 public class Window {
   // fields that describe width and height
-  public static int width = 1440;
-  public static int height = 800;
+  // Big size = 1390 x 859
+  // Small size = 1132 x 700
+  public static int width = 1390;
+  public static int height = 859;
 }
