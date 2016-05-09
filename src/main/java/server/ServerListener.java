@@ -13,6 +13,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.PlayerMessage;
@@ -119,7 +121,7 @@ public class ServerListener extends Listener {
       PlayerNew newPlayer = new PlayerNew();
       newPlayer.id = this.player1ID;
       newPlayer.isPlayer1 = true;
-      newPlayer.name = "Player1";
+      newPlayer.name = "Player 1";
       c.sendTCP(newPlayer);
       this.connected = true;
       this.game.setTimeInit(System.currentTimeMillis());
@@ -157,6 +159,11 @@ public class ServerListener extends Listener {
       Player p = new Player(null, newPlayer.name);
       p.setID(newPlayer.id);
       p.setPlayer1(newPlayer.isPlayer1);
+      p.setImage(Resources.getImage("player2"));
+
+      // player 2 is 2/3 to right of screen, halfway vertically
+      p.setX(Math.round(Window.width * (0.666)));
+      p.setY(Window.height / 2);
 
       if (this.players.size() == 1) {
         this.players.put(p.getID(), p);

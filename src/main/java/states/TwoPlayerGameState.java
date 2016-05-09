@@ -43,9 +43,19 @@ public class TwoPlayerGameState extends GamePlayState {
     Player player1 = new Player(null, "player1");
     player1.setPlayer1(true);
     player1.setID("0");
+
+    // player 1 is 1/3 from left of screen, halfway down
+    player1.setX(Window.width / 3);
+    player1.setY(Window.height / 2);
+
+
     Player player2 = new Player(null, "player2");
     player2.setPlayer1(false);
     player2.setID("1");
+
+    // player 2 is 2/3 from left of screen, halfway down
+    player2.setX(Math.round(Window.width * 0.666));
+    player2.setY(Window.height / 2);
 
     player2.setImage(Resources.getImage("player2"));
     this.players.put(player1.getID(), player1);

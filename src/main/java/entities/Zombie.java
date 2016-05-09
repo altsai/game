@@ -1,5 +1,10 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Circle;
+
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -9,11 +14,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Maps;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Circle;
 
 /**
  * Defines the zombie object.
@@ -184,6 +184,10 @@ public class Zombie extends Entity {
 
   public double getInitSpeed() {
     return initial_speed;
+  }
+
+  public void setInitSpeed(double s) {
+    initial_speed = s;
   }
 
   /**

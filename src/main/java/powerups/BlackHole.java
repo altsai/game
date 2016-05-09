@@ -1,5 +1,11 @@
 package powerups;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Player;
+import entities.Zombie;
+import entities.ZombieFormationBody;
+import game_objects.Powerup;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +15,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Player;
-import entities.Zombie;
-import entities.ZombieFormationBody;
-import game_objects.Powerup;
 import states.GamePlayState;
 
 /**
