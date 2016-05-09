@@ -91,7 +91,7 @@ public class Zombie extends Entity {
 
     this.radius = 20;
     this.image = Resources.getImage("zombie");
-    this.speed = ((Player) player).getSpeed() * 3;
+    this.speed = Player.PLAYER_SPEED * 3;
 
     this.state = false;
     this.id = UUID.randomUUID().toString();

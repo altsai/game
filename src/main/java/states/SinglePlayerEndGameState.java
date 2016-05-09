@@ -86,9 +86,9 @@ public class SinglePlayerEndGameState extends BasicGameState {
 
     // Draw header
     float currHeight = 20;
-    headerFont.drawString((Window.width - headerFont.getWidth("You Died!")) / 2, currHeight, "You Died!", Color.black);
+    headerFont.drawString((Window.width - headerFont.getWidth("You Died!")) / 2, currHeight, "You Died!", Color.white);
     currHeight += (headerFont.getLineHeight() + 10);
-    textFont.drawString((Window.width - textFont.getWidth("Score: ") - scoreFont.getWidth(Integer.toString(this.spgs.getScore()))) / 2, currHeight, "Score: ", Color.black);
+    textFont.drawString((Window.width - textFont.getWidth("Score: ") - scoreFont.getWidth(Integer.toString(this.spgs.getScore()))) / 2, currHeight, "Score: ", Color.white);
     scoreFont.drawString((Window.width - textFont.getWidth("Score: ") - scoreFont.getWidth(Integer.toString(this.spgs.getScore()))) / 2 + textFont.getWidth("Score: "), currHeight, Integer.toString(this.spgs.getScore()), Color.red);
 
     // Add local score, and global score if applicable
@@ -106,7 +106,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
     if (bestHighscore && highscoreSystem.isGlobal()) {
       currHeight += textFont.getLineHeight() + 10;
       String toDraw = "New best score! Enter the name you would like to be associated with this score on the global highscores board below:";
-      textFont.drawString((Window.width - textFont.getWidth(toDraw)) / 2, currHeight, toDraw, Color.black);
+      textFont.drawString((Window.width - textFont.getWidth(toDraw)) / 2, currHeight, toDraw, Color.white);
       nameField.setAcceptingInput(true);
       nameField.render(gc, g);
       nameField.setBackgroundColor(Color.white);
