@@ -80,7 +80,8 @@ public class OnFire extends Powerup {
           } else {
             for (String ozid : zombies.keySet()) {
               Zombie other = zombies.get(ozid);
-              if ((!ozid.equals(zid)) && (z.distTo(other) <= FIRE_RADIUS)) {
+              if ((onFireTimes.get(ozid) == null) && (!ozid.equals(zid))
+                  && (z.distTo(other) <= FIRE_RADIUS)) {
                 other.setState(true);
                 onFireTimes.put(ozid, System.currentTimeMillis());
               }
