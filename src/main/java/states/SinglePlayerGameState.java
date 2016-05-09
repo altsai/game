@@ -11,6 +11,12 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import powerups.BlackHole;
+import powerups.Bomb;
+import powerups.LaserBeam;
+import powerups.OnFire;
+import powerups.Speed;
+import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
@@ -19,12 +25,6 @@ import entities.ZombieArrow;
 import entities.ZombieWall;
 import game_objects.Powerup;
 import highscore.HighscoreSystem;
-import powerups.BlackHole;
-import powerups.Bomb;
-import powerups.LaserBeam;
-import powerups.OnFire;
-import powerups.Speed;
-import powerups.TimeStop;
 
 /**
  * Defines the Single Player game state.
@@ -43,7 +43,7 @@ public class SinglePlayerGameState extends GamePlayState {
     super.init(gc, s);
 
     // add players to the player list from the superclass
-    Player player1 = new Player(null, "player1");
+    Player player1 = new Player(null, "Player 1");
     player1.setPlayer1(true);
 
     Font font = new Font("Arial", Font.BOLD, 20);
@@ -70,7 +70,8 @@ public class SinglePlayerGameState extends GamePlayState {
 
     // Draw score
     ttf.drawString(15, 10, "Score", Color.white);
-    ttf.drawString((Window.width / 2 - ttf.getWidth(getTimeSurvived())) / 2, 10, getTimeSurvived());
+    ttf.drawString((Window.width / 2 - ttf.getWidth(getTimeSurvived())) / 2,
+        10, getTimeSurvived());
     ttf2.drawString(80, 10, Integer.toString(this.getScore()), Color.green);
 
     // Draw current power-up in the middle
@@ -190,7 +191,8 @@ public class SinglePlayerGameState extends GamePlayState {
         OnFire onfire = new OnFire(powerups, zombies);
         this.powerups.put(onfire.getID(), onfire);
       } else if (randomNum < .80 && randomNum >= .64) {
-        BlackHole blackhole = new BlackHole(powerups, zombies, this);
+        BlackHole blackhole = new BlackHole(powerups, zombies, this,
+            zombieFormations, players);
         this.powerups.put(blackhole.getID(), blackhole);
       } else {
         LaserBeam lb = new LaserBeam(powerups, zombies);

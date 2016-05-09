@@ -72,7 +72,7 @@ public class Resources {
       images.put("laserbeam", loadImage("img/laser_icon.png"));
       images.put("particle", loadImage("img/particle.png"));
       images.put("particle_black", loadImage("img/particle_black.png"));
-      sprites.put("laser", loadSprite("img/wasd_laser_4_small.png", 75, 75));
+      sprites.put("lasershot", loadSprite("img/lasershot.png", 120, 120));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
