@@ -36,6 +36,8 @@ public class Zombie extends Entity {
     setSpawn();
   }
 
+  protected boolean wallInPlace;
+
   protected double initial_speed;
 
   // zombies keep track of a player and a specific target area of the player.
@@ -91,7 +93,7 @@ public class Zombie extends Entity {
 
     this.radius = 20;
     this.image = Resources.getImage("zombie");
-    this.speed = ((Player) player).getSpeed() * 3;
+    this.speed = Player.PLAYER_SPEED * 3;
 
     this.state = false;
     this.id = UUID.randomUUID().toString();
