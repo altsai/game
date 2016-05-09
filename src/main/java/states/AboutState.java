@@ -17,7 +17,7 @@ import edu.brown.cs.altsai.game.Window;
 public class AboutState extends BasicGameState {
 
   private static final int BUTTON_WIDTH = 180;
-  private static final int BUTTON_HEIGHT = 50;
+  private static final int BUTTON_HEIGHT = 68;
 
   private TrueTypeFont headerFont;
   private TrueTypeFont textFont;

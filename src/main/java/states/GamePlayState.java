@@ -17,13 +17,13 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import powerups.BlackHole;
 
 /**
  * Provides a template for gameplay state objects.
@@ -77,8 +77,8 @@ public abstract class GamePlayState extends BasicGameState {
 
   protected boolean pauseMenu;
   protected TrueTypeFont ttf;
-  private static final int BUTTON_WIDTH = 280;
-  private static final int BUTTON_HEIGHT = 67;
+  private static final int BUTTON_WIDTH = 250;
+  private static final int BUTTON_HEIGHT = 95;
   private static final int PAUSE_MENU_HEIGHT = 300;
   private static final int PAUSE_MENU_WIDTH = 300;
 
@@ -155,7 +155,7 @@ public abstract class GamePlayState extends BasicGameState {
       // Pause menu
       if (pauseMenu) {
         // Background rectangle
-        g.setColor(Color.black);
+        g.setColor(Color.gray);
         float currY = (Window.height - PAUSE_MENU_HEIGHT) / 2;
         g.fillRoundRect((Window.width - PAUSE_MENU_WIDTH) / 2, currY,
             PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT, 10);
@@ -170,7 +170,7 @@ public abstract class GamePlayState extends BasicGameState {
         Resources.getImage("buttonResume").draw(
             (Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH,
             BUTTON_HEIGHT);
-        currY += (20 + BUTTON_HEIGHT);
+        currY += (BUTTON_HEIGHT);
         Resources.getImage("buttonMainMenuLarge").draw(
             (Window.width - BUTTON_WIDTH) / 2, currY, BUTTON_WIDTH,
             BUTTON_HEIGHT);
@@ -243,7 +243,7 @@ public abstract class GamePlayState extends BasicGameState {
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (inX
             && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-                + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
+            + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
             / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
       pauseMenu = !pauseMenu;
     }
@@ -251,9 +251,9 @@ public abstract class GamePlayState extends BasicGameState {
     // back to main menu
     if (inX
         && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20
+        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
         && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
+        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
       s.enterState(States.MENU);
     }
   }

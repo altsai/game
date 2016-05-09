@@ -42,7 +42,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
   private TrueTypeFont scoreFont;
 
   private static final int BUTTON_WIDTH = 180;
-  private static final int BUTTON_HEIGHT = 50;
+  private static final int BUTTON_HEIGHT = 68;
 
   /**
    * Constructor for a SinglePlayerEndGameState

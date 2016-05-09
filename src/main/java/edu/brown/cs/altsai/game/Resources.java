@@ -43,7 +43,7 @@ public class Resources {
       images.put("background", loadImage("img/background.png"));
       images.put("backgroundMainMenu", loadImage("img/background_main_menu.png"));
       images.put("backgroundMainMenuSmall", loadImage("img/background_main_menu_small.png"));
-      images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
+      images.put("gray_arrow", loadImage("img/gray_arrow.png"));
 
       images.put("button", loadImage("img/buttons/buttonrounded1.png"));
       images.put("buttonSingle", loadImage("img/buttons/spg_button.png"));
@@ -64,8 +64,10 @@ public class Resources {
           loadImage("img/buttons/offmulti_button.png"));
       sprites.put("bomb_explosion",
           loadSprite("img/bomb_animation_large.png", 300, 300));
-      sprites.put("injuredAnimation",
-          loadSprite("img/wasd_injured_sprite.png", 30, 30));
+      sprites.put("injuredAnimationPlayer1",
+          loadSprite("img/player_hit_animation_player_1.png", 30, 30));
+      sprites.put("injuredAnimationPlayer2",
+          loadSprite("img/player_hit_animation_player_2.png", 30, 30));
       images.put("blackhole", loadImage("img/blackhole_icon.png"));
       images.put("blackholeLarge", loadImage("img/blackhole.png"));
       images.put("fire", loadImage("img/fire_icon.png"));

@@ -34,6 +34,9 @@ import edu.brown.cs.altsai.game.Window;
  */
 public class TwoPlayerStartServer extends BasicGameState {
 
+  private static final int BUTTON_WIDTH = 180;
+  private static final int BUTTON_HEIGHT = 68;
+
   private Connection conn;
   private List<String> serverNames;
   private List<String> serverAddresses;
@@ -76,7 +79,7 @@ public class TwoPlayerStartServer extends BasicGameState {
     Font font3 = new Font("Arial", Font.PLAIN, 18);
     searchFont = new TrueTypeFont(font3, true);
 
-    arrowImage = Resources.getImage("blue_arrow");
+    arrowImage = Resources.getImage("gray_arrow");
   }
 
   @Override
@@ -219,11 +222,15 @@ public class TwoPlayerStartServer extends BasicGameState {
     } else {
 
       float normalTableHeight = Window.height - tableY - entryFont.getLineHeight() - 15;
+      if (Window.height == 700) {
+        normalTableHeight = Window.height - tableY - entryFont.getLineHeight();
+      }
 
       // Get table height
       float tableHeight = Math.min(normalTableHeight, (entryFont.getLineHeight() + 5) * serverNames.size());
 
       // Outline of table
+      g.setColor(Color.gray);
       g.drawRect(tableX, tableY, tableWidth, tableHeight);
 
       // Separator line
@@ -281,6 +288,13 @@ public class TwoPlayerStartServer extends BasicGameState {
     serverName.setBackgroundColor(Color.white);
     serverName.setBorderColor(Color.black);
     serverName.setTextColor(Color.black);
+
+    // Main menu button
+    if (Window.width == 1390) {
+      Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
+    } else {
+      Resources.getImage("buttonMainMenu").draw((Window.width - BUTTON_WIDTH) / 2, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
+    }
 
   }
 
@@ -378,10 +392,19 @@ public class TwoPlayerStartServer extends BasicGameState {
       }
     }
 
+    // Get x and y mouse position coordinates
+    int posX = gc.getInput().getMouseX();
+    int posY = gc.getInput().getMouseY();
 
-    // go to the home menu state when 'esc' is pressed
-    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
-      s.enterState(States.MENU);
+    // Back to main menu
+    if (Window.width == 1390) {
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (gc.getInput().isMouseButtonDown(0) && posX >= 20 && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
+        s.enterState(States.MENU);
+      }
+    } else {
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
+        s.enterState(States.MENU);
+      }
     }
 
   }

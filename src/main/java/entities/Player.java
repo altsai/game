@@ -56,10 +56,12 @@ public class Player extends Entity implements PlayerAction {
   private FireEmitterCustom emitter;
   private Map<String, Boolean> jails;
 
-  private static final int ANIMATION_FRAME_TIME = 100;
+  private static final int ANIMATION_FRAME_TIME = 150;
 
-  private SpriteSheet spriteSheet;
-  private Animation animation;
+  private SpriteSheet spriteSheetPlayer1;
+  private Animation animationPlayer1;
+  private SpriteSheet spriteSheetPlayer2;
+  private Animation animationPlayer2;
 
   private float lastDir;
   public static final double PLAYER_SPEED = 0.3;
@@ -86,9 +88,12 @@ public class Player extends Entity implements PlayerAction {
     this.isPlayer1 = true;
     this.lastBombFired = 0;
     this.lastTimeStop = 0;
-    this.spriteSheet = Resources.getSprite("injuredAnimation");
-    this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
-    this.animation.setPingPong(true);
+    this.spriteSheetPlayer1 = Resources.getSprite("injuredAnimationPlayer1");
+    this.animationPlayer1 = new Animation(this.spriteSheetPlayer1, ANIMATION_FRAME_TIME);
+    this.animationPlayer1.setPingPong(true);
+    this.spriteSheetPlayer2 = Resources.getSprite("injuredAnimationPlayer2");
+    this.animationPlayer2 = new Animation(this.spriteSheetPlayer2, ANIMATION_FRAME_TIME);
+    this.animationPlayer2.setPingPong(true);
     this.canMove = true;
     this.immune = false;
     this.lastDir = 0;
@@ -278,7 +283,11 @@ public class Player extends Entity implements PlayerAction {
     super.render(gc, g);
 
     if (this.isInvincible()) {
-      this.animation.draw(this.x, this.y, 30, 30);
+      if (this.isPlayer1) {
+        this.animationPlayer1.draw(this.x, this.y, 30, 30);
+      } else {
+        this.animationPlayer2.draw(this.x, this.y, 30, 30);
+      }
     }
 
     if (this.isImmune()) {
@@ -300,7 +309,11 @@ public class Player extends Entity implements PlayerAction {
 
     // Update animation
     if (this.isInvincible()) {
-      this.animation.update(delta);
+      if (this.isPlayer1) {
+        this.animationPlayer1.update(delta);
+      } else {
+        this.animationPlayer2.update(delta);
+      }
     }
 
     if (this.isImmune()) {

@@ -39,9 +39,17 @@ public class HighScoreState extends BasicGameState {
   private List<String[]> localHighscores;
 
   private static final int BUTTON_WIDTH = 180;
-  private static final int BUTTON_HEIGHT = 50;
+  private static final int BUTTON_HEIGHT = 68;
 
-  private static final int HIGHEST_NUM = 23;
+  private static int HIGHEST_NUM = 21;
+  static {
+    if (Window.width == 1390) {
+      HIGHEST_NUM = 21;
+    } else {
+      HIGHEST_NUM = 15;
+    }
+  }
+
   private int highlightedNum;
   private boolean invalidSearch;
 
@@ -77,7 +85,7 @@ public class HighScoreState extends BasicGameState {
     Font font2 = new Font("Arial", Font.BOLD, 20);
     entryFont = new TrueTypeFont(font2, true);
 
-    arrowImage = Resources.getImage("blue_arrow");
+    arrowImage = Resources.getImage("gray_arrow");
 
     scoreWidth = entryFont.getWidth("18446744073709551615") + PADDING;
     dateWidth = entryFont.getWidth("2016-12-31") + PADDING;
@@ -176,7 +184,7 @@ public class HighScoreState extends BasicGameState {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     // Draw title
-    headerFont.drawString(Window.width / 2 - headerFont.getWidth("Highscores") / 2, 20, "Highscores", Color.black);
+    headerFont.drawString(Window.width / 2 - headerFont.getWidth("Highscores") / 2, 20, "Highscores", Color.white);
 
     // Draw buttons
     float buttonsX = Window.width / 2 - (BUTTON_WIDTH * 5 + 20 * 5) / 2;
@@ -188,7 +196,7 @@ public class HighScoreState extends BasicGameState {
     Resources.getImage("buttonAllTime").draw(buttonsX + BUTTON_WIDTH * 4 + 20 * 4, buttonsY, BUTTON_WIDTH, BUTTON_HEIGHT);
 
     // Draw search bar
-    entryFont.drawString(Window.width / 2 - (300 + entryFont.getWidth("Search for a name: ")) / 2, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, "Search for a name: ", Color.black);
+    entryFont.drawString(Window.width / 2 - (300 + entryFont.getWidth("Search for a name: ")) / 2, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, "Search for a name: ", Color.white);
     g.setColor(Color.white);
     searchField.render(gc, g);
     if (localScoresInUse) {
@@ -206,15 +214,20 @@ public class HighScoreState extends BasicGameState {
 
     // Get some variables
     float tableX = (Window.width - tableWidth) / 2;
-    float tableY = 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10 + entryFont.getLineHeight() + 10;
+    float tableY = 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10 + entryFont.getLineHeight() + 20;
     g.setColor(Color.black);
 
     float normalTableHeight = Window.height - tableY - entryFont.getLineHeight() - 15;
+    if (Window.height == 700) {
+      normalTableHeight = Window.height - tableY - entryFont.getLineHeight()*2 - 5;
+    }
+
+    g.setColor(Color.gray);
 
     // Draw the highscores table (local or global)
     if ((localScoresInUse && (localHighscores == null || localHighscores.size() == 0)) || (!localScoresInUse && (scoresInUse == null || scoresInUse.size() == 0))) {
       String toDraw = "No Highscores!";
-      entryFont.drawString(Window.width / 2 - entryFont.getWidth(toDraw) / 2, tableY, toDraw, Color.black);
+      entryFont.drawString(Window.width / 2 - entryFont.getWidth(toDraw) / 2, tableY, toDraw, Color.white);
     } else if (localScoresInUse) {
       // Get table height
       float tableHeight = Math.min(normalTableHeight, (entryFont.getLineHeight() + 5) * localHighscores.size());
@@ -252,19 +265,19 @@ public class HighScoreState extends BasicGameState {
 
         // Draw place
         float x = tableX + (placeWidth - entryFont.getWidth(Integer.toString(entryIndex + 1))) / 2;
-        entryFont.drawString(x, y, Integer.toString(entryIndex + 1), Color.black);
+        entryFont.drawString(x, y, Integer.toString(entryIndex + 1), Color.white);
 
         // Draw score
         x = tableX + placeWidth + (scoreWidth - entryFont.getWidth(score[2])) / 2;
-        entryFont.drawString(x, y, score[2], Color.black);
+        entryFont.drawString(x, y, score[2], Color.white);
 
         // Draw time
         x = tableX + placeWidth + scoreWidth + (timeWidth - entryFont.getWidth(score[3])) / 2;
-        entryFont.drawString(x, y, score[3], Color.black);
+        entryFont.drawString(x, y, score[3], Color.white);
 
         // Draw date
         x = tableX + placeWidth + scoreWidth + timeWidth + (dateWidth - entryFont.getWidth(score[4])) / 2;
-        entryFont.drawString(x, y, score[4], Color.black);
+        entryFont.drawString(x, y, score[4], Color.white);
 
         // Draw separating line
         if (y + entryFont.getLineHeight() + 5 < tableY + tableHeight) {
@@ -313,7 +326,7 @@ public class HighScoreState extends BasicGameState {
         if (Integer.parseInt(score[0]) == highlightedNum) {
           color = Color.red;
         } else {
-          color = Color.black;
+          color = Color.white;
         }
 
         // Draw place
