@@ -43,7 +43,7 @@ public class SinglePlayerGameState extends GamePlayState {
     super.init(gc, s);
 
     // add players to the player list from the superclass
-    Player player1 = new Player(null, "player1");
+    Player player1 = new Player(null, "Player 1");
     player1.setPlayer1(true);
 
     Font font = new Font("Arial", Font.BOLD, 20);
