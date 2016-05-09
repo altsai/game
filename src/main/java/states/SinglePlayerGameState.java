@@ -11,12 +11,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.BlackHole;
-import powerups.Bomb;
-import powerups.LaserBeam;
-import powerups.OnFire;
-import powerups.Speed;
-import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
@@ -25,6 +19,12 @@ import entities.ZombieArrow;
 import entities.ZombieWall;
 import game_objects.Powerup;
 import highscore.HighscoreSystem;
+import powerups.BlackHole;
+import powerups.Bomb;
+import powerups.LaserBeam;
+import powerups.OnFire;
+import powerups.Speed;
+import powerups.TimeStop;
 
 /**
  * Defines the Single Player game state.
@@ -131,7 +131,7 @@ public class SinglePlayerGameState extends GamePlayState {
         if (prob < 2) {
           new ZombieArrow(target, players, ZOMBIE_BASE_SPEED * 1.5, zombies,
               zombieFormations);
-        } else if (prob == 2) {
+        } else if (prob > 2) {
           new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,
               zombieFormations);
         } else {

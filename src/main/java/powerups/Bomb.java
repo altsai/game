@@ -28,17 +28,17 @@ public class Bomb extends Powerup {
   /**
    * The explosion radius in pixels.
    */
-  public static final int EXPLOSION_RADIUS = 200;
+  public static final int EXPLOSION_RADIUS = 150;
 
   /**
    * The width of the animation.
    */
-  public static final int ANIMATION_WIDTH = 400;
+  public static final int ANIMATION_WIDTH = 300;
 
   /**
    * The height of the animation.s
    */
-  public static final int ANIMATION_HEIGHT = 400;
+  public static final int ANIMATION_HEIGHT = 300;
 
   /**
    * The animation frame time.
@@ -214,10 +214,8 @@ public class Bomb extends Powerup {
 
   @Override
   public void deactivate() {
-
     // reset all other player's speeds back after 5 seconds
-    if (this.isUsed
-        && (System.currentTimeMillis() - this.activationStartTime > 5000)) {
+    if ((activationStartTime != 0) && (System.currentTimeMillis() - this.activationStartTime > 5000)) {
       for (Player p : this.players.values()) {
         if (!p.getID().equals(affectedPlayer.getID())) {
           p.setSpeed(Player.PLAYER_SPEED);

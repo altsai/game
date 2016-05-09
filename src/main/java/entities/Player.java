@@ -311,7 +311,11 @@ public class Player extends Entity implements PlayerAction {
     if (!immune && state
         && (System.currentTimeMillis() - this.invincibleTime > 5000)) {
       this.setState(false);
-      this.image = Resources.getImage("player");
+      if (this.isPlayer1) {
+        this.image = Resources.getImage("player");
+      } else {
+        this.image = Resources.getImage("player2");
+      }
     }
   }
 
