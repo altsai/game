@@ -41,9 +41,13 @@ public class Resources {
       images.put("speed", loadImage("img/speed_icon.png"));
       images.put("timestop", loadImage("img/timestop_icon.png"));
       images.put("background", loadImage("img/background.png"));
-      images.put("backgroundMainMenu", loadImage("img/background_main_menu.png"));
-      images.put("backgroundMainMenuSmall", loadImage("img/background_main_menu_small.png"));
+      images.put("backgroundMainMenu",
+          loadImage("img/background_main_menu.png"));
+      images.put("backgroundMainMenuSmall",
+          loadImage("img/background_main_menu_small.png"));
       images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
+
+      images.put("aboutPage", loadImage("img/aboutpage.png"));
 
       images.put("button", loadImage("img/buttons/buttonrounded1.png"));
       images.put("buttonSingle", loadImage("img/buttons/spg_button.png"));
