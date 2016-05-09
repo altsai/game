@@ -14,6 +14,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
+import entities.Zombie;
 import entities.ZombieArrow;
 import entities.ZombieWall;
 import game_objects.Powerup;
@@ -35,6 +36,7 @@ public class SinglePlayerGameState extends GamePlayState {
 
   private TrueTypeFont ttf;
   private TrueTypeFont ttf2;
+  private int iter;
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
@@ -119,56 +121,55 @@ public class SinglePlayerGameState extends GamePlayState {
     // spawns)
     if (this.spawnOn) {
 
-      // if (System.currentTimeMillis() - this.lastZombieSpawnTime >=
-      // ZOMBIE_SPAWN_DELAY) {
-      //
-      // // have a random player to target
-      Player target = this.players.get(String.valueOf(random
-          .nextInt(this.players.size())));
-      //
-      // // at any given time there is a 30% chance of multiple spawns
-      // if (random.nextInt(9) < 3) {
-      // for (int i = 0; i < this.difficultyLevel; i++) {
-      // // spawn targeting a random player
-      //
-      // Zombie newZombie = new Zombie(target, this.players);
-      //
-      // // newZombie.setSpeed(ZOMBIE_BASE_SPEED
-      // // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-      // // * ZOMBIE_BASE_SPEED);
-      // newZombie.setSpeed(ZOMBIE_BASE_SPEED);
-      // this.zombies.put(newZombie.getID(), newZombie); // add to hashmap
-      // // instead of add to
-      // // list
-      // }
-      // }
-      //
-      // Zombie newZombie = new Zombie(target, this.players);
-      //
-      // // newZombie.setSpeed(ZOMBIE_BASE_SPEED
-      // // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-      // // * ZOMBIE_BASE_SPEED);
-      // newZombie.setSpeed(ZOMBIE_BASE_SPEED);
-      // this.zombies.put(newZombie.getID(), newZombie);
-      //
-      // this.lastZombieSpawnTime = System.currentTimeMillis();
-      // }
-      //
-      // if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
-      // if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime >
-      // 10000) {
-      //
-      // this.difficultyLevel++;
-      // this.lastDifficultyIncreaseTime = System.currentTimeMillis();
-      // }
-      // }
-      new ZombieArrow(target, players, ZOMBIE_BASE_SPEED, zombies,
-          zombieFormations);
+      if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
 
-      new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,
-          zombieFormations);
+        // have a random player to target
+        Player target = this.players.get(String.valueOf(random
+            .nextInt(this.players.size())));
+        int prob = random.nextInt(20);
+        if (prob < 2) {
+          new ZombieArrow(target, players, ZOMBIE_BASE_SPEED, zombies,
+              zombieFormations);
+        } else if (prob == 2) {
+          new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,
+              zombieFormations);
+        } else {
+          // at any given time there is a 30% chance of multiple spawns
+          if (random.nextInt(10) < 3) {
+            for (int i = 0; i < this.difficultyLevel; i++) {
+              // spawn targeting a random player
 
-      spawnOn = false;
+              Zombie newZombie = new Zombie(target, this.players);
+
+              // newZombie.setSpeed(ZOMBIE_BASE_SPEED
+              // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+              // * ZOMBIE_BASE_SPEED);
+              newZombie.setSpeed(ZOMBIE_BASE_SPEED);
+              this.zombies.put(newZombie.getID(), newZombie);
+            }
+          }
+
+          Zombie newZombie = new Zombie(target, this.players);
+
+          // newZombie.setSpeed(ZOMBIE_BASE_SPEED
+          // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+          // * ZOMBIE_BASE_SPEED);
+          newZombie.setSpeed(ZOMBIE_BASE_SPEED);
+          this.zombies.put(newZombie.getID(), newZombie);
+        }
+
+        this.lastZombieSpawnTime = System.currentTimeMillis();
+
+      }
+
+      if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
+        if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > 10000) {
+
+          this.difficultyLevel++;
+          this.lastDifficultyIncreaseTime = System.currentTimeMillis();
+        }
+      }
+
     }
   }
 
