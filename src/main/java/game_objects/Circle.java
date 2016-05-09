@@ -1,5 +1,7 @@
 package game_objects;
 
+import powerups.LaserShot;
+
 /**
  * Defines a circular hitbox.
  *
@@ -126,6 +128,11 @@ public class Circle {
    * @return double, distance to the other Circle.
    */
   public double distTo(Circle other) {
+    if (this instanceof LaserShot) {
+      double distSquared = Math.pow((this.x + 50) - other.getX(), 2)
+          + Math.pow((this.y + 50) - other.getY(), 2);
+      return Math.sqrt(distSquared);
+    }
     double distSquared = Math.pow(this.x - other.getX(), 2)
         + Math.pow(this.y - other.getY(), 2);
     return Math.sqrt(distSquared);
@@ -139,6 +146,16 @@ public class Circle {
    * @return True if collision occurs, else false.
    */
   public boolean isCollision(Circle other) {
+    // laser beam specific
+    if (this instanceof LaserShot) {
+      if (Math.abs(this.x - other.getX()) > (other.getRadius() + this.radius)
+          || (other.getY() - (this.y)) > (other.getRadius() + this.radius) || ((this.y + 60) - other.getY()) > (other.getRadius() + this.radius)) {
+        return false;
+      } else {
+        return distTo(other) <= this.radius;
+      }
+    }
+
     if (Math.abs(this.x - other.getX()) > (other.getRadius() + this.radius)
         || Math.abs(this.y - other.getY()) > (other.getRadius() + this.radius)) {
       return false;

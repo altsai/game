@@ -42,8 +42,13 @@ public class TwoPlayerClient extends NetworkPlay {
     this.gameEnd = false;
 
     // add the second player to the player array
-    Player p2 = new Player(null, "player2");
+    Player p2 = new Player(null, "Player 2");
     p2.setPlayer1(false);
+    p2.setImage(Resources.getImage("player2"));
+
+    // player 2 is 2/3 to the right of the screen and halfway vertically
+    p2.setX(Math.round(Window.width * (0.666)));
+    p2.setY(Window.height / 2);
 
     // explicitly set the id of player2 to "1"
     p2.setID("1");

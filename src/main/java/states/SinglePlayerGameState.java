@@ -131,7 +131,7 @@ public class SinglePlayerGameState extends GamePlayState {
         if (prob < 2) {
           new ZombieArrow(target, players, ZOMBIE_BASE_SPEED * 1.5, zombies,
               zombieFormations);
-        } else if (prob == 2) {
+        } else if (prob > 2) {
           new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,
               zombieFormations);
         } else {

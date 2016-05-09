@@ -67,7 +67,7 @@ public class Resources {
       images.put("buttonMultiOffline",
           loadImage("img/buttons/offmulti_button.png"));
       sprites.put("bomb_explosion",
-          loadSprite("img/bomb_animation.png", 200, 200));
+          loadSprite("img/bomb_animation_large.png", 300, 300));
       sprites.put("injuredAnimation",
           loadSprite("img/wasd_injured_sprite.png", 30, 30));
       images.put("blackhole", loadImage("img/blackhole_icon.png"));
