@@ -33,12 +33,12 @@ public class Bomb extends Powerup {
   /**
    * The width of the animation.
    */
-  public static final int ANIMATION_WIDTH = EXPLOSION_RADIUS * 4;
+  public static final int ANIMATION_WIDTH = 400;
 
   /**
    * The height of the animation.s
    */
-  public static final int ANIMATION_HEIGHT = (int) (ANIMATION_WIDTH / 1.0315);
+  public static final int ANIMATION_HEIGHT = 400;
 
   /**
    * The animation frame time.
@@ -140,7 +140,7 @@ public class Bomb extends Powerup {
       this.animation.draw(this.explosionX - (ANIMATION_WIDTH / 2),
           this.explosionY - (ANIMATION_HEIGHT / 2), ANIMATION_WIDTH,
           ANIMATION_HEIGHT);
-      if (animation.getFrame() == 29) {
+      if (animation.getFrame() == 12) {
         this.isUsed = false;
       }
     } else {
@@ -168,8 +168,8 @@ public class Bomb extends Powerup {
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
 
-    this.explosionX = this.affectedPlayer.getX();
-    this.explosionY = this.affectedPlayer.getY();
+    this.explosionX = this.affectedPlayer.getX() + 15;
+    this.explosionY = this.affectedPlayer.getY() + 15;
 
     List<String> removedZombies = new LinkedList<>();
 

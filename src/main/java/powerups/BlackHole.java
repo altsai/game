@@ -1,20 +1,17 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import entities.ZombieFormationBody;
-import game_objects.Powerup;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SpriteSheet;
 
+import edu.brown.cs.altsai.game.Resources;
+import entities.Zombie;
+import entities.ZombieFormationBody;
+import game_objects.Powerup;
 import states.GamePlayState;
 
 /**
@@ -40,12 +37,7 @@ public class BlackHole extends Powerup {
 
   private Image imageLarge;
 
-  private static final int ANIMATION_FRAME_TIME = 150;
-
   private float currAngle = 0;
-
-  private SpriteSheet spriteSheet;
-  private Animation animation;
 
   /**
    * Constructor for the BlackHole.
@@ -65,9 +57,6 @@ public class BlackHole extends Powerup {
     game = gps;
     image = Resources.getImage("blackhole");
     imageLarge = Resources.getImage("blackholeLarge");
-    this.spriteSheet = Resources.getSprite("blackholeAnimation");
-    this.animation = new Animation(this.spriteSheet, ANIMATION_FRAME_TIME);
-    animation.setPingPong(true);
     this.powerupIndex = Powerup.BLACK_HOLE;
   }
 
@@ -78,10 +67,7 @@ public class BlackHole extends Powerup {
     if (this.isUsed) {
 
       // trigger animation
-      // imageLarge.draw(this.x - 40, this.y - 40, 100, 100);
-      animation.getCurrentFrame().setRotation(currAngle);
-      animation.getCurrentFrame().draw(this.x - 80, this.y - 80, 200, 200);
-      animation.draw(-10000, -10000);
+      imageLarge.draw(this.x - 110, this.y - 110, 250, 250);
     }
 
   }
@@ -102,9 +88,7 @@ public class BlackHole extends Powerup {
       }
 
       // rotate image
-      // imageLarge.rotate(.05f * delta);
-      currAngle += 1;
-      animation.update(delta);
+      imageLarge.rotate(.05f * delta);
     }
 
     // check if BlackHole should be deactivated

@@ -13,12 +13,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.BlackHole;
-import powerups.Bomb;
-import powerups.LaserBeam;
-import powerups.OnFire;
-import powerups.Speed;
-import powerups.TimeStop;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
@@ -26,6 +20,12 @@ import entities.ZombieFormationBody;
 import entities.ZombieFormationHead;
 import game_objects.Powerup;
 import highscore.HighscoreSystem;
+import powerups.BlackHole;
+import powerups.Bomb;
+import powerups.LaserBeam;
+import powerups.OnFire;
+import powerups.Speed;
+import powerups.TimeStop;
 
 /**
  * Defines the Single Player game state.
@@ -69,12 +69,12 @@ public class SinglePlayerGameState extends GamePlayState {
     }
 
     // Draw score
-    ttf.drawString(15, 10, "Score", Color.black);
-    ttf.drawString(300, 10, getTimeSurvived());
+    ttf.drawString(15, 10, "Score", Color.white);
+    ttf.drawString((Window.width / 2 - ttf.getWidth(getTimeSurvived())) / 2, 10, getTimeSurvived());
     ttf2.drawString(80, 10, Integer.toString(this.getScore()), Color.green);
 
     // Draw current power-up in the middle
-    g.setColor(Color.black);
+    g.setColor(Color.gray);
     g.drawRect(Window.width / 2 - 15, 6, 30, 30);
     g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
     Powerup currPowerup = this.players.get("0").getCurrPowerup();

@@ -109,7 +109,7 @@ public class TwoPlayerGameState extends GamePlayState {
     }
 
     // Draw current powerups
-    g.setColor(Color.black);
+    g.setColor(Color.gray);
     g.drawRect(Window.width / 4 - 15, 6, 30, 30);
     g.drawRect(3 * Window.width / 4 - 15, 6, 30, 30);
     g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));

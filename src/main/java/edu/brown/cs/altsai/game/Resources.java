@@ -33,23 +33,20 @@ public class Resources {
 
     // load in all the files that are initially needed
     try {
-      images.put("player", loadImage("img/wasd_to_live_hero_small.png"));
-      images.put("player2", loadImage("img/player2.png"));
-      images.put("zombie", loadImage("img/wasd_zombie_v3_small.png"));
+      images.put("player", loadImage("img/player_1.png"));
+      images.put("player2", loadImage("img/player_2.png"));
+      images.put("zombie", loadImage("img/zombie.png"));
       images.put("life", loadImage("img/wasd_life.png"));
       images.put("invinciblePlayer", loadImage("img/PlayerInvincible.png"));
-      images.put("bomb", loadImage("img/wasd_bomb.png"));
-      images.put("speed", loadImage("img/wasd_speed.png"));
-      images.put("timestop", loadImage("img/wasd_timestop.png"));
-      images.put("background", loadImage("img/wasd_background_blue_2.png"));
-      images.put("key", loadImage("img/blank_key.png"));
+      images.put("bomb", loadImage("img/bomb_icon.png"));
+      images.put("speed", loadImage("img/speed_icon.png"));
+      images.put("timestop", loadImage("img/timestop_icon.png"));
+      images.put("background", loadImage("img/background.png"));
       images.put("w_key", loadImage("img/W_key.png"));
       images.put("a_key", loadImage("img/A_key.png"));
       images.put("s_key", loadImage("img/S_key.png"));
       images.put("d_key", loadImage("img/D_key.png"));
       images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));
-      images
-      .put("playerLarge", loadImage("img/wasd_to_live_hero_large_70.png"));
       images.put("button", loadImage("img/wasd_button.png"));
       images.put("buttonSingle", loadImage("img/wasd_button_singleplayer.png"));
       images.put("buttonMulti", loadImage("img/wasd_button_multiplayer.png"));
@@ -65,24 +62,17 @@ public class Resources {
       images.put("buttonResume", loadImage("img/wasd_button_resume.png"));
       images.put("buttonMultiOffline", loadImage("img/wasd_button_multiplayer_offline.png"));
       sprites.put("bomb_explosion",
-          loadSprite("img/bomb_explosion.png", 196, 190));
+          loadSprite("img/bomb_animation.png", 200, 200));
       sprites.put("injuredAnimation",
           loadSprite("img/wasd_injured_sprite.png", 30, 30));
-      images.put("blackhole", loadImage("img/wasd_blackhole.png"));
-      images.put("blackholeLarge", loadImage("img/wasd_blackhole_large_2.png"));
-      images.put("fire", loadImage("img/wasd_fire.png"));
-      images.put("jail", loadImage("img/jail.png"));
-      images.put("firezombie", loadImage("img/firezombie.png"));
-      images.put("laserbeam", loadImage("img/laserbeam.png"));
+      images.put("blackhole", loadImage("img/blackhole_icon.png"));
+      images.put("blackholeLarge", loadImage("img/blackhole.png"));
+      images.put("fire", loadImage("img/fire_icon.png"));
+      images.put("jail", loadImage("img/jail_icon.png"));
+      images.put("laserbeam", loadImage("img/laser_icon.png"));
       images.put("particle", loadImage("img/particle.png"));
       images.put("particle_black", loadImage("img/particle_black.png"));
-      sprites.put("bomb_explosion",
-          loadSprite("img/bomb_explosion.png", 196, 190));
-      sprites.put("bomb_explosion_2",
-          loadSprite("img/wasd_bomb_animation_large_2.png", 500, 281));
       sprites.put("laser", loadSprite("img/wasd_laser_4_small.png", 75, 75));
-      sprites.put("blackholeAnimation",
-          loadSprite("img/wasd_blackhole_animation.png", 200, 200));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
