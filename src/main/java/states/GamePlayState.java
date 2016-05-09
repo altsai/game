@@ -265,6 +265,10 @@ public abstract class GamePlayState extends BasicGameState {
   }
 
   private void breakFormation(String id) {
+    if (timeStopped) {
+      return;
+    }
+
     if (zombies.get(id) != null) {
       replaceZombie(zombies.get(id));
     }
@@ -282,7 +286,7 @@ public abstract class GamePlayState extends BasicGameState {
     Player target = this.players.get(String.valueOf(random.nextInt(this.players
         .size())));
 
-    if (z.isOnFire() || timeStopped) {
+    if (z.isOnFire()) {
       return;
     }
 
