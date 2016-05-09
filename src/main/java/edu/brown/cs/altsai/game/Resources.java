@@ -63,7 +63,8 @@ public class Resources {
       images.put("buttonResume", loadImage("img/buttons/resume_button.png"));
       images.put("buttonMultiOffline",
           loadImage("img/buttons/offmulti_button.png"));
-      images.put("background", loadImage("img/preview1.png"));
+      images.put("background", loadImage("/img/background1-.png"));
+      images.put("background-main", loadImage("img/preview1.png"));
       images.put("logo", loadImage("img/logo-4-1.png"));
 
       images.put("blue_arrow", loadImage("img/wasd_blue_arrow.png"));

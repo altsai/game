@@ -49,7 +49,7 @@ public class MenuState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    g.drawImage(Resources.getImage("background"), 0, 0);
+    g.drawImage(Resources.getImage("background-main"), 0, 0);
 
     // // Draw title
     // Resources.getImage("logo").draw(Window.width / 2 - 85 - 100,
