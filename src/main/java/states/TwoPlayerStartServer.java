@@ -191,11 +191,11 @@ public class TwoPlayerStartServer extends BasicGameState {
 
     // Draw title
     float currHeight = 20;
-    headerFont.drawString((Window.width / 2 - headerFont.getWidth("Join Server")) / 2, currHeight, "Join Server", Color.black);
+    headerFont.drawString((Window.width / 2 - headerFont.getWidth("Join Server")) / 2, currHeight, "Join Server", Color.white);
     currHeight += (10 + headerFont.getLineHeight());
 
     // Draw serverField
-    entryFont.drawString((Window.width / 2 - entryFont.getWidth("Enter server number or name to join: ") - 200) / 2, currHeight, "Enter server number or name to join: ", Color.black);
+    entryFont.drawString((Window.width / 2 - entryFont.getWidth("Enter server number or name to join: ") - 200) / 2, currHeight, "Enter server number or name to join: ", Color.white);
     g.setColor(Color.white);
     serverField.render(gc, g);
     serverField.setBackgroundColor(Color.white);
@@ -215,7 +215,7 @@ public class TwoPlayerStartServer extends BasicGameState {
     // Check if there are no servers
     if (serverNames == null || serverNames.size() == 0) {
       String toDraw = "No Servers!";
-      entryFont.drawString((Window.width / 2 - entryFont.getWidth(toDraw)) / 2, tableY, toDraw, Color.black);
+      entryFont.drawString((Window.width / 2 - entryFont.getWidth(toDraw)) / 2, tableY, toDraw, Color.white);
     } else {
 
       float normalTableHeight = Window.height - tableY - entryFont.getLineHeight() - 15;
@@ -252,11 +252,11 @@ public class TwoPlayerStartServer extends BasicGameState {
       for (float y = tableY + 5; y < tableY + tableHeight && entryIndex < serverNames.size(); y += entryFont.getLineHeight() + 5) {
         // Draw number
         float x = tableX + (numberWidth - entryFont.getWidth(Integer.toString(entryIndex + 1))) / 2;
-        entryFont.drawString(x, y, Integer.toString(entryIndex + 1), Color.black);
+        entryFont.drawString(x, y, Integer.toString(entryIndex + 1), Color.white);
 
         // Draw name
         x = tableX + numberWidth + (nameWidth - entryFont.getWidth(serverNames.get(entryIndex))) / 2;
-        entryFont.drawString(x, y, serverNames.get(entryIndex), Color.black);
+        entryFont.drawString(x, y, serverNames.get(entryIndex), Color.white);
 
         // Draw separating line
         if (y + entryFont.getLineHeight() + 5 < tableY + tableHeight) {
@@ -271,11 +271,11 @@ public class TwoPlayerStartServer extends BasicGameState {
 
     // Draw title
     currHeight = 20;
-    headerFont.drawString((Window.width * 1.5f - headerFont.getWidth("Create Server")) / 2, currHeight, "Create Server", Color.black);
+    headerFont.drawString((Window.width * 1.5f - headerFont.getWidth("Create Server")) / 2, currHeight, "Create Server", Color.white);
     currHeight += (10 + headerFont.getLineHeight());
 
     // Draw serverField
-    entryFont.drawString((Window.width * 1.5f - entryFont.getWidth("Enter server name to create: ") - 200) / 2, currHeight, "Enter server name to create: ", Color.black);
+    entryFont.drawString((Window.width * 1.5f - entryFont.getWidth("Enter server name to create: ") - 200) / 2, currHeight, "Enter server name to create: ", Color.white);
     g.setColor(Color.white);
     serverName.render(gc, g);
     serverName.setBackgroundColor(Color.white);

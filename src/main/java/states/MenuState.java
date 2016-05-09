@@ -37,7 +37,11 @@ public class MenuState extends BasicGameState {
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
-    Resources.getImage("backgroundMainMenu").draw(0, 0, Window.width, Window.height);
+    if (Window.width == 1390) {
+      Resources.getImage("backgroundMainMenu").draw(0, 0);
+    } else {
+      Resources.getImage("backgroundMainMenuSmall").draw(0, 0);
+    }
 
     // Draw buttons
     Resources.getImage("buttonSingle").draw(
