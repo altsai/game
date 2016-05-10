@@ -7,7 +7,6 @@ import game_objects.Powerup;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.GameContainer;
 
@@ -112,8 +111,6 @@ public class OnFire extends Powerup {
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
     affectedPlayer.setImmune();
-
-    onFireTimes = new ConcurrentHashMap<>();
 
     // TODO reset player's image
 

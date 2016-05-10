@@ -183,7 +183,7 @@ public class BlackHole extends Powerup {
 
     if (game.inOnFire(z.getID())) {
       zomb.setState(true);
-      zomb.setID(z.getID());
+      zomb.setZombID(z.getID());
     }
 
     zomb.setX(z.getX());
