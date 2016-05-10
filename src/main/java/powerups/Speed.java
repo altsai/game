@@ -1,13 +1,13 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import game_objects.Powerup;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
+
+import edu.brown.cs.altsai.game.Resources;
+import game_objects.Powerup;
 
 /**
  * Defines the speed powerup that boosts a Players speed by +20%.
@@ -24,7 +24,7 @@ public class Speed extends Powerup {
   /**
    * How much to increase the affected palyer's speed by.
    */
-  private static final double SPEED_MULTIPLIER = 1.35;
+  private static final double SPEED_MULTIPLIER = 1.25;
 
   /**
    * Constructor for a Speed Powerup.
