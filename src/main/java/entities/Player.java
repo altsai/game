@@ -1,10 +1,5 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Powerup;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -18,6 +13,11 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Lists;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
 
 /**
  * Defines the Player object.
@@ -55,9 +55,7 @@ public class Player extends Entity implements PlayerAction {
   private ParticleSystem fireParticles;
   private FireEmitterCustom emitter;
   private Map<String, Boolean> jails;
-  private double distanceTraveled;
-  private float lastX;
-  private float lastY;
+
 
   private static final int ANIMATION_FRAME_TIME = 150;
 
@@ -70,6 +68,16 @@ public class Player extends Entity implements PlayerAction {
   public static final double PLAYER_SPEED = 0.3;
 
   public static final float EMITTER_SIZE = 30;
+
+  // advanced stats
+  private double distanceTraveled;
+  private float lastX;
+  private float lastY;
+  private int bombKills;
+  private int blackholeKills;
+  private int laserKills;
+  private int fireKills;
+
 
   @Override
   /**
@@ -108,6 +116,42 @@ public class Player extends Entity implements PlayerAction {
     jails = new ConcurrentHashMap<>();
 
     initFire();
+  }
+
+  /**
+   * Returns how many zombies were killed by bombs.
+   * @return  int    number of zombies killed by bombs.
+   */
+  public int getBombKills() {
+    return bombKills;
+  }
+
+  public int getBlackholeKills() {
+    return blackholeKills;
+  }
+
+  public void setBlackholeKills(int blackholeKills) {
+    this.blackholeKills = blackholeKills;
+  }
+
+  public void setBombKills(int bombKills) {
+    this.bombKills = bombKills;
+  }
+
+  public int getLaserKills() {
+    return laserKills;
+  }
+
+  public void setLaserKills(int laserKills) {
+    this.laserKills = laserKills;
+  }
+
+  public int getFireKills() {
+    return fireKills;
+  }
+
+  public void setFireKills(int fireKills) {
+    this.fireKills = fireKills;
   }
 
   /**

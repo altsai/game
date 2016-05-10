@@ -1,14 +1,14 @@
 package powerups;
 
-import edu.brown.cs.altsai.game.Resources;
-import entities.Zombie;
-import game_objects.Powerup;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
+
+import edu.brown.cs.altsai.game.Resources;
+import entities.Zombie;
+import game_objects.Powerup;
 
 /**
  * OnFire Powerup that gives the player a temporary capability of lighting
@@ -76,6 +76,7 @@ public class OnFire extends Powerup {
             zombies.remove(zid);
             onFireTimes.remove(zid);
             affectedPlayer.incrementScore();
+            affectedPlayer.setFireKills(affectedPlayer.getFireKills() + 1);
             continue;
           } else {
             for (String ozid : zombies.keySet()) {
@@ -112,8 +113,6 @@ public class OnFire extends Powerup {
     this.affectedPlayer.clearPowerupStorage();
     affectedPlayer.setImmune();
 
-    // TODO reset player's image
-
     return new LinkedList<>();
   }
 
@@ -129,6 +128,7 @@ public class OnFire extends Powerup {
       for (String zid : onFireTimes.keySet()) {
         zombies.remove(zid);
         affectedPlayer.incrementScore();
+        affectedPlayer.setFireKills(affectedPlayer.getFireKills() + 1);
       }
 
       // kill the powerup
