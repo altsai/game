@@ -55,7 +55,6 @@ public class Resources {
 
     // load in all the files that are initially needed
     try {
-      //img/player_1.png
       images.put("player", loadImage("/src/main/java/img/player_1.png"));
       images.put("player2", loadImage("/src/main/java/img/player_2.png"));
       images.put("zombie", loadImage("/src/main/java/img/zombie.png"));
@@ -77,6 +76,7 @@ public class Resources {
       images.put("gameOver2", loadImage("/src/main/java/img/gameOver2.png"));
       images.put("gameOver1Small", loadImage("/src/main/java/img/gameOver1_small.png"));
       images.put("gameOver2Small", loadImage("/src/main/java/img/gameOver2_small.png"));
+      images.put("statsbox", loadImage("src/main/java/img/statsbox.png"));
 
       images.put("aboutPage", loadImage("/src/main/java/img/aboutpage.png"));
       images.put("aboutPageSmall", loadImage("/src/main/java/img/aboutpage_small.png"));

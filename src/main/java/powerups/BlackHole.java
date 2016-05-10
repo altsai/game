@@ -30,7 +30,14 @@ public class BlackHole extends Powerup {
    */
   private Map<String, Zombie> zombies;
 
+  /**
+   * Map of zombie formations in the game.
+   */
   private Map<String, List<String>> zombieFormations;
+
+  /**
+   * Players in the game.
+   */
   private Map<String, Player> players;
 
   /**
@@ -38,11 +45,15 @@ public class BlackHole extends Powerup {
    */
   private GamePlayState game;
 
+  /**
+   * How long the black hole operates for.
+   */
   private final static long EFFECT_DURATION = 3000;
 
+  /**
+   * Large version of image.
+   */
   private Image imageLarge;
-
-  private float currAngle = 0;
 
   /**
    * Constructor for the BlackHole.
@@ -53,11 +64,14 @@ public class BlackHole extends Powerup {
    *          the list of Zombies in the game
    * @param gps
    *          the GamePlayState
+   * @param zf
+   *          the zombie formations in the game
+   * @param pl
+   *          the players in the game
    */
   public BlackHole(Map<String, Powerup> p, Map<String, Zombie> z,
       GamePlayState gps, Map<String, List<String>> zf, Map<String, Player> pl) {
     super(p);
-    // TODO animation
     zombies = z;
     game = gps;
     image = Resources.getImage("blackhole");
@@ -90,6 +104,8 @@ public class BlackHole extends Powerup {
         if (z.isCollision(this)) {
           zombies.remove(zid);
           affectedPlayer.incrementScore();
+          affectedPlayer
+              .setBlackholeKills(affectedPlayer.getBlackholeKills() + 1);
         }
         z.update(gc, delta);
       }
@@ -113,8 +129,6 @@ public class BlackHole extends Powerup {
     // reset location to player location
     this.setX(affectedPlayer.getX());
     this.setY(affectedPlayer.getY());
-
-    // TODO: reset image/animation
 
     // turn off spawning of new Zombies
     this.game.setSpawnOn(false);
@@ -164,6 +178,12 @@ public class BlackHole extends Powerup {
     }
   }
 
+  /**
+   * Replaces a zombie in a formation with a normal one.
+   *
+   * @param z
+   *          the zombie to replace
+   */
   private void replaceZombie(Zombie z) {
     Random random = new Random();
     Player target = this.players.get(String.valueOf(random.nextInt(this.players

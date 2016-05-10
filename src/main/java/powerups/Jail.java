@@ -15,15 +15,48 @@ import org.newdawn.slick.geom.Rectangle;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Representation of jail to confine other player to.
+ *
+ * @author Alison
+ *
+ */
 public class Jail extends Powerup {
-
+  /**
+   * Radius of jail confines.
+   */
   public static final int JAIL_RADIUS = 230;
+
+  /**
+   * How long jail lasts.
+   */
   private final int JAIL_LIFETIME = 5000;
+
+  /**
+   * Whether a bomb has been fired.
+   */
   private boolean bombFired;
+
+  /**
+   * Whether the other player is already jailed.
+   */
   private boolean jailAlready;
 
+  /**
+   * Players in the game.
+   */
   private Map<String, Player> players;
 
+  /**
+   * Jail constructor.
+   * 
+   * @param p
+   *          powerups in the game
+   * @param z
+   *          zombies in the game
+   * @param pl
+   *          players in the game
+   */
   public Jail(Map<String, Powerup> p, Map<String, Zombie> z,
       Map<String, Player> pl) {
     super(p);

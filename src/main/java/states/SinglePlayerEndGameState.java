@@ -86,8 +86,12 @@ public class SinglePlayerEndGameState extends BasicGameState {
     float currHeight = 20;
     headerFont.drawString((Window.width - headerFont.getWidth("You Died!")) / 2, currHeight, "You Died!", Color.white);
     currHeight += (headerFont.getLineHeight() + 10);
-    textFont.drawString((Window.width - textFont.getWidth("Score: ") - scoreFont.getWidth(Integer.toString(this.spgs.getScore()))) / 2, currHeight, "Score: ", Color.white);
-    scoreFont.drawString((Window.width - textFont.getWidth("Score: ") - scoreFont.getWidth(Integer.toString(this.spgs.getScore()))) / 2 + textFont.getWidth("Score: "), currHeight, Integer.toString(this.spgs.getScore()), Color.red);
+    textFont.drawString((Window.width - textFont.getWidth("Score: ")
+        - scoreFont.getWidth(Integer.toString(this.spgs.getScore()))) / 2, currHeight, "Score: "
+        , Color.white);
+    scoreFont.drawString((Window.width - textFont.getWidth("Score: ")
+        - scoreFont.getWidth(Integer.toString(this.spgs.getScore()))) / 2 + textFont.getWidth("Score: ")
+        , currHeight, Integer.toString(this.spgs.getScore()), Color.red);
 
     // Add local score, and global score if applicable
     if (!checkedHighscore) {
@@ -103,7 +107,8 @@ public class SinglePlayerEndGameState extends BasicGameState {
 
     if (bestHighscore && highscoreSystem.isGlobal()) {
       currHeight += textFont.getLineHeight() + 10;
-      String toDraw = "New best score! Enter the name you would like to be associated with this score on the global highscores board below:";
+      String toDraw = "New best score! Enter the name you would like to be associated"
+          + " with this score on the global highscores board below:";
       textFont.drawString((Window.width - textFont.getWidth(toDraw)) / 2, currHeight, toDraw, Color.white);
       nameField.setAcceptingInput(true);
       nameField.render(gc, g);
@@ -111,6 +116,14 @@ public class SinglePlayerEndGameState extends BasicGameState {
       nameField.setBorderColor(Color.black);
       nameField.setTextColor(Color.black);
     }
+
+    Resources.getImage("statsbox").draw(0, 0, Window.width, Window.height);
+
+    int bombKills = this.spgs.players.get(this.spgs.playerID).getBombKills();
+    int blackholeKills = this.spgs.players.get(this.spgs.playerID).getBlackholeKills();
+    int laserKills = this.spgs.players.get(this.spgs.playerID).getLaserKills();
+    int fireKills = this.spgs.players.get(this.spgs.playerID).getFireKills();
+    double distMoved = this.spgs.players.get(this.spgs.playerID).getDistTraveled();
 
     Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
   }

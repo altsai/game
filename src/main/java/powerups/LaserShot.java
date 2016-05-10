@@ -8,18 +8,56 @@ import org.newdawn.slick.SpriteSheet;
 import edu.brown.cs.altsai.game.Resources;
 import entities.Entity;
 
+/**
+ * Laser shot that moves across the screen, eliminating zombies.
+ *
+ * @author Alison
+ *
+ */
 public class LaserShot extends Entity {
-
+  /**
+   * The sprite sheet for the LaserShot.
+   */
   private SpriteSheet spriteSheet;
+
+  /**
+   * The animation for the LaserShot.
+   */
   private Animation animation;
 
+  /**
+   * How long each frame lasts.
+   */
   private static final int ANIMATION_FRAME_TIME = 50;
+
+  /**
+   * Radius.
+   */
   public static final float LASER_SHOT_RADIUS = 75;
+
+  /**
+   * Correcting offset.
+   */
   public static final float LASER_OFFSET = 20;
+
+  /**
+   * Size of animation in pixels.
+   */
   public static final float ANIMATION_SIZE = 120;
 
+  /**
+   * Angle of travel.
+   */
   private float angle;
 
+  /**
+   * Constructs a LaserShot.
+   * 
+   * @param other
+   *          to be passed to the superconstructor
+   * @param angle
+   *          the angle to travel at
+   */
   public LaserShot(Entity other, float angle) {
     super(other);
     // setImage(Resources.getImage("lasershot"));
@@ -53,8 +91,8 @@ public class LaserShot extends Entity {
       animation.getCurrentFrame().setRotation(angle + 180);
     }
 
-    animation.getCurrentFrame().draw(this.getX(), this.getY() - LASER_OFFSET
-        , ANIMATION_SIZE, ANIMATION_SIZE);
+    animation.getCurrentFrame().draw(this.getX(), this.getY() - LASER_OFFSET,
+        ANIMATION_SIZE, ANIMATION_SIZE);
 
     animation.draw(-10000, -10000);
   }
