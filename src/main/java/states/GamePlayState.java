@@ -51,7 +51,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected static final double ZOMBIE_BASE_SPEED = 0.3 * 3;
   protected static final int MAX_DIFFICULTY_LEVEL = 8;
   protected static final double SPEED_MULTIPLIER = 0.1;
-  protected static final long INC_DIFFICULTY_TIME = 20;
+  protected static final long INC_DIFFICULTY_TIME = 30;
 
   // keep this a little higher than 3 seconds because user needs to see the 3
   protected static final long GAME_COUNTDOWN = 3800;
