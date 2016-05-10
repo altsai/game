@@ -1,10 +1,5 @@
 package entities;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Circle;
-
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -14,6 +9,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Maps;
+
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Circle;
 
 /**
  * Defines the zombie object.
@@ -105,11 +105,7 @@ public class Zombie extends Entity {
 
   protected void initFire() {
     fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
-    // File xmlFile = new File("particle/fire.xml");
     try {
-      // ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
-      // emitter.setPosition(this.radius / 2, this.radius / 2);
-      // fireParticles.addEmitter(emitter);
       emitter = new FireEmitterCustom((int) this.radius / 2,
           (int) this.radius / 2, 10);
       fireParticles.addEmitter(emitter);
