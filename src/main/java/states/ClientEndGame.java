@@ -48,13 +48,13 @@ public class ClientEndGame extends BasicGameState {
 
     g.drawImage(Resources.getImage("background"), 0, 0);
 
-    if (this.gps.equals("0")) {
+    if (this.gps.equals("1")) {
       if (Window.width == 1390) {
         Resources.getImage("gameOver1").draw(0, 0);
       } else if (Window.width == 1132) {
         Resources.getImage("gameOver1Small").draw(0, 0);
       }
-    } else if (this.gps.equals("1")) {
+    } else if (this.gps.equals("0")) {
       if (Window.width == 1390) {
         Resources.getImage("gameOver2").draw(0, 0);
       } else if (Window.width == 1132) {

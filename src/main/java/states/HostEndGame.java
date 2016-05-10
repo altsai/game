@@ -49,13 +49,13 @@ public class HostEndGame extends BasicGameState {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     if (this.gps.getLoser() != null) {
-      if (this.gps.equals("0")) {
+      if (this.gps.equals("1")) {
         if (Window.width == 1390) {
           Resources.getImage("gameOver1").draw(0, 0);
         } else if (Window.width == 1132) {
           Resources.getImage("gameOver1Small").draw(0, 0);
         }
-      } else if (this.gps.equals("1")) {
+      } else if (this.gps.equals("0")) {
         if (Window.width == 1390) {
           Resources.getImage("gameOver2").draw(0, 0);
         } else if (Window.width == 1132) {
@@ -63,7 +63,7 @@ public class HostEndGame extends BasicGameState {
         }
       }
     } else {
-      headerFont.drawString((Window.width - headerFont.getWidth("Connection Lost")) / 2, 20, "Connection Lost", Color.black);
+      headerFont.drawString((Window.width - headerFont.getWidth("Connection Lost")) / 2, 20, "Connection Lost", Color.white);
     }
 
     // Main menu button
