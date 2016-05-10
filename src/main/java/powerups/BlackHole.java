@@ -3,7 +3,6 @@ package powerups;
 import edu.brown.cs.altsai.game.Resources;
 import entities.Player;
 import entities.Zombie;
-import entities.ZombieFormationBody;
 import game_objects.Powerup;
 
 import java.util.LinkedList;
@@ -136,9 +135,6 @@ public class BlackHole extends Powerup {
 
     // set target of all Zombies to the BlackHole
     for (Zombie z : this.zombies.values()) {
-      if (z instanceof ZombieFormationBody) {
-        z.setSpeed(.9);
-      }
       z.setTarget(this);
     }
 
@@ -182,14 +178,18 @@ public class BlackHole extends Powerup {
     }
 
     if (game.inOnFire(z.getID())) {
+      System.out.println(z.getID());
       zomb.setState(true);
       zomb.setZombID(z.getID());
     }
 
     zomb.setX(z.getX());
     zomb.setY(z.getY());
-    this.zombies.put(zomb.getID(), zomb);
-    zombies.remove(z.getID());
+    zombies.put(zomb.getID(), zomb);
+
+    if (!game.inOnFire(z.getID())) {
+      zombies.remove(z.getID());
+    }
   }
 
 }
