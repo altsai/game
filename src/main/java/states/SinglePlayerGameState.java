@@ -11,14 +11,20 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.BlackHole;
-import powerups.OnFire;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
+import entities.Zombie;
 import entities.ZombieArrow;
+import entities.ZombieWall;
 import game_objects.Powerup;
 import highscore.HighscoreSystem;
+import powerups.BlackHole;
+import powerups.Bomb;
+import powerups.LaserBeam;
+import powerups.OnFire;
+import powerups.Speed;
+import powerups.TimeStop;
 
 /**
  * Defines the Single Player game state.
@@ -121,40 +127,39 @@ public class SinglePlayerGameState extends GamePlayState {
         // have a random player to target
         Player target = this.players.get(String.valueOf(random
             .nextInt(this.players.size())));
-        int prob = random.nextInt(5);
-        // if (prob < 2) {
-        new ZombieArrow(target, players, ZOMBIE_BASE_SPEED * 1.5, zombies,
-            zombieFormations);
-        // } else if (prob == 2) {
-        // new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,
-        // zombieFormations);
-        // } // else {
-        // // at any given time there is a 30% chance of multiple spawns
-        // if (random.nextInt(10) < 3) {
-        // for (int i = 0; i < this.difficultyLevel; i++) {
-        // // spawn targeting a random player
-        //
-        // Zombie newZombie = new Zombie(target, this.players);
-        //
-        // // newZombie.setSpeed(ZOMBIE_BASE_SPEED
-        // // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-        // // * ZOMBIE_BASE_SPEED);
-        // newZombie.setSpeed(ZOMBIE_BASE_SPEED);
-        // this.zombies.put(newZombie.getID(), newZombie);
-        // }
-        // }
-        //
-        // Zombie newZombie = new Zombie(target, this.players);
-        //
-        // // newZombie.setSpeed(ZOMBIE_BASE_SPEED
-        // // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-        // // * ZOMBIE_BASE_SPEED);
-        // newZombie.setSpeed(ZOMBIE_BASE_SPEED);
-        // this.zombies.put(newZombie.getID(), newZombie);
-        // }
+        int prob = random.nextInt(20);
+        if (prob < 2) {
+          new ZombieArrow(target, players, ZOMBIE_BASE_SPEED * 1.5, zombies,
+              zombieFormations);
+        } else if (prob == 2) {
+          new ZombieWall(target, players, ZOMBIE_BASE_SPEED, zombies,
+              zombieFormations);
+        } else {
+          // at any given time there is a 30% chance of multiple spawns
+          if (random.nextInt(10) < 3) {
+            for (int i = 0; i < this.difficultyLevel; i++) {
+              // spawn targeting a random player
+
+              Zombie newZombie = new Zombie(target, this.players);
+
+              // newZombie.setSpeed(ZOMBIE_BASE_SPEED
+              // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+              // * ZOMBIE_BASE_SPEED);
+              newZombie.setSpeed(ZOMBIE_BASE_SPEED);
+              this.zombies.put(newZombie.getID(), newZombie);
+            }
+          }
+
+          Zombie newZombie = new Zombie(target, this.players);
+
+          // newZombie.setSpeed(ZOMBIE_BASE_SPEED
+          // + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+          // * ZOMBIE_BASE_SPEED);
+          newZombie.setSpeed(ZOMBIE_BASE_SPEED);
+          this.zombies.put(newZombie.getID(), newZombie);
+        }
 
         this.lastZombieSpawnTime = System.currentTimeMillis();
-        spawnOn = false;
       }
 
       if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
@@ -171,27 +176,27 @@ public class SinglePlayerGameState extends GamePlayState {
   @Override
   protected void spawnPowerup() {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
-      // double randomNum = random.nextDouble();
-      // if (randomNum < .16) {
-      // Bomb bomb = new Bomb(powerups, zombies);
-      // this.powerups.put(bomb.getID(), bomb);
-      // } else if (randomNum < 0.32 && randomNum >= 0.16) {
-      // Speed speed = new Speed(powerups);
-      // this.powerups.put(speed.getID(), speed);
-      // // } else if (randomNum < 0.48 && randomNum >= 0.32) {
-      // TimeStop timestop = new TimeStop(powerups, zombies, this);
-      // this.powerups.put(timestop.getID(), timestop);
-      // } else if (randomNum < 0.64 && randomNum >= 0.48) {
-      OnFire onfire = new OnFire(powerups, zombies, onFireTimes);
-      this.powerups.put(onfire.getID(), onfire);
-      // } else if (randomNum < .80 && randomNum >= .64) {
-      BlackHole blackhole = new BlackHole(powerups, zombies, this,
-          zombieFormations, players);
-      this.powerups.put(blackhole.getID(), blackhole);
-      // } else {
-      // LaserBeam lb = new LaserBeam(powerups, zombies);
-      // this.powerups.put(lb.getID(), lb);
-      // }
+      double randomNum = random.nextDouble();
+      if (randomNum < .16) {
+        Bomb bomb = new Bomb(powerups, zombies);
+        this.powerups.put(bomb.getID(), bomb);
+      } else if (randomNum < 0.32 && randomNum >= 0.16) {
+        Speed speed = new Speed(powerups);
+        this.powerups.put(speed.getID(), speed);
+        // } else if (randomNum < 0.48 && randomNum >= 0.32) {
+        TimeStop timestop = new TimeStop(powerups, zombies, this);
+        this.powerups.put(timestop.getID(), timestop);
+      } else if (randomNum < 0.64 && randomNum >= 0.48) {
+        OnFire onfire = new OnFire(powerups, zombies, onFireTimes);
+        this.powerups.put(onfire.getID(), onfire);
+      } else if (randomNum < .80 && randomNum >= .64) {
+        BlackHole blackhole = new BlackHole(powerups, zombies, this,
+            zombieFormations, players);
+        this.powerups.put(blackhole.getID(), blackhole);
+      } else {
+        LaserBeam lb = new LaserBeam(powerups, zombies);
+        this.powerups.put(lb.getID(), lb);
+      }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
