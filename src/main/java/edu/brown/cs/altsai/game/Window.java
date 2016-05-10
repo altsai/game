@@ -16,8 +16,8 @@ public class Window {
   // fields that describe width and height
   // Big size = 1390 x 859
   // Small size = 1132 x 700
-  public static int width = 1132;
-  public static int height = 700;
+  public static int width = 1390;
+  public static int height = 859;
 
   public static double screenWidth;
   public static double screenHeight;
@@ -30,8 +30,8 @@ public class Window {
     screenWidth = screenSize.getWidth();
     screenHeight = screenSize.getHeight();
     if (screenWidth >= 1440 && screenHeight >= 909) {
-      width = 1390;
-      height = 859;
+      width = 1132;
+      height = 700;
     } else {
       width = 1132;
       height = 700;

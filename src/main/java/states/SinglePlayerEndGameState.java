@@ -38,9 +38,16 @@ public class SinglePlayerEndGameState extends BasicGameState {
   private TrueTypeFont headerFont;
   private TrueTypeFont textFont;
   private TrueTypeFont scoreFont;
+  private TrueTypeFont statsFont;
 
   private static final int BUTTON_WIDTH = 180;
   private static final int BUTTON_HEIGHT = 68;
+
+  private int bombKills;
+  private int blackholeKills;
+  private int laserKills;
+  private int fireKills;
+  private double distMoved;
 
   /**
    * Constructor for a SinglePlayerEndGameState
@@ -55,11 +62,13 @@ public class SinglePlayerEndGameState extends BasicGameState {
   public void init(GameContainer gc, StateBasedGame s)
       throws SlickException {
     Font font = new Font("Arial", Font.BOLD, 50);
-    headerFont = new TrueTypeFont(font, true);
+    headerFont = Resources.getDefaultFont(40);
     Font font2 = new Font("Arial", Font.BOLD, 20);
-    textFont = new TrueTypeFont(font2, true);
+    textFont = Resources.getDefaultFont(10);
     Font font3 = new Font("Arial", Font.PLAIN, 20);
-    scoreFont = new TrueTypeFont(font3, true);
+    scoreFont = Resources.getDefaultFont(10);
+
+    statsFont = Resources.getDefaultFont(12);
 
     if (!instantiatedTextField) {
       instantiateTextField(gc);
@@ -69,11 +78,17 @@ public class SinglePlayerEndGameState extends BasicGameState {
     nameField.setAcceptingInput(false);
     this.checkedHighscore = false;
     this.bestHighscore = false;
+
+    bombKills = this.spgs.players.get(this.spgs.playerID).getBombKills();
+    blackholeKills = this.spgs.players.get(this.spgs.playerID).getBlackholeKills();
+    laserKills = this.spgs.players.get(this.spgs.playerID).getLaserKills();
+    fireKills = this.spgs.players.get(this.spgs.playerID).getFireKills();
+    distMoved = this.spgs.players.get(this.spgs.playerID).getDistTraveled();
   }
 
   private void instantiateTextField(GameContainer gc) {
     Font font3 = new Font("Arial", Font.PLAIN, 18);
-    TrueTypeFont fieldFont = new TrueTypeFont(font3, true);
+    TrueTypeFont fieldFont = Resources.getDefaultFont(8);
     nameField = new TextField(gc, fieldFont, (Window.width - 300) / 2, 20 + headerFont.getLineHeight() + 10 + textFont.getLineHeight() + 10 + textFont.getLineHeight() + 10, 300, textFont.getLineHeight());
   }
 
@@ -107,8 +122,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
 
     if (bestHighscore && highscoreSystem.isGlobal()) {
       currHeight += textFont.getLineHeight() + 10;
-      String toDraw = "New best score! Enter the name you would like to be associated"
-          + " with this score on the global highscores board below:";
+      String toDraw = "New best score! Enter your name below:";
       textFont.drawString((Window.width - textFont.getWidth(toDraw)) / 2, currHeight, toDraw, Color.white);
       nameField.setAcceptingInput(true);
       nameField.render(gc, g);
@@ -117,19 +131,23 @@ public class SinglePlayerEndGameState extends BasicGameState {
       nameField.setTextColor(Color.black);
     }
 
-    Resources.getImage("statsbox").draw(0, 0, Window.width, Window.height);
+    if (Window.width == 1390) {
+      Resources.getImage("statsbox").draw(0, 0);
 
-    int bombKills = this.spgs.players.get(this.spgs.playerID).getBombKills();
-    int blackholeKills = this.spgs.players.get(this.spgs.playerID).getBlackholeKills();
-    int laserKills = this.spgs.players.get(this.spgs.playerID).getLaserKills();
-    int fireKills = this.spgs.players.get(this.spgs.playerID).getFireKills();
-    double distMoved = this.spgs.players.get(this.spgs.playerID).getDistTraveled();
+      statsFont.drawString(530, 380, "Zombies Vacuumed:  " + blackholeKills);
+      statsFont.drawString(530, 460, "Zombies Bombed:    " + bombKills);
+      statsFont.drawString(530, 540, "Zombies Cooked:    " + fireKills);
+      statsFont.drawString(530, 620, "Zombies Lasered:   " + laserKills);
+      statsFont.drawString(530, 700, "Distance Traveled: " + distMoved + " feet");
+    } else if (Window.width == 1132) {
+      Resources.getImage("statsboxSmall").draw(0, 0);
 
-    Resources.getDefaultFont(12).drawString(530, 380, "Zombies Vacuumed:  " + blackholeKills);
-    Resources.getDefaultFont(12).drawString(530, 460, "Zombies Bombed:    " + bombKills);
-    Resources.getDefaultFont(12).drawString(530, 540, "Zombies Cooked:    " + fireKills);
-    Resources.getDefaultFont(12).drawString(530, 620, "Zombies Lasered:   " + laserKills);
-    Resources.getDefaultFont(12).drawString(530, 700, "Distance Traveled: " + distMoved + " feet");
+      statsFont.drawString(430, 320 - 15, "Zombies Vacuumed:  " + blackholeKills);
+      statsFont.drawString(430, 380 - 15 + 5, "Zombies Bombed:    " + bombKills);
+      statsFont.drawString(430, 450 - 15 + 1, "Zombies Cooked:    " + fireKills);
+      statsFont.drawString(430, 515 - 15 + 2, "Zombies Lasered:   " + laserKills);
+      statsFont.drawString(430, 575 - 15 + 5, "Distance Traveled: " + distMoved + " feet");
+    }
 
     Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
   }

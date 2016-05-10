@@ -1,7 +1,5 @@
 package states;
 
-import highscore.HighscoreSystem;
-
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -19,6 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
+import highscore.HighscoreSystem;
 
 /**
  * Defines the high score game state.
@@ -187,7 +186,7 @@ public class HighScoreState extends BasicGameState {
 
     // Draw title
     headerFont.drawString(Window.width / 2 - headerFont.getWidth("High Scores")
-        / 2, 20, "Highscores", Color.white);
+        / 2, 20, "High Scores", Color.white);
 
     // Draw buttons
     float buttonsX = Window.width / 2 - (BUTTON_WIDTH * 5 + 20 * 5) / 2;
@@ -209,7 +208,7 @@ public class HighScoreState extends BasicGameState {
     // Draw search bar
     entryFont.drawString(
         Window.width / 2 - (300 + entryFont.getWidth("Search for a name: "))
-            / 2, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10,
+        / 2, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10,
         "Search for a name: ", Color.white);
     g.setColor(Color.white);
     searchField.render(gc, g);
@@ -225,8 +224,8 @@ public class HighScoreState extends BasicGameState {
     if (invalidSearch) {
       entryFont.drawString(
           Window.width / 2 - (300 + entryFont.getWidth("Search for a name: "))
-              / 2 + entryFont.getWidth("Search for a name: ") + 300 + 10, 20
-              + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10,
+          / 2 + entryFont.getWidth("Search for a name: ") + 300 + 10, 20
+          + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10,
           "No Results!", Color.red);
     }
 
@@ -439,54 +438,54 @@ public class HighScoreState extends BasicGameState {
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_2) && !searchField.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH + 20 && posX <= buttonsX
-            + BUTTON_WIDTH * 2 + 20)) {
+        + BUTTON_WIDTH * 2 + 20)) {
       if (highscoreSystem.isGlobal()) {
         setTable("year");
       } else {
         JOptionPane
-            .showMessageDialog(
-                null,
-                "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
-                "Connection Error", JOptionPane.ERROR_MESSAGE);
+        .showMessageDialog(
+            null,
+            "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
+            "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_3) && !searchField.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH * 2 + 20 * 2 && posX <= buttonsX
-            + BUTTON_WIDTH * 3 + 20 * 2)) {
+        + BUTTON_WIDTH * 3 + 20 * 2)) {
       if (highscoreSystem.isGlobal()) {
         setTable("month");
       } else {
         JOptionPane
-            .showMessageDialog(
-                null,
-                "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
-                "Connection Error", JOptionPane.ERROR_MESSAGE);
+        .showMessageDialog(
+            null,
+            "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
+            "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_4) && !searchField.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH * 3 + 20 * 3 && posX <= buttonsX
-            + BUTTON_WIDTH * 4 + 20 * 3)) {
+        + BUTTON_WIDTH * 4 + 20 * 3)) {
       if (highscoreSystem.isGlobal()) {
         setTable("day");
       } else {
         JOptionPane
-            .showMessageDialog(
-                null,
-                "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
-                "Connection Error", JOptionPane.ERROR_MESSAGE);
+        .showMessageDialog(
+            null,
+            "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
+            "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     }
     if ((gc.getInput().isKeyPressed(Input.KEY_5) && !searchField.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH * 4 + 20 * 4 && posX <= buttonsX
-            + BUTTON_WIDTH * 5 + 20 * 4)) {
+        + BUTTON_WIDTH * 5 + 20 * 4)) {
       if (highscoreSystem.isGlobal()) {
         setTable("all-time");
       } else {
         JOptionPane
-            .showMessageDialog(
-                null,
-                "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
-                "Connection Error", JOptionPane.ERROR_MESSAGE);
+        .showMessageDialog(
+            null,
+            "The game is running in offline mode.\nTo run in online mode, fix your internet connection and restart the game.",
+            "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     }
 
@@ -521,7 +520,7 @@ public class HighScoreState extends BasicGameState {
     // Back to main menu
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (gc.getInput().isMouseButtonDown(0) && posX >= 20
-            && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
+        && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
       s.enterState(States.MENU);
     }
   }
