@@ -40,7 +40,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected Map<String, Powerup> powerups;
   protected Set<Powerup> pickedUpPowerups;
   protected Map<String, List<String>> zombieFormations;
-  public Map<String, Long> onFireTimes;
+  protected Map<String, Long> onFireTimes;
 
   // players in the game
   protected Map<String, Player> players;
@@ -128,8 +128,21 @@ public abstract class GamePlayState extends BasicGameState {
     long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
     if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
       this.setElapsedTime(0);
-      g.drawString("Game begins in: "
-          + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
+
+      int currNum = (int) ((GAME_COUNTDOWN - timeSinceInit) / 1000);
+      if (currNum == 3) {
+        Resources.getImage("3").draw(
+            (Window.width - Resources.getImage("3").getWidth()) / 2,
+            (Window.height - Resources.getImage("3").getHeight()) / 2);
+      } else if (currNum == 2) {
+        Resources.getImage("2").draw(
+            (Window.width - Resources.getImage("2").getWidth()) / 2,
+            (Window.height - Resources.getImage("2").getHeight()) / 2);
+      } else if (currNum == 1) {
+        Resources.getImage("1").draw(
+            (Window.width - Resources.getImage("1").getWidth()) / 2,
+            (Window.height - Resources.getImage("1").getHeight()) / 2);
+      }
     } else {
       if (!this.gameStart) {
         // set elapsed time here.... once game begins

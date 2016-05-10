@@ -45,7 +45,16 @@ public class Resources {
       images.put("background", loadImage("/src/main/java/img/background.png"));
       images.put("backgroundMainMenu", loadImage("/src/main/java/img/background_main_menu.png"));
       images.put("backgroundMainMenuSmall", loadImage("/src/main/java/img/background_main_menu_small.png"));
+      images.put("connectionPage", loadImage("/src/main/java/img/connection_page.png"));
+      images.put("connectionPageSmall", loadImage("/src/main/java/img/connection_page_small.png"));
       images.put("gray_arrow", loadImage("/src/main/java/img/gray_arrow.png"));
+      images.put("3", loadImage("/src/main/java/img/3_image.png"));
+      images.put("2", loadImage("/src/main/java/img/2_image.png"));
+      images.put("1", loadImage("/src/main/java/img/1_image.png"));
+      images.put("gameOver1", loadImage("/src/main/java/img/gameOver1.png"));
+      images.put("gameOver2", loadImage("/src/main/java/img/gameOver2.png"));
+      images.put("gameOver1Small", loadImage("/src/main/java/img/gameOver1_small.png"));
+      images.put("gameOver2Small", loadImage("/src/main/java/img/gameOver2_small.png"));
 
       images.put("aboutPage", loadImage("/src/main/java/img/aboutpage.png"));
       images.put("aboutPageSmall", loadImage("/src/main/java/img/aboutpage_small.png"));

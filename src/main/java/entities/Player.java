@@ -1,5 +1,10 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,11 +18,6 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Lists;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Powerup;
 
 /**
  * Defines the Player object.
@@ -94,10 +94,12 @@ public class Player extends Entity implements PlayerAction {
     this.lastBombFired = 0;
     this.lastTimeStop = 0;
     this.spriteSheetPlayer1 = Resources.getSprite("injuredAnimationPlayer1");
-    this.animationPlayer1 = new Animation(this.spriteSheetPlayer1, ANIMATION_FRAME_TIME);
+    this.animationPlayer1 = new Animation(this.spriteSheetPlayer1,
+        ANIMATION_FRAME_TIME);
     this.animationPlayer1.setPingPong(true);
     this.spriteSheetPlayer2 = Resources.getSprite("injuredAnimationPlayer2");
-    this.animationPlayer2 = new Animation(this.spriteSheetPlayer2, ANIMATION_FRAME_TIME);
+    this.animationPlayer2 = new Animation(this.spriteSheetPlayer2,
+        ANIMATION_FRAME_TIME);
     this.animationPlayer2.setPingPong(true);
     this.canMove = true;
     this.immune = false;
@@ -322,8 +324,7 @@ public class Player extends Entity implements PlayerAction {
       emitter.reduceSize(.063f);
     }
 
-    if (!immune && state
-        && (System.currentTimeMillis() - this.invincibleTime > 5000)) {
+    if (state && (System.currentTimeMillis() - this.invincibleTime > 5000)) {
       this.setState(false);
       if (this.isPlayer1) {
         this.image = Resources.getImage("player");
