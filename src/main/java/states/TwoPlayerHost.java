@@ -37,6 +37,9 @@ public class TwoPlayerHost extends NetworkPlay {
   private boolean makeServer;
   private String player1ID;
 
+  private static final int BUTTON_WIDTH = 180;
+  private static final int BUTTON_HEIGHT = 68;
+
   private Connection conn;
   private TwoPlayerStartServer twoPlayerStartServer;
 
@@ -99,6 +102,9 @@ public class TwoPlayerHost extends NetworkPlay {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     if (this.server == null || this.server.getConnections().length == 0) {
+      // Main menu button
+      Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH,
+          BUTTON_HEIGHT);
       g.drawString("Waiting for a client", 150, 150);
     }
 
@@ -266,11 +272,20 @@ public class TwoPlayerHost extends NetworkPlay {
         }
       }
 
-      // go to the home menu state when 'esc' is pressed
-      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+
+    }
+
+    // Get x and y mouse position coordinates
+    int posX = gc.getInput().getMouseX();
+    int posY = gc.getInput().getMouseY();
+
+    // go to the home menu state when 'esc' is pressed
+    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || ((this.server == null || this.server.getConnections().length == 0) && (gc.getInput().isMouseButtonDown(0) && posX >= 20
+        && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT))) {
+      if (this.server != null) {
         this.server.close();
-        s.enterState(States.MENU);
       }
+      s.enterState(States.MENU);
     }
 
   }
