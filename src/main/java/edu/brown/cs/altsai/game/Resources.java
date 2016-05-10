@@ -37,7 +37,8 @@ public class Resources {
       images.put("player", loadImage("src/main/java/img/player_1.png"));
       images.put("player2", loadImage("/src/main/java/img/player_2.png"));
       images.put("zombie", loadImage("/src/main/java/img/zombie.png"));
-      images.put("life", loadImage("/src/main/java/img/heart.png"));
+      images.put("life1", loadImage("/src/main/java/img/heart_green.png"));
+      images.put("life2", loadImage("/src/main/java/img/heart_orange.png"));
       images.put("bomb", loadImage("/src/main/java/img/bomb_icon.png"));
       images.put("speed", loadImage("/src/main/java/img/speed_icon.png"));
       images.put("timestop", loadImage("/src/main/java/img/timestop_icon.png"));
