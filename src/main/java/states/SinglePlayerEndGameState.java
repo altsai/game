@@ -82,18 +82,6 @@ public class SinglePlayerEndGameState extends BasicGameState {
       throws SlickException {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
-    int bombKills = this.spgs.players.get(this.spgs.playerID).getBombKills();
-    int blackholeKills = this.spgs.players.get(this.spgs.playerID).getBlackholeKills();
-    int laserKills = this.spgs.players.get(this.spgs.playerID).getLaserKills();
-    int fireKills = this.spgs.players.get(this.spgs.playerID).getFireKills();
-    double distMoved = this.spgs.players.get(this.spgs.playerID).getDistTraveled();
-
-    System.out.println("bombkills: " + bombKills);
-    System.out.println("blackholeKills: " + blackholeKills);
-    System.out.println("laserkills: " + laserKills);
-    System.out.println("firekills: " + fireKills);
-    System.out.println("distmove: " + distMoved);
-
     // Draw header
     float currHeight = 20;
     headerFont.drawString((Window.width - headerFont.getWidth("You Died!")) / 2, currHeight, "You Died!", Color.white);
@@ -128,6 +116,14 @@ public class SinglePlayerEndGameState extends BasicGameState {
       nameField.setBorderColor(Color.black);
       nameField.setTextColor(Color.black);
     }
+
+    Resources.getImage("statsbox").draw(0, 0, Window.width, Window.height);
+
+    int bombKills = this.spgs.players.get(this.spgs.playerID).getBombKills();
+    int blackholeKills = this.spgs.players.get(this.spgs.playerID).getBlackholeKills();
+    int laserKills = this.spgs.players.get(this.spgs.playerID).getLaserKills();
+    int fireKills = this.spgs.players.get(this.spgs.playerID).getFireKills();
+    double distMoved = this.spgs.players.get(this.spgs.playerID).getDistTraveled();
 
     Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
   }
