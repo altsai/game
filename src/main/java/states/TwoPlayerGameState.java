@@ -9,16 +9,16 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
 import powerups.LaserBeam;
 import powerups.Speed;
 import powerups.TimeStop;
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 
 /**
  * Defines the two player game state.
@@ -47,7 +47,6 @@ public class TwoPlayerGameState extends GamePlayState {
     // player 1 is 1/3 from left of screen, halfway down
     player1.setX(Window.width / 3);
     player1.setY(Window.height / 2);
-
 
     Player player2 = new Player(null, "player2");
     player2.setPlayer1(false);
@@ -93,18 +92,27 @@ public class TwoPlayerGameState extends GamePlayState {
       int posY = gc.getInput().getMouseY();
       boolean inX = false;
 
-
-      if (pauseMenu && gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
+      if (pauseMenu && gc.getInput().isMouseButtonDown(0)
+          && posX >= (Window.width - BUTTON_WIDTH) / 2
+          && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH) {
         inX = true;
       }
 
       // bring up/down pause menu
-      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
+      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
+          || (inX
+              && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
+                  + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
+              / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
         pauseMenu = !pauseMenu;
       }
 
       // back to main menu
-      if (inX && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
+      if (inX
+          && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
+              + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20
+          && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
+              + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + 20 + BUTTON_HEIGHT) {
         s.enterState(States.MENU);
       }
     }
@@ -154,7 +162,8 @@ public class TwoPlayerGameState extends GamePlayState {
       if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
 
         // have a random player to target
-        Player target = this.players.get(String.valueOf(random.nextInt(this.players.size())));
+        Player target = this.players.get(String.valueOf(random
+            .nextInt(this.players.size())));
 
         // at any given time there is a 30% chance of multiple spawns
         if (random.nextInt(9) < 3) {
@@ -195,26 +204,25 @@ public class TwoPlayerGameState extends GamePlayState {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
       double randomNum = random.nextDouble();
-      if (randomNum < 0.2) {
+      if (randomNum < 0.4) { // 40%
         Bomb bomb = new Bomb(powerups, zombies, players);
         this.powerups.put(bomb.getID(), bomb);
-      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+      } else if (randomNum < 0.5 && randomNum >= 0.4) { // 10%
         Speed speed = new Speed(powerups);
         this.powerups.put(speed.getID(), speed);
-      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+      } else if (randomNum < 0.65 && randomNum >= 0.5) { // 15%
         TimeStop timestop = new TimeStop(powerups, zombies, players, this);
         this.powerups.put(timestop.getID(), timestop);
-      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+      } else if (randomNum < 0.85 && randomNum >= 0.65) { // 20%
         LaserBeam lb = new LaserBeam(powerups, zombies, players);
         this.powerups.put(lb.getID(), lb);
-      } else {
+      } else { // 15%
         Jail jail = new Jail(powerups, zombies, players);
         this.powerups.put(jail.getID(), jail);
       }
 
       this.lastPowerupSpawnTime = System.currentTimeMillis();
     }
-
 
   }
 

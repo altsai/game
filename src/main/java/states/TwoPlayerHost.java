@@ -14,12 +14,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Entity;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
 import powerups.LaserBeam;
@@ -28,9 +22,14 @@ import powerups.TimeStop;
 import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 
 public class TwoPlayerHost extends NetworkPlay {
-
 
   private GameServer server;
   private boolean errorMakingServer;
@@ -46,7 +45,6 @@ public class TwoPlayerHost extends NetworkPlay {
   public TwoPlayerHost(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
   }
-
 
   /**
    * Method that goes through all players in game and updates if needed.
@@ -200,7 +198,8 @@ public class TwoPlayerHost extends NetworkPlay {
         this.isTyping = false;
 
         // if user presses enter while in current text, send text.
-      } else if (this.currentText.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+      } else if (this.currentText.hasFocus()
+          && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
         String message = this.currentText.getText();
         if (message.length() > 0) {
           this.server.sendMessage(message);
@@ -213,17 +212,15 @@ public class TwoPlayerHost extends NetworkPlay {
     }
   }
 
-
   @Override
   public void update(GameContainer gc, StateBasedGame s, int delta)
       throws SlickException {
 
     if (!this.makeServer) {
       try {
-        this.server = new GameServer(this.players, this.zombies
-            , this.powerups, this.previousPlayers, this.messages
-            , this.player1ID, this, s, twoPlayerStartServer.getConn(),
-            twoPlayerStartServer.getAddress());
+        this.server = new GameServer(this.players, this.zombies, this.powerups,
+            this.previousPlayers, this.messages, this.player1ID, this, s,
+            twoPlayerStartServer.getConn(), twoPlayerStartServer.getAddress());
         this.server.start();
         this.makeServer = true;
       } catch (IOException e) {
@@ -242,7 +239,6 @@ public class TwoPlayerHost extends NetworkPlay {
       spawnPowerup();
 
       this.updateChat(gc, s, delta);
-
 
       // if not currently typing, allow movement
       if (!this.isTyping) {
@@ -277,7 +273,6 @@ public class TwoPlayerHost extends NetworkPlay {
         }
       }
 
-
     }
 
     // Get x and y mouse position coordinates
@@ -285,8 +280,11 @@ public class TwoPlayerHost extends NetworkPlay {
     int posY = gc.getInput().getMouseY();
 
     // go to the home menu state when 'esc' is pressed
-    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || ((this.server == null || this.server.getConnections().length == 0) && (gc.getInput().isMouseButtonDown(0) && posX >= 20
-        && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT))) {
+    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
+        || ((this.server == null || this.server.getConnections().length == 0) && (gc
+            .getInput().isMouseButtonDown(0)
+            && posX >= 20
+            && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT))) {
       if (this.server != null) {
         this.server.close();
       }
@@ -484,23 +482,23 @@ public class TwoPlayerHost extends NetworkPlay {
     if (System.currentTimeMillis() - this.lastPowerupSpawnTime >= POWERUP_SPAWN_DELAY) {
 
       double randomNum = random.nextDouble();
-      if (randomNum < 0.2) {
+      if (randomNum < 0.4) { // 40%
         Bomb bomb = new Bomb(powerups, zombies, players);
         this.powerups.put(bomb.getID(), bomb);
         this.server.sendNewPowerup(bomb);
-      } else if (randomNum < 0.4 && randomNum >= 0.2) {
+      } else if (randomNum < 0.5 && randomNum >= 0.4) { // 10%
         Speed speed = new Speed(powerups);
         this.powerups.put(speed.getID(), speed);
         this.server.sendNewPowerup(speed);
-      } else if (randomNum < 0.6 && randomNum >= 0.4) {
+      } else if (randomNum < 0.65 && randomNum >= 0.5) { // 15%
         TimeStop timestop = new TimeStop(powerups, zombies, players, this);
         this.powerups.put(timestop.getID(), timestop);
         this.server.sendNewPowerup(timestop);
-      } else if (randomNum < 0.8 && randomNum >= 0.6) {
+      } else if (randomNum < 0.85 && randomNum >= 0.65) { // 20%
         LaserBeam lb = new LaserBeam(powerups, zombies, players, server);
         this.powerups.put(lb.getID(), lb);
         this.server.sendNewPowerup(lb);
-      } else {
+      } else { // 15%
         Jail jail = new Jail(powerups, zombies, players);
         this.powerups.put(jail.getID(), jail);
         this.server.sendNewPowerup(jail);
