@@ -72,17 +72,17 @@ public class TwoPlayerGameState extends GamePlayState {
     if (this.gameStart) {
 
       if (!this.pauseMenu) {
-      elapsedTime += delta;
+        elapsedTime += delta;
 
-      spawnZombie();
-      spawnPowerup();
+        spawnZombie();
+        spawnPowerup();
 
-      for (Player p : this.players.values()) {
-        p.updateAndControlTwoPlayerSameScreen(gc, delta);
-      }
+        for (Player p : this.players.values()) {
+          p.updateAndControlTwoPlayerSameScreen(gc, delta);
+        }
 
-      updateAndCheckCollisions(gc, s, delta);
-      updatePowerups(gc, delta);
+        updateAndCheckCollisions(gc, s, delta);
+        updatePowerups(gc, delta);
 
       } else {
         this.updatePowerupsPaused(gc, delta);
@@ -119,10 +119,10 @@ public class TwoPlayerGameState extends GamePlayState {
 
     // Draw lives
     for (int i = 0; i < this.players.get("0").getLives() + 1; i++) {
-      Resources.getImage("life").draw(15 + i * 25, 10, 20, 20);
+      Resources.getImage("life1").draw(15 + i * 25, 10, 20, 20);
     }
     for (int i = 0; i < this.players.get("1").getLives() + 1; i++) {
-      Resources.getImage("life").draw(Window.width - 35 - i * 25, 10, 20, 20);
+      Resources.getImage("life2").draw(Window.width - 35 - i * 25, 10, 20, 20);
     }
 
     // Draw current powerups

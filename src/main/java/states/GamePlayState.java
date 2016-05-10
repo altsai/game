@@ -17,13 +17,13 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
-import powerups.BlackHole;
 
 /**
  * Provides a template for gameplay state objects.
@@ -40,6 +40,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected Map<String, Powerup> powerups;
   protected Set<Powerup> pickedUpPowerups;
   protected Map<String, List<String>> zombieFormations;
+  protected Map<String, Long> onFireTimes;
 
   // players in the game
   protected Map<String, Player> players;
@@ -89,6 +90,7 @@ public abstract class GamePlayState extends BasicGameState {
     this.players = new ConcurrentHashMap<>();
     this.pickedUpPowerups = new ConcurrentHashSet<>();
     this.zombieFormations = new ConcurrentHashMap<>();
+    this.onFireTimes = new ConcurrentHashMap<>();
 
     this.lastZombieSpawnTime = System.currentTimeMillis();
     this.lastDifficultyIncreaseTime = System.currentTimeMillis();
@@ -125,7 +127,7 @@ public abstract class GamePlayState extends BasicGameState {
 
     long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
     if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
-      // this.setElapsedTime(0);
+      this.setElapsedTime(0);
       g.drawString("Game begins in: "
           + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
     } else {
@@ -243,7 +245,7 @@ public abstract class GamePlayState extends BasicGameState {
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (inX
             && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-            + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
+                + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
             / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
       pauseMenu = !pauseMenu;
     }
@@ -251,9 +253,9 @@ public abstract class GamePlayState extends BasicGameState {
     // back to main menu
     if (inX
         && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
+            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
         && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
+            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
       s.enterState(States.MENU);
     }
   }
@@ -376,6 +378,14 @@ public abstract class GamePlayState extends BasicGameState {
 
   public void setTimeStopped(boolean t) {
     timeStopped = t;
+  }
+
+  public boolean isTimeStopped() {
+    return timeStopped;
+  }
+
+  public boolean inOnFire(String id) {
+    return (onFireTimes.get(id) != null);
   }
 
   public boolean isGameEnd() {
