@@ -49,8 +49,19 @@ public class HostEndGame extends BasicGameState {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     if (this.gps.getLoser() != null) {
-      headerFont.drawString((Window.width - headerFont.getWidth("Game Over")) / 2, 20, "Game Over", Color.black);
-      textFont.drawString((Window.width - textFont.getWidth(this.gps.getLoser())) / 2, 20 + headerFont.getLineHeight() + 10, gps.getLoser(), Color.black);
+      if (this.gps.equals("0")) {
+        if (Window.width == 1390) {
+          Resources.getImage("gameOver1").draw(0, 0);
+        } else if (Window.width == 1132) {
+          Resources.getImage("gameOver1Small").draw(0, 0);
+        }
+      } else if (this.gps.equals("1")) {
+        if (Window.width == 1390) {
+          Resources.getImage("gameOver2").draw(0, 0);
+        } else if (Window.width == 1132) {
+          Resources.getImage("gameOver2Small").draw(0, 0);
+        }
+      }
     } else {
       headerFont.drawString((Window.width - headerFont.getWidth("Connection Lost")) / 2, 20, "Connection Lost", Color.black);
     }
