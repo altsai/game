@@ -63,7 +63,6 @@ public class OnFire extends Powerup {
   public OnFire(Map<String, Powerup> p, Map<String, Zombie> z,
       Map<String, Long> oft) {
     super(p);
-    // TODO set animation
     zombies = z;
     image = Resources.getImage("fire");
     onFireTimes = oft;
