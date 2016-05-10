@@ -84,6 +84,10 @@ public class SinglePlayerEndGameState extends BasicGameState {
     laserKills = this.spgs.players.get(this.spgs.playerID).getLaserKills();
     fireKills = this.spgs.players.get(this.spgs.playerID).getFireKills();
     distMoved = this.spgs.players.get(this.spgs.playerID).getDistTraveled();
+
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
   }
 
   private void instantiateTextField(GameContainer gc) {
@@ -168,6 +172,7 @@ public class SinglePlayerEndGameState extends BasicGameState {
     if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && nameField.hasFocus() && bestHighscore) {
       try {
         if (highscoreSystem.addGlobalScore(nameField.getText(), spgs.getScore(), spgs.getElapsedTime())) {
+          s.getState(States.MENU).init(gc, s);
           s.enterState(States.MENU);
         } else {
           Window.showMessage("Name Taken", "Oops! Someone in the global highscores board already has that name!");

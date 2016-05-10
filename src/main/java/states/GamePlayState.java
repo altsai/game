@@ -104,6 +104,10 @@ public abstract class GamePlayState extends BasicGameState {
     Font font = new Font("Arial", Font.BOLD, 50);
     ttf = Resources.getDefaultFont(40);
     timeStopped = false;
+
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
   }
 
   public int getElapsedTime() {
@@ -269,6 +273,7 @@ public abstract class GamePlayState extends BasicGameState {
         + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
         && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
         + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
+      s.getState(States.MENU).init(gc, s);
       s.enterState(States.MENU);
     }
   }

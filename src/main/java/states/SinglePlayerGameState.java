@@ -56,6 +56,10 @@ public class SinglePlayerGameState extends GamePlayState {
     this.playerID = player1.getID();
 
     this.setElapsedTime(0);
+
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
   }
 
   @Override

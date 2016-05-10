@@ -72,6 +72,9 @@ public abstract class NetworkPlay extends GamePlayState {
     this.isTyping = false;
     this.chatOn = true;
 
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
   }
 
   /**

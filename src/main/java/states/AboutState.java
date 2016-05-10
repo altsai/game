@@ -28,6 +28,10 @@ public class AboutState extends BasicGameState {
 
     Font font2 = new Font("Arial", Font.BOLD, 20);
     textFont = new TrueTypeFont(font2, true);
+
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
   }
 
   @Override
@@ -57,6 +61,7 @@ public class AboutState extends BasicGameState {
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (gc.getInput().isMouseButtonDown(0) && posX >= 20
         && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
+      s.getState(States.MENU).init(gc, s);
       s.enterState(States.MENU);
     }
   }
