@@ -7,11 +7,33 @@ import java.util.Random;
 
 import edu.brown.cs.altsai.game.Window;
 
+/**
+ * Creates a horizontal-moving wall of zombies.
+ *
+ * @author Alison
+ *
+ */
 public class ZombieWall {
 
+  /**
+   * Size of gap to leave in the wall.
+   */
   public final static int GAP_WIDTH = 3;
 
-
+  /**
+   * Creates a wall of zombies.
+   * 
+   * @param target
+   *          the target entity
+   * @param players
+   *          the players in the game
+   * @param speed
+   *          the speed of the zombies
+   * @param zombies
+   *          the map of zombies in the game
+   * @param zombieFormations
+   *          the map of zombie formations in the game
+   */
   public ZombieWall(Entity target, Map<String, Player> players, double speed,
       Map<String, Zombie> zombies, Map<String, List<String>> zombieFormations) {
     float x = 13.0f;
@@ -38,7 +60,8 @@ public class ZombieWall {
         // pick a random side to fill in (so the other side gets the gap)
         if (r.nextInt(2) == 0) {
           while (Math.abs(n - gap) <= GAP_WIDTH) {
-            ZombieFormationBody b1 = new ZombieFormationBody(z, players, n, 270.0);
+            ZombieFormationBody b1 = new ZombieFormationBody(z, players, n,
+                270.0);
             zombies.put(b1.getID(), b1);
             zfbIds.add(b1.getID());
             n++;
@@ -50,10 +73,11 @@ public class ZombieWall {
             n++;
             yPos -= 20;
             atCap = yPos < 60;
-            ZombieFormationBody b2 = new ZombieFormationBody(z, players, n, 90.0);
+            ZombieFormationBody b2 = new ZombieFormationBody(z, players, n,
+                90.0);
             if (b2.getY() < Window.height - 30) {
-            zombies.put(b2.getID(), b2);
-            zfbIds.add(b2.getID());
+              zombies.put(b2.getID(), b2);
+              zfbIds.add(b2.getID());
             }
           }
         }

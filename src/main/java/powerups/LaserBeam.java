@@ -1,21 +1,28 @@
 package powerups;
 
-import java.util.List;
-import java.util.Map;
-
-import org.newdawn.slick.GameContainer;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+
+import java.util.List;
+import java.util.Map;
+
+import org.newdawn.slick.GameContainer;
+
 import server.GameServer;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+/**
+ * Powerup to fire a directed laser beam.
+ *
+ * @author Alison
+ *
+ */
 public class LaserBeam extends Powerup {
 
   /**
@@ -28,13 +35,29 @@ public class LaserBeam extends Powerup {
    */
   private Map<String, Player> players;
 
+  /**
+   * Direction to fire laser in.
+   */
   private float direction;
+
+  /**
+   * Speed of laser beam.
+   */
   private static final float LASER_SPEED = 10.0f;
 
+  /**
+   * LaserShot to fire.
+   */
   private LaserShot laser;
 
+  /**
+   * Server to pass to.
+   */
   private GameServer server;
 
+  /**
+   * Whether it has already taken another player's life.
+   */
   private boolean lifeLost = false;
 
   /**
@@ -120,8 +143,6 @@ public class LaserBeam extends Powerup {
     super.update(gc, delta);
 
     if (this.isUsed && laser != null) {
-
-      // TODO advance along line of attack
       float x = laser.getX();
       float y = laser.getY();
 
@@ -199,14 +220,12 @@ public class LaserBeam extends Powerup {
     // clear the player's powerup storage after using the powerup
     this.affectedPlayer.clearPowerupStorage();
     direction = affectedPlayer.getLastDir();
-    // TODO reset radius to larger
     laser = new LaserShot(null, direction);
     laser.setX(affectedPlayer.getX() - laser.getRadius() / 2
         + affectedPlayer.getRadius() / 2);
     laser.setY(affectedPlayer.getY() - laser.getRadius() / 2
         + affectedPlayer.getRadius() / 2);
 
-    // TODO return list of zombies hit by laser
     return Lists.newArrayList();
   }
 
@@ -218,7 +237,7 @@ public class LaserBeam extends Powerup {
 
   @Override
   public void deactivate() {
-    if (this.isUsed && hasReachedBoundary()) { // TODO reached boundary
+    if (this.isUsed && hasReachedBoundary()) {
       // kill the powerup
       kill();
     }

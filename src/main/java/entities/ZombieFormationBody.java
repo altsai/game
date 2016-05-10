@@ -8,11 +8,40 @@ import org.newdawn.slick.GameContainer;
 import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 
+/**
+ * Representation of a following zombie in a formation.
+ *
+ * @author Alison
+ *
+ */
 public class ZombieFormationBody extends Zombie {
+  /**
+   * The leader the zombie is oriented around.
+   */
   private Entity leader;
+
+  /**
+   * The angle to preserve.
+   */
   private double angle;
+
+  /**
+   * The number of zombie widths to position itself away from the leader.
+   */
   private int offset;
 
+  /**
+   * Constructor for a ZombieFormationBody.
+   *
+   * @param other
+   *          the leader to follow
+   * @param players
+   *          the players in the game
+   * @param off
+   *          the offset
+   * @param ang
+   *          the angle to preserve
+   */
   public ZombieFormationBody(Entity other, Map<String, Player> players,
       int off, double ang) {
     super(other, players);
@@ -68,6 +97,12 @@ public class ZombieFormationBody extends Zombie {
     }
   }
 
+  /**
+   * Follows the leader based on the set offset and angle.
+   *
+   * @param delta
+   *          the update frequency
+   */
   private void followLeader(int delta) {
     if (this.getTarget() instanceof BlackHole) {
       followPlayer(delta);
