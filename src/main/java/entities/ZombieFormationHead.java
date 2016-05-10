@@ -7,18 +7,63 @@ import java.util.Map;
 
 import org.newdawn.slick.GameContainer;
 
+/**
+ * Zombie that determines others' orientation in a formation.
+ *
+ * @author Alison
+ *
+ */
 public class ZombieFormationHead extends Zombie {
+  /**
+   * The angle of travel of the zombie.
+   */
   protected double directionAngle;
+
+  /**
+   * Whether the zombie is entity-target-independent.
+   */
   private boolean independent;
+
+  /**
+   * x coordinate of target spot.
+   */
   private double xTarg;
+
+  /**
+   * y coordinate of target spot.
+   */
   private double yTarg;
+
+  /**
+   * Whether the head is right-moving.
+   */
   private boolean right;
 
+  /**
+   * Constructor for entity-target-dependent formation head.
+   *
+   * @param other
+   *          the target
+   * @param players
+   *          the players in the game
+   */
   public ZombieFormationHead(Entity other, Map<String, Player> players) {
     super(other, players);
     independent = false;
   }
 
+  /**
+   * Constructor for static point oriented head.
+   *
+   * @param other
+   *          a given target
+   * @param players
+   *          the players in the game
+   * @param x
+   *          the x position to move to
+   * @param y
+   *          the y position to move to
+   */
   public ZombieFormationHead(Entity other, Map<String, Player> players,
       double x, double y) {
     super(other, players);
@@ -66,6 +111,12 @@ public class ZombieFormationHead extends Zombie {
     }
   }
 
+  /**
+   * Moves the head left or right, depending on current movement.
+   *
+   * @param delta
+   *          update frequency
+   */
   public void moveToPoint(int delta) {
     if (right) {
       if ((this.x + this.speed) >= Window.width - 30) {
@@ -84,6 +135,11 @@ public class ZombieFormationHead extends Zombie {
     }
   }
 
+  /**
+   * Returns the angle the leader is traveling in.
+   *
+   * @return directionAngle
+   */
   public double getLAngle() {
     return directionAngle;
   }

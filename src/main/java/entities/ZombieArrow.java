@@ -4,7 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Representation of a player-oriented arrow.
+ *
+ * @author Alison
+ *
+ */
 public class ZombieArrow {
+  /**
+   * Constructor for a player-oriented arrow.
+   *
+   * @param target
+   *          the target to follow
+   * @param players
+   *          the players in the game
+   * @param speed
+   *          the speed to move at
+   * @param zombies
+   *          the map of zombies in the game
+   * @param zombieFormations
+   *          the map of zombie formations in the game
+   */
   public ZombieArrow(Entity target, Map<String, Player> players, double speed,
       Map<String, Zombie> zombies, Map<String, List<String>> zombieFormations) {
     ZombieFormationHead z = new ZombieFormationHead(target, players);
@@ -20,6 +40,7 @@ public class ZombieArrow {
     ZombieFormationBody b4 = new ZombieFormationBody(z, players, 2, 225.0);
     zombies.put(b4.getID(), b4);
 
+    // add ZombieFormationBody zombies to the leader list
     List<String> zfbIds = new ArrayList<>();
     zfbIds.add(b1.getID());
     zfbIds.add(b2.getID());
