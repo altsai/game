@@ -194,7 +194,6 @@ public class ServerListener extends Listener {
 
     // if we get a message, add it to the queue
     if (o instanceof PlayerMessage) {
-      System.out.println("received message");
       PlayerMessage message = (PlayerMessage) o;
 
       synchronized (this.messages) {
