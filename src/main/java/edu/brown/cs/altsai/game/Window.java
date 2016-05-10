@@ -21,6 +21,8 @@ public class Window {
 
   public static double screenWidth;
   public static double screenHeight;
+  public static double screenDPI;
+  public static double feetPerPixel;
 
   // Automatically set width and height based on screen size
   static {
@@ -34,6 +36,9 @@ public class Window {
       width = 1132;
       height = 700;
     }
+
+    screenDPI = Toolkit.getDefaultToolkit().getScreenResolution();
+    feetPerPixel = 1 / (Math.sqrt(screenDPI) * 12);
   }
 
   public static void showMessage(String title, String message) {

@@ -11,14 +11,14 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import powerups.BlackHole;
-import powerups.OnFire;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.ZombieArrow;
 import game_objects.Powerup;
 import highscore.HighscoreSystem;
+import powerups.BlackHole;
+import powerups.OnFire;
 
 /**
  * Defines the Single Player game state.
@@ -56,6 +56,9 @@ public class SinglePlayerGameState extends GamePlayState {
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
     super.render(gc, s, g);
+
+    System.out.println(this.players.get(this.playerID).getDistTraveled());
+    System.out.println("screen dpi: " + Window.screenDPI);
 
     // Draw lives
     for (int i = 0; i < this.players.get("0").getLives() + 1; i++) {

@@ -55,6 +55,9 @@ public class Player extends Entity implements PlayerAction {
   private ParticleSystem fireParticles;
   private FireEmitterCustom emitter;
   private Map<String, Boolean> jails;
+  private double distanceTraveled;
+  private float lastX;
+  private float lastY;
 
   private static final int ANIMATION_FRAME_TIME = 150;
 
@@ -75,6 +78,8 @@ public class Player extends Entity implements PlayerAction {
   public void init(Entity other) {
     this.x = 500;
     this.y = 500;
+    this.lastX = 500;
+    this.lastY = 500;
     this.radius = 30;
     this.lives = 5;
     this.powerup = null;
@@ -108,11 +113,7 @@ public class Player extends Entity implements PlayerAction {
    */
   private void initFire() {
     fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
-    // File xmlFile = new File("particle/fire.xml");
     try {
-      // ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
-      // emitter.setPosition(this.radius / 2, this.radius / 2);
-      // fireParticles.addEmitter(emitter);
       emitter = new FireEmitterCustom((int) this.radius / 2,
           (int) this.radius / 2, EMITTER_SIZE);
       fireParticles.addEmitter(emitter);
@@ -527,6 +528,29 @@ public class Player extends Entity implements PlayerAction {
     } else if (leftFlag) {
       lastDir = 180;
     }
+
+    double movedPixels = movedPixels(this.x, this.y);
+    this.lastX = this.x;
+    this.lastY = this.y;
+    this.distanceTraveled += movedPixels * Window.feetPerPixel;
+  }
+
+  /**
+   * Returns the distance traveled by the player in feet.
+   *
+   * Takes a pixel size and using the screen DPI and resolution,
+   * calculates the feet traveled.
+   *
+   * @return  double      Feet traveled by the player.
+   */
+  public double getDistTraveled() {
+    return this.distanceTraveled;
+  }
+
+  private double movedPixels(float x, float y) {
+    double squaredDist = Math.pow(x - this.lastX, 2) +
+        Math.pow(y - this.lastY, 2);
+    return Math.sqrt(squaredDist);
   }
 
   /**

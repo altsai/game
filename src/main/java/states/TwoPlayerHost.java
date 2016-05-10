@@ -360,7 +360,7 @@ public class TwoPlayerHost extends NetworkPlay {
             continue;
           }
           if (p.getLives() == 0) {
-            this.loser = p.getName() + " Lost!!!";
+            this.loser = p.getID();
             this.server.sendGameEnd(this.loser);
             // do not call endGame here. The server handles this
           } else {
