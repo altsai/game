@@ -589,7 +589,7 @@ public class Player extends Entity implements PlayerAction {
    * @return  double      Feet traveled by the player.
    */
   public double getDistTraveled() {
-    return this.distanceTraveled;
+    return Math.round(this.distanceTraveled * 100.0) / 100.0;
   }
 
   private double movedPixels(float x, float y) {

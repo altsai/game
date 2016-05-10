@@ -125,6 +125,12 @@ public class SinglePlayerEndGameState extends BasicGameState {
     int fireKills = this.spgs.players.get(this.spgs.playerID).getFireKills();
     double distMoved = this.spgs.players.get(this.spgs.playerID).getDistTraveled();
 
+    Resources.getDefaultFont(12).drawString(530, 380, "Zombies Vacuumed:  " + blackholeKills);
+    Resources.getDefaultFont(12).drawString(530, 460, "Zombies Bombed:    " + bombKills);
+    Resources.getDefaultFont(12).drawString(530, 540, "Zombies Cooked:    " + fireKills);
+    Resources.getDefaultFont(12).drawString(530, 620, "Zombies Lasered:   " + laserKills);
+    Resources.getDefaultFont(12).drawString(530, 700, "Distance Traveled: " + distMoved + " feet");
+
     Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
   }
 
