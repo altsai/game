@@ -179,6 +179,7 @@ public class Bomb extends Powerup {
         this.zombies.remove(key);
         removedZombies.add(key);
         this.affectedPlayer.incrementScore();
+        this.affectedPlayer.setBombKills(affectedPlayer.getBombKills() + 1);
       }
     }
 

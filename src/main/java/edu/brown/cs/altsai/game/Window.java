@@ -38,7 +38,7 @@ public class Window {
     }
 
     screenDPI = Toolkit.getDefaultToolkit().getScreenResolution();
-    feetPerPixel = 1 / (Math.sqrt(screenDPI) * 12);
+    feetPerPixel = 1 / (Math.sqrt(screenDPI) * 12 * 12);
   }
 
   public static void showMessage(String title, String message) {

@@ -63,9 +63,6 @@ public class SinglePlayerGameState extends GamePlayState {
       throws SlickException {
     super.render(gc, s, g);
 
-    System.out.println(this.players.get(this.playerID).getDistTraveled());
-    System.out.println("screen dpi: " + Window.screenDPI);
-
     // Draw lives
     for (int i = 0; i < this.players.get("0").getLives() + 1; i++) {
       Resources.getImage("life1").draw(Window.width - 35 - i * 25, 10, 20, 20);

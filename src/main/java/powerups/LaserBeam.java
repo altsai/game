@@ -163,6 +163,7 @@ public class LaserBeam extends Powerup {
           removedZombies.add(zid);
 
           affectedPlayer.incrementScore();
+          affectedPlayer.setLaserKills(affectedPlayer.getLaserKills() + 1);
         }
       }
 
