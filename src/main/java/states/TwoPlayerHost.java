@@ -102,7 +102,11 @@ public class TwoPlayerHost extends NetworkPlay {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     if (this.server == null || this.server.getConnections().length == 0) {
-      Resources.getImage("connectionPage").draw(0, 0);
+      if (Window.width == 1390) {
+        Resources.getImage("connectionPage").draw(0, 0);
+      } else if (Window.width == 1132) {
+        Resources.getImage("connectionPageSmall").draw(0, 0);
+      }
 
       // Main menu button
       Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH,

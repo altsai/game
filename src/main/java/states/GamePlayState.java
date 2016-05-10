@@ -17,13 +17,13 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import powerups.BlackHole;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 import entities.Entity;
 import entities.Player;
 import entities.Zombie;
 import game_objects.Powerup;
+import powerups.BlackHole;
 
 /**
  * Provides a template for gameplay state objects.
@@ -128,8 +128,15 @@ public abstract class GamePlayState extends BasicGameState {
     long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
     if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
       this.setElapsedTime(0);
-      g.drawString("Game begins in: "
-          + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
+
+      int currNum = (int) ((GAME_COUNTDOWN - timeSinceInit) / 1000);
+      if (currNum == 3) {
+        Resources.getImage("3").draw((Window.width - Resources.getImage("3").getWidth()) / 2, (Window.height - Resources.getImage("3").getHeight()) / 2);
+      } else if (currNum == 2) {
+        Resources.getImage("2").draw((Window.width - Resources.getImage("2").getWidth()) / 2, (Window.height - Resources.getImage("2").getHeight()) / 2);
+      } else if (currNum == 1) {
+        Resources.getImage("1").draw((Window.width - Resources.getImage("1").getWidth()) / 2, (Window.height - Resources.getImage("1").getHeight()) / 2);
+      }
     } else {
       if (!this.gameStart) {
         // set elapsed time here.... once game begins
@@ -245,7 +252,7 @@ public abstract class GamePlayState extends BasicGameState {
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (inX
             && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-                + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
+            + ttf.getLineHeight() + 20 && posY <= (Window.height - PAUSE_MENU_HEIGHT)
             / 2 + 20 + ttf.getLineHeight() + 20 + BUTTON_HEIGHT)) {
       pauseMenu = !pauseMenu;
     }
@@ -253,9 +260,9 @@ public abstract class GamePlayState extends BasicGameState {
     // back to main menu
     if (inX
         && posY >= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
+        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT
         && posY <= (Window.height - PAUSE_MENU_HEIGHT) / 2 + 20
-            + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
+        + ttf.getLineHeight() + 20 + BUTTON_HEIGHT + BUTTON_HEIGHT) {
       s.enterState(States.MENU);
     }
   }
