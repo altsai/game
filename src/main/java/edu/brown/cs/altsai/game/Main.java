@@ -36,20 +36,24 @@ public class Main extends StateBasedGame {
   private HighscoreSystem highscoreSystem;
 
   public Main() throws NumberFormatException, IOException, ParseException {
-    super("Survival game");
+    super("WASD To Live");
 
     try {
       conn = instantiateConnection();
       this.highscoreSystem = new HighscoreSystem("highscores.txt", 10, conn);
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null, "Unable to connect to the internet. The game is now running in offline mode.\nTo run in online mode, fix your connection and restart the game.", "Connection Error", JOptionPane.WARNING_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Unable to connect to the internet. "
+          + "The game is now running in offline mode.\nTo run in online mode, "
+          + "fix your connection and restart the game.", "Connection Error"
+          , JOptionPane.WARNING_MESSAGE);
       this.highscoreSystem = new HighscoreSystem("highscores.txt", 10);
     }
   }
 
   private Connection instantiateConnection() throws SQLException,
   ClassNotFoundException {
-    String url = "jdbc:mysql://cs32db.csox7dghpjsn.us-east-1.rds.amazonaws.com:3306/";
+    String url =
+        "jdbc:mysql://cs32db.csox7dghpjsn.us-east-1.rds.amazonaws.com:3306/";
     String userName = "cs32user";
     String password = "cs32pass";
     String dbName = "cs32db";
