@@ -167,7 +167,6 @@ public class GameServer {
    * @param message   String, text to be sent
    */
   public void sendMessage(String message) {
-    System.out.println("sent message");
     PlayerMessage packet = new PlayerMessage();
     packet.message = message;
     packet.playerID = this.player1ID;
