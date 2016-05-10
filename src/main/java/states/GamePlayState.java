@@ -40,7 +40,7 @@ public abstract class GamePlayState extends BasicGameState {
   protected Map<String, Powerup> powerups;
   protected Set<Powerup> pickedUpPowerups;
   protected Map<String, List<String>> zombieFormations;
-  protected Map<String, Long> onFireTimes;
+  public Map<String, Long> onFireTimes;
 
   // players in the game
   protected Map<String, Player> players;
