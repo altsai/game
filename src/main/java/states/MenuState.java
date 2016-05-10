@@ -32,6 +32,9 @@ public class MenuState extends BasicGameState {
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
   }
 
   @Override

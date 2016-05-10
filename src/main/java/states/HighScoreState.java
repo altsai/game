@@ -90,6 +90,10 @@ public class HighScoreState extends BasicGameState {
 
   @Override
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
+
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
     // Get global highscores and local highscores
     if (highscoreSystem.isGlobal()) {
       globalHighscores = highscoreSystem.getGlobalScores();
@@ -521,6 +525,7 @@ public class HighScoreState extends BasicGameState {
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)
         || (gc.getInput().isMouseButtonDown(0) && posX >= 20
         && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
+      s.getState(States.MENU).init(gc, s);
       s.enterState(States.MENU);
     }
   }
