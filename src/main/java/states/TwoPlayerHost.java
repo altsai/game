@@ -102,10 +102,11 @@ public class TwoPlayerHost extends NetworkPlay {
     g.drawImage(Resources.getImage("background"), 0, 0);
 
     if (this.server == null || this.server.getConnections().length == 0) {
+      Resources.getImage("connectionPage").draw(0, 0);
+
       // Main menu button
       Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH,
           BUTTON_HEIGHT);
-      g.drawString("Waiting for a client", 150, 150);
     }
 
     // check that there isn't an error making the server

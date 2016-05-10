@@ -45,6 +45,7 @@ public class Resources {
       images.put("background", loadImage("/src/main/java/img/background.png"));
       images.put("backgroundMainMenu", loadImage("/src/main/java/img/background_main_menu.png"));
       images.put("backgroundMainMenuSmall", loadImage("/src/main/java/img/background_main_menu_small.png"));
+      images.put("connectionPage", loadImage("src/main/java/img/connection_page.png"));
       images.put("gray_arrow", loadImage("/src/main/java/img/gray_arrow.png"));
 
       images.put("aboutPage", loadImage("/src/main/java/img/aboutpage.png"));
