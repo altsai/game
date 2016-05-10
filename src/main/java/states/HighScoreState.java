@@ -2,7 +2,6 @@ package states;
 
 import highscore.HighscoreSystem;
 
-import java.awt.Font;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -42,12 +41,12 @@ public class HighScoreState extends BasicGameState {
   private static final int BUTTON_WIDTH = 180;
   private static final int BUTTON_HEIGHT = 68;
 
-  private static int HIGHEST_NUM = 21;
+  private static int HIGHEST_NUM = 28;
   static {
     if (Window.width == 1390) {
-      HIGHEST_NUM = 21;
+      HIGHEST_NUM = 28;
     } else {
-      HIGHEST_NUM = 15;
+      HIGHEST_NUM = 20;
     }
   }
 
@@ -80,11 +79,9 @@ public class HighScoreState extends BasicGameState {
   public HighScoreState(HighscoreSystem highscoreSystem) {
     this.highscoreSystem = highscoreSystem;
 
-    Font font = new Font("Arial", Font.BOLD, 50);
-    headerFont = new TrueTypeFont(font, true);
+    headerFont = Resources.getDefaultFont(40);
 
-    Font font2 = new Font("Arial", Font.BOLD, 20);
-    entryFont = new TrueTypeFont(font2, true);
+    entryFont = Resources.getDefaultFont(10);
 
     arrowImage = Resources.getImage("gray_arrow");
 
@@ -104,8 +101,7 @@ public class HighScoreState extends BasicGameState {
     localHighscores = highscoreSystem.getLocalScores();
 
     if (!initializedSearchField) {
-      Font font3 = new Font("Arial", Font.PLAIN, 18);
-      TrueTypeFont searchFont = new TrueTypeFont(font3, true);
+      TrueTypeFont searchFont = Resources.getDefaultFont(8);
       searchField = new TextField(gc, searchFont, Window.width / 2
           - (300 + entryFont.getWidth("Search for a name: ")) / 2
           + entryFont.getWidth("Search for a name: "), 20
@@ -244,7 +240,7 @@ public class HighScoreState extends BasicGameState {
         - entryFont.getLineHeight() - 15;
     if (Window.height == 700) {
       normalTableHeight = Window.height - tableY - entryFont.getLineHeight()
-          * 2 - 5;
+          * 2 - 15;
     }
 
     g.setColor(Color.gray);
