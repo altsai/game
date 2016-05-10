@@ -38,6 +38,10 @@ public class TwoPlayerClient extends NetworkPlay {
   public void init(GameContainer gc, StateBasedGame s) throws SlickException {
     super.init(gc, s);
 
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
+
     this.hasClient = false;
     this.gameEnd = false;
 
@@ -237,6 +241,7 @@ public class TwoPlayerClient extends NetworkPlay {
     // go to the home menu state when 'esc' is pressed
     if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
       this.client.close();
+      s.getState(States.MENU).init(gc, s);
       s.enterState(States.MENU);
     }
 

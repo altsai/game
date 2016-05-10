@@ -19,8 +19,9 @@ public class TwoPlayerServerName extends BasicGameState {
   @Override
   public void init(GameContainer gc, StateBasedGame s)
       throws SlickException {
-    //this.inputBox = new TextField(gc, new TrueTypeFont())
-
+    gc.getInput().clearControlPressedRecord();
+    gc.getInput().clearKeyPressedRecord();
+    gc.getInput().clearMousePressedRecord();
   }
 
   @Override
@@ -38,6 +39,7 @@ public class TwoPlayerServerName extends BasicGameState {
       s.getState(States.TWO_PLAYER_HOST).init(gc, s);
       s.enterState(States.TWO_PLAYER_HOST);
     } else if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+      s.getState(States.MENU).init(gc, s);
       s.enterState(States.MENU);
     }
   }
