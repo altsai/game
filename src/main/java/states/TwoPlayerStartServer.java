@@ -67,13 +67,13 @@ public class TwoPlayerStartServer extends BasicGameState {
     this.conn = conn;
 
     Font font = new Font("Arial", Font.BOLD, 50);
-    headerFont = new TrueTypeFont(font, true);
+    headerFont = Resources.getDefaultFont(40);
 
     Font font2 = new Font("Arial", Font.BOLD, 20);
-    entryFont = new TrueTypeFont(font2, true);
+    entryFont = Resources.getDefaultFont(10);
 
     Font font3 = new Font("Arial", Font.PLAIN, 18);
-    searchFont = new TrueTypeFont(font3, true);
+    searchFont = Resources.getDefaultFont(8);
 
     arrowImage = Resources.getImage("gray_arrow");
   }
@@ -99,13 +99,13 @@ public class TwoPlayerStartServer extends BasicGameState {
       serverField = new TextField(gc
           , searchFont
           , (Window.width / 2 - entryFont.getWidth("Enter server number or name to join: ") - 200) / 2
-          + entryFont.getWidth("Enter server number or name to join: "), 20
+          + entryFont.getWidth("Enter server number or name to join: "), 75
           + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
 
       serverName = new TextField(gc
           , searchFont
           , (int) (Window.width * 1.5 - entryFont.getWidth("Enter server name to create: ") - 200) / 2
-          + entryFont.getWidth("Enter server name to create: "), 20
+          + entryFont.getWidth("Enter server name to create: "), 75
           + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
 
       initializedTextFields = true;
@@ -187,7 +187,7 @@ public class TwoPlayerStartServer extends BasicGameState {
     // Left Side
 
     // Draw title
-    float currHeight = 20;
+    float currHeight = 75;
     headerFont.drawString((Window.width / 2 - headerFont.getWidth("Join Server")) / 2, currHeight, "Join Server", Color.white);
     currHeight += (10 + headerFont.getLineHeight());
 
@@ -210,7 +210,7 @@ public class TwoPlayerStartServer extends BasicGameState {
       entryFont.drawString((Window.width / 2 - entryFont.getWidth(toDraw)) / 2, tableY, toDraw, Color.white);
     } else {
 
-      float normalTableHeight = Window.height - tableY - entryFont.getLineHeight() - 15;
+      float normalTableHeight = Window.height - tableY - entryFont.getLineHeight() - 27;
       if (Window.height == 700) {
         normalTableHeight = Window.height - tableY - entryFont.getLineHeight();
       }
@@ -266,7 +266,7 @@ public class TwoPlayerStartServer extends BasicGameState {
     // Right side
 
     // Draw title
-    currHeight = 20;
+    currHeight = 75;
     headerFont.drawString((Window.width * 1.5f - headerFont.getWidth("Create Server")) / 2, currHeight, "Create Server", Color.white);
     currHeight += (10 + headerFont.getLineHeight());
 
@@ -279,11 +279,7 @@ public class TwoPlayerStartServer extends BasicGameState {
     serverName.setTextColor(Color.black);
 
     // Main menu button
-    if (Window.width == 1390) {
-      Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
-    } else {
-      Resources.getImage("buttonMainMenu").draw((Window.width - BUTTON_WIDTH) / 2, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
-    }
+    Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   }
 
@@ -386,14 +382,8 @@ public class TwoPlayerStartServer extends BasicGameState {
     int posY = gc.getInput().getMouseY();
 
     // Back to main menu
-    if (Window.width == 1390) {
-      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (gc.getInput().isMouseButtonDown(0) && posX >= 20 && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
-        s.enterState(States.MENU);
-      }
-    } else {
-      if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (gc.getInput().isMouseButtonDown(0) && posX >= (Window.width - BUTTON_WIDTH) / 2 && posX <= (Window.width - BUTTON_WIDTH) / 2 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
-        s.enterState(States.MENU);
-      }
+    if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || (gc.getInput().isMouseButtonDown(0) && posX >= 20 && posX <= 20 + BUTTON_WIDTH && posY >= 20 && posY <= 20 + BUTTON_HEIGHT)) {
+      s.enterState(States.MENU);
     }
 
   }

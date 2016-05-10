@@ -153,8 +153,20 @@ public class TwoPlayerHost extends NetworkPlay {
       // check that a 3 second delay has completed before playing the game
       long timeSinceInit = System.currentTimeMillis() - this.initialDelayTime;
       if (timeSinceInit < (GAME_COUNTDOWN - 1000)) {
-        g.drawString("Game begins in: "
-            + ((GAME_COUNTDOWN - timeSinceInit) / 1000), 200, 200);
+        int currNum = (int) ((GAME_COUNTDOWN - timeSinceInit) / 1000);
+        if (currNum == 3) {
+          Resources.getImage("3").draw(
+              (Window.width - Resources.getImage("3").getWidth()) / 2,
+              (Window.height - Resources.getImage("3").getHeight()) / 2);
+        } else if (currNum == 2) {
+          Resources.getImage("2").draw(
+              (Window.width - Resources.getImage("2").getWidth()) / 2,
+              (Window.height - Resources.getImage("2").getHeight()) / 2);
+        } else if (currNum == 1) {
+          Resources.getImage("1").draw(
+              (Window.width - Resources.getImage("1").getWidth()) / 2,
+              (Window.height - Resources.getImage("1").getHeight()) / 2);
+        }
       } else {
 
         this.gameStart = true;

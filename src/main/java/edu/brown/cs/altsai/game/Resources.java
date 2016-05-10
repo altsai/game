@@ -1,5 +1,12 @@
 package edu.brown.cs.altsai.game;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +14,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.TrueTypeFont;
 
 /**
  * Groups together graphics and sounds that the game uses.
@@ -22,6 +30,20 @@ public class Resources {
   private static Map<String, SpriteSheet> sprites;
   private static Map<String, Sound> sounds;
 
+  private static Font defaultFont;
+  static {
+    try {
+      InputStream myStream = new BufferedInputStream(new FileInputStream("src/main/java/font/mono_0756_Regular.ttf"));
+      Font font = Font.createFont(Font.TRUETYPE_FONT, myStream);
+      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+      ge.registerFont(font);
+      defaultFont = font;
+    } catch (FontFormatException | IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
   /**
    * Constructor for a resources object.
    */
@@ -34,7 +56,7 @@ public class Resources {
     // load in all the files that are initially needed
     try {
       //img/player_1.png
-      images.put("player", loadImage("src/main/java/img/player_1.png"));
+      images.put("player", loadImage("/src/main/java/img/player_1.png"));
       images.put("player2", loadImage("/src/main/java/img/player_2.png"));
       images.put("zombie", loadImage("/src/main/java/img/zombie.png"));
       images.put("life1", loadImage("/src/main/java/img/heart_green.png"));
@@ -172,6 +194,10 @@ public class Resources {
    */
   public static Sound getSound(String name) {
     return sounds.get(name);
+  }
+
+  public static TrueTypeFont getDefaultFont(float size) {
+    return new TrueTypeFont(defaultFont.deriveFont(size), true);
   }
 
 }

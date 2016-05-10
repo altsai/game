@@ -15,6 +15,7 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import game_objects.PlayerMessage;
 
@@ -66,7 +67,7 @@ public abstract class NetworkPlay extends GamePlayState {
 
     this.previousPlayers = new ConcurrentHashMap<>();
     this.messages = new ConcurrentLinkedQueue<>();
-    this.currentText = new TextField(gc, playerFont, 500, 400, 400, 25);
+    this.currentText = new TextField(gc, playerFont, 12, Window.height - 35, 400, 25);
     this.currentText.setMaxLength(120);
     this.isTyping = false;
     this.chatOn = true;
@@ -97,12 +98,20 @@ public abstract class NetworkPlay extends GamePlayState {
    */
   protected void renderChat(GameContainer gc, Graphics g, String playerID) {
     float x = 20;
-    float y = 300;
+    float y = Window.height - 35 - 5*(playerFont.getLineHeight()) - 10;
     for (PlayerMessage m : this.messages) {
       if (m.playerID.equals(playerID)) {
-        playerFont.drawString(x, y, "YOU:   " + m.message, new Color(0, 0, 102));
+        if (playerID.equals("0")) {
+          playerFont.drawString(x, y, "YOU:   " + m.message, Color.green);
+        } else {
+          playerFont.drawString(x, y, "YOU:   " + m.message, Color.orange);
+        }
       } else {
-        otherFont.drawString(x, y,  "OTHER: " + m.message, new Color(128, 0, 0));
+        if (playerID.equals("0")) {
+          otherFont.drawString(x, y, "OTHER:   " + m.message, Color.orange);
+        } else {
+          otherFont.drawString(x, y, "OTHER:   " + m.message, Color.green);
+        }
       }
       y += 25;
     }
