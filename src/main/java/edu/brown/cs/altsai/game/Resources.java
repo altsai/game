@@ -55,6 +55,7 @@ public class Resources {
       images.put("gameOver2", loadImage("/src/main/java/img/gameOver2.png"));
       images.put("gameOver1Small", loadImage("/src/main/java/img/gameOver1_small.png"));
       images.put("gameOver2Small", loadImage("/src/main/java/img/gameOver2_small.png"));
+      images.put("statsbox", loadImage("src/main/java/img/statsbox.png"));
 
       images.put("aboutPage", loadImage("/src/main/java/img/aboutpage.png"));
       images.put("aboutPageSmall", loadImage("/src/main/java/img/aboutpage_small.png"));
