@@ -34,6 +34,7 @@ public class Main extends StateBasedGame {
 
   private Connection conn;
   private HighscoreSystem highscoreSystem;
+  private static AppGameContainer app;
 
   public Main() throws NumberFormatException, IOException, ParseException {
     super("WASD To Live");
@@ -66,13 +67,23 @@ public class Main extends StateBasedGame {
     // System.setProperty("org.lwjgl.librarypath",
     // new File("natives").getAbsolutePath());
     try {
-      AppGameContainer app = new AppGameContainer(new Main());
+      app = new AppGameContainer(new Main());
       app.setDisplayMode(Window.width, Window.height, false);
       app.start();
     } catch (SlickException
         | IOException | NumberFormatException | ParseException e) {
       e.printStackTrace();
     }
+  }
+
+  public static void setWidthHeight(int widthNew, int heightNew) {
+    Window.setWidthHeight(widthNew, heightNew);
+    try {
+      app.setDisplayMode(Window.width, Window.height, false);
+    } catch (NumberFormatException | SlickException e) {
+      e.printStackTrace();
+    }
+
   }
 
   @Override

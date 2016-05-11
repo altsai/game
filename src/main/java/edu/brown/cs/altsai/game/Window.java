@@ -54,4 +54,9 @@ public class Window {
     }
 
   }
+
+  public static void setWidthHeight(int widthNew, int heightNew) {
+    width = widthNew;
+    height = heightNew;
+  }
 }
