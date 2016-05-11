@@ -2,6 +2,8 @@ package server;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+import edu.brown.cs.altsai.game.Main;
+import edu.brown.cs.altsai.game.Window;
 import entities.Player;
 import entities.Zombie;
 import game_objects.PlayerMessage;
@@ -52,6 +56,7 @@ public class GameServer {
   private StateBasedGame s;
   private java.sql.Connection conn;
   private String address;
+  private String serverId;
 
   private Server server;
 
@@ -74,7 +79,8 @@ public class GameServer {
       , GamePlayState game
       , StateBasedGame s
       , java.sql.Connection conn
-      , String address) {
+      , String address
+      , String serverId) {
     this.players = players;
     this.zombies = zombies;
     this.powerups = powerups;
@@ -85,6 +91,37 @@ public class GameServer {
     this.s = s;
     this.conn = conn;
     this.address = address;
+    this.serverId = serverId;
+  }
+
+  public void setSize() throws SQLException {
+    String query = "SELECT * FROM screenSize WHERE id = ?";
+    PreparedStatement prep = conn.prepareStatement(query);
+    prep.setString(1, serverId);
+    ResultSet rs = prep.executeQuery();
+
+    if (rs.next()) {
+      int width = rs.getInt("width");
+      int height = rs.getInt("height");
+
+      if (Window.width > width || Window.height > height) {
+        Main.setWidthHeight(width, height);
+      }
+    }
+
+    rs.close();
+    prep.close();
+
+    deleteFromScreenSize();
+  }
+
+  private void deleteFromScreenSize() throws SQLException {
+    String delete = "DELETE FROM screenSize WHERE id = ?";
+    PreparedStatement prep = conn.prepareStatement(delete);
+    prep.setString(1, serverId);
+    prep.execute();
+
+    prep.close();
   }
 
   /**

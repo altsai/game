@@ -2,6 +2,7 @@ package states;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class TwoPlayerHost extends NetworkPlay {
   private GameServer server;
   private boolean errorMakingServer;
   private boolean makeServer;
+  private boolean setSize;
   private String player1ID;
 
   private static final int BUTTON_WIDTH = 180;
@@ -67,6 +69,7 @@ public class TwoPlayerHost extends NetworkPlay {
     gc.getInput().clearMousePressedRecord();
 
     this.makeServer = false;
+    this.setSize = false;
 
     Player p1 = new Player(null, "player1");
     p1.setPlayer1(true);
@@ -97,6 +100,16 @@ public class TwoPlayerHost extends NetworkPlay {
     });
   }
 
+  public void resizeWindow() {
+    try {
+      this.server.setSize();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    this.players.get("0").refreshBoundaries();
+    this.players.get("0").refreshXY();
+  }
+
   @Override
   public void render(GameContainer gc, StateBasedGame s, Graphics g)
       throws SlickException {
@@ -119,7 +132,14 @@ public class TwoPlayerHost extends NetworkPlay {
     if (this.errorMakingServer) {
       g.drawString("ERROR CREATING SERVER", 0, 0);
     } else if (server.getConnections().length > 0) {
-      // g.drawString("Host", 0, 0);
+      if (!setSize) {
+        setSize = true;
+        resizeWindow();
+      }
+
+      if (players.get("1") != null) {
+        players.get("1").refreshBoundaries();
+      }
 
       // Draw bounding box
       g.setColor(Color.gray);
@@ -236,7 +256,7 @@ public class TwoPlayerHost extends NetworkPlay {
       try {
         this.server = new GameServer(this.players, this.zombies, this.powerups,
             this.previousPlayers, this.messages, this.player1ID, this, s,
-            twoPlayerStartServer.getConn(), twoPlayerStartServer.getAddress());
+            twoPlayerStartServer.getConn(), twoPlayerStartServer.getAddress(), twoPlayerStartServer.getServerId());
         this.server.start();
         this.makeServer = true;
       } catch (IOException e) {

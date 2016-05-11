@@ -1,6 +1,5 @@
 package states;
 
-import java.awt.Font;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -11,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.UUID;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -23,6 +23,7 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import edu.brown.cs.altsai.game.Main;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 
@@ -38,9 +39,17 @@ public class TwoPlayerStartServer extends BasicGameState {
   private Connection conn;
   private List<String> serverNames;
   private List<String> serverAddresses;
+  private List<Integer> serverWidths;
+  private List<Integer> serverHeights;
+  private List<String> serverIds;
   private String address;
-  private TextField serverField;
-  private TextField serverName;
+  private String serverId;
+  private TextField serverField1390;
+  private TextField serverName1390;
+  private TextField serverField1132;
+  private TextField serverName1132;
+  private TextField serverFieldUsing;
+  private TextField serverNameUsing;
   private boolean makeServer;
   private boolean initializedTextFields = false;
 
@@ -66,13 +75,10 @@ public class TwoPlayerStartServer extends BasicGameState {
   public TwoPlayerStartServer(Connection conn) {
     this.conn = conn;
 
-    Font font = new Font("Arial", Font.BOLD, 50);
     headerFont = Resources.getDefaultFont(40);
 
-    Font font2 = new Font("Arial", Font.BOLD, 20);
     entryFont = Resources.getDefaultFont(10);
 
-    Font font3 = new Font("Arial", Font.PLAIN, 18);
     searchFont = Resources.getDefaultFont(8);
 
     arrowImage = Resources.getImage("gray_arrow");
@@ -88,8 +94,12 @@ public class TwoPlayerStartServer extends BasicGameState {
 
     this.serverNames = new ArrayList<>();
     this.serverAddresses = new ArrayList<>();
+    this.serverWidths = new ArrayList<>();
+    this.serverHeights = new ArrayList<>();
+    this.serverIds = new ArrayList<>();
 
     // get the ipAddress of the player
+    serverId = "";
     try {
       this.address = getIpAddress();
     } catch (SocketException e1) {
@@ -101,28 +111,48 @@ public class TwoPlayerStartServer extends BasicGameState {
     canScrollDown = false;
 
     if (!initializedTextFields) {
-      serverField = new TextField(gc
+      serverField1390 = new TextField(gc
           , searchFont
-          , (Window.width / 2 - entryFont.getWidth("Enter server number or name to join: ") - 200) / 2
-          + entryFont.getWidth("Enter server number or name to join: "), 75
+          , (1390 / 2 - entryFont.getWidth("Enter server number/name to join: ") - 200) / 2
+          + entryFont.getWidth("Enter server number/name to join: "), 75
           + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
 
-      serverName = new TextField(gc
+      serverName1390 = new TextField(gc
           , searchFont
-          , (int) (Window.width * 1.5 - entryFont.getWidth("Enter server name to create: ") - 200) / 2
+          , (int) (1390 * 1.5 - entryFont.getWidth("Enter server name to create: ") - 200) / 2
+          + entryFont.getWidth("Enter server name to create: "), 75
+          + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
+
+      serverField1132 = new TextField(gc
+          , searchFont
+          , (1132 / 2 - entryFont.getWidth("Enter server number/name to join: ") - 200) / 2
+          + entryFont.getWidth("Enter server number/name to join: "), 75
+          + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
+
+      serverName1132 = new TextField(gc
+          , searchFont
+          , (int) (1132 * 1.5 - entryFont.getWidth("Enter server name to create: ") - 200) / 2
           + entryFont.getWidth("Enter server name to create: "), 75
           + headerFont.getLineHeight() + 10, 200, entryFont.getLineHeight());
 
       initializedTextFields = true;
     }
 
-    serverField.setAcceptingInput(true);
-    serverField.setText("");
-    serverField.setFocus(false);
+    if (Window.width == 1390) {
+      serverFieldUsing = serverField1390;
+      serverNameUsing = serverName1390;
+    } else if (Window.width == 1132) {
+      serverFieldUsing = serverField1132;
+      serverNameUsing = serverName1132;
+    }
 
-    serverName.setAcceptingInput(true);
-    serverName.setText("");
-    serverName.setFocus(false);
+    serverFieldUsing.setAcceptingInput(true);
+    serverFieldUsing.setText("");
+    serverFieldUsing.setFocus(false);
+
+    serverNameUsing.setAcceptingInput(true);
+    serverNameUsing.setText("");
+    serverNameUsing.setFocus(false);
 
     try {
       getServers();
@@ -151,6 +181,9 @@ public class TwoPlayerStartServer extends BasicGameState {
       // Add to arrayLists
       serverNames.add(name);
       serverAddresses.add(rs.getString("ip"));
+      serverWidths.add(rs.getInt("width"));
+      serverHeights.add(rs.getInt("height"));
+      serverIds.add(rs.getString("id"));
     }
 
     // Set numberWidth
@@ -168,6 +201,10 @@ public class TwoPlayerStartServer extends BasicGameState {
    */
   public String getAddress() {
     return this.address;
+  }
+
+  public String getServerId() {
+    return this.serverId;
   }
 
   /**
@@ -197,12 +234,12 @@ public class TwoPlayerStartServer extends BasicGameState {
     currHeight += (10 + headerFont.getLineHeight());
 
     // Draw serverField
-    entryFont.drawString((Window.width / 2 - entryFont.getWidth("Enter server number or name to join: ") - 200) / 2, currHeight, "Enter server number or name to join: ", Color.white);
+    entryFont.drawString((Window.width / 2 - entryFont.getWidth("Enter server number/name to join: ") - 200) / 2, currHeight, "Enter server number/name to join: ", Color.white);
     g.setColor(Color.white);
-    serverField.render(gc, g);
-    serverField.setBackgroundColor(Color.white);
-    serverField.setBorderColor(Color.black);
-    serverField.setTextColor(Color.black);
+    serverFieldUsing.render(gc, g);
+    serverFieldUsing.setBackgroundColor(Color.white);
+    serverFieldUsing.setBorderColor(Color.black);
+    serverFieldUsing.setTextColor(Color.black);
 
     // Get some variables
     float tableX = (Window.width / 2 - tableWidth) / 2;
@@ -278,10 +315,10 @@ public class TwoPlayerStartServer extends BasicGameState {
     // Draw serverField
     entryFont.drawString((Window.width * 1.5f - entryFont.getWidth("Enter server name to create: ") - 200) / 2, currHeight, "Enter server name to create: ", Color.white);
     g.setColor(Color.white);
-    serverName.render(gc, g);
-    serverName.setBackgroundColor(Color.white);
-    serverName.setBorderColor(Color.black);
-    serverName.setTextColor(Color.black);
+    serverNameUsing.render(gc, g);
+    serverNameUsing.setBackgroundColor(Color.white);
+    serverNameUsing.setBorderColor(Color.black);
+    serverNameUsing.setTextColor(Color.black);
 
     // Main menu button
     Resources.getImage("buttonMainMenu").draw(20, 20, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -310,17 +347,43 @@ public class TwoPlayerStartServer extends BasicGameState {
     return localAddr;
   }
 
-  private void addServer(String name, String localAddr) throws SQLException, SocketException {
-    String add = "INSERT INTO servers VALUES (?, ?)";
+  private void addServer(String name, String localAddr, int width, int height, String id) throws SQLException, SocketException {
+    String add = "INSERT INTO servers VALUES (?, ?, ?, ?, ?)";
     PreparedStatement prep = conn.prepareStatement(add);
     prep.setString(1, name);
     prep.setString(2, localAddr);
+    prep.setInt(3, width);
+    prep.setInt(4, height);
+    prep.setString(5, id);
 
     prep.execute();
 
     prep.close();
 
 
+  }
+
+  private void handleSizing(int width, int height, String id) {
+    // Add this width and height
+    try {
+      String add = "INSERT INTO screenSize VALUES (?, ?, ?)";
+      PreparedStatement prep;
+      prep = conn.prepareStatement(add);
+      prep.setString(1, id);
+      prep.setInt(2, Window.width);
+      prep.setInt(3, Window.height);
+
+      prep.execute();
+
+      prep.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    // Set new width, height if necessary
+    if (Window.width > width || Window.height > height) {
+      Main.setWidthHeight(width, height);
+    }
   }
 
   public Connection getConn() {
@@ -339,15 +402,16 @@ public class TwoPlayerStartServer extends BasicGameState {
     }
 
     // Joining a server
-    if (serverField.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+    if (serverFieldUsing.hasFocus() && gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
       // Get input
-      String input = serverField.getText();
+      String input = serverFieldUsing.getText();
 
       // Check if its a number, if it's not then check if its a name
       try {
         int serverNum = Integer.parseInt(input);
         if (serverNum - 1 < serverAddresses.size() && serverNum > 0) {
           address = serverAddresses.get(serverNum - 1);
+          handleSizing(serverWidths.get(serverNum - 1), serverHeights.get(serverNum - 1), serverIds.get(serverNum - 1));
           s.getState(States.TWO_PLAYER_CLIENT).init(gc, s);
           s.enterState(States.TWO_PLAYER_CLIENT);
         } else {
@@ -356,6 +420,7 @@ public class TwoPlayerStartServer extends BasicGameState {
       } catch (NumberFormatException e) {
         if (serverNames.contains(input)) {
           address = serverAddresses.get(serverNames.indexOf(input));
+          handleSizing(serverWidths.get(serverNames.indexOf(input)), serverHeights.get(serverNames.indexOf(input)), serverIds.get(serverNames.indexOf(input)));
           s.getState(States.TWO_PLAYER_CLIENT).init(gc, s);
           s.enterState(States.TWO_PLAYER_CLIENT);
         } else {
@@ -365,13 +430,14 @@ public class TwoPlayerStartServer extends BasicGameState {
     }
 
     // Create a server
-    if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && serverName.hasFocus()) {
+    if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && serverNameUsing.hasFocus()) {
       try {
-        String input = serverName.getText();
+        String input = serverNameUsing.getText();
 
         if (!serverNames.contains(input)) {
           address = getIpAddress();
-          addServer(serverName.getText(), address);
+          serverId = UUID.randomUUID().toString().substring(10);
+          addServer(serverNameUsing.getText(), address, Window.width, Window.height, serverId);
           s.getState(States.TWO_PLAYER_HOST).init(gc, s);
           s.enterState(States.TWO_PLAYER_HOST);
         } else {

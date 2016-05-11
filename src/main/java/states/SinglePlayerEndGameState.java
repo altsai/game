@@ -30,7 +30,9 @@ import highscore.HighscoreSystem;
 public class SinglePlayerEndGameState extends BasicGameState {
   private SinglePlayerGameState spgs;
   private HighscoreSystem highscoreSystem;
-  private TextField nameField;
+  private TextField nameField1390;
+  private TextField nameField1132;
+  private TextField nameFieldUsing;
   private boolean checkedHighscore;
   private boolean bestHighscore;
   private boolean instantiatedTextField = false;
@@ -74,8 +76,15 @@ public class SinglePlayerEndGameState extends BasicGameState {
       instantiateTextField(gc);
       instantiatedTextField = true;
     }
-    nameField.setText("");
-    nameField.setAcceptingInput(false);
+
+    if (Window.width == 1390) {
+      nameFieldUsing = nameField1390;
+    } else if (Window.width == 1132) {
+      nameFieldUsing = nameField1132;
+    }
+    nameFieldUsing.setText("");
+    nameFieldUsing.setAcceptingInput(false);
+
     this.checkedHighscore = false;
     this.bestHighscore = false;
 
@@ -93,7 +102,8 @@ public class SinglePlayerEndGameState extends BasicGameState {
   private void instantiateTextField(GameContainer gc) {
     Font font3 = new Font("Arial", Font.PLAIN, 18);
     TrueTypeFont fieldFont = Resources.getDefaultFont(8);
-    nameField = new TextField(gc, fieldFont, (Window.width - 300) / 2, 20 + headerFont.getLineHeight() + 10 + textFont.getLineHeight() + 10 + textFont.getLineHeight() + 10, 300, textFont.getLineHeight());
+    nameField1390 = new TextField(gc, fieldFont, (1390 - 300) / 2, 20 + headerFont.getLineHeight() + 10 + textFont.getLineHeight() + 10 + textFont.getLineHeight() + 10, 300, textFont.getLineHeight());
+    nameField1132 = new TextField(gc, fieldFont, (1132 - 300) / 2, 20 + headerFont.getLineHeight() + 10 + textFont.getLineHeight() + 10 + textFont.getLineHeight() + 10, 300, textFont.getLineHeight());
   }
 
   @Override
@@ -128,11 +138,11 @@ public class SinglePlayerEndGameState extends BasicGameState {
       currHeight += textFont.getLineHeight() + 10;
       String toDraw = "New best score! Enter your name below:";
       textFont.drawString((Window.width - textFont.getWidth(toDraw)) / 2, currHeight, toDraw, Color.white);
-      nameField.setAcceptingInput(true);
-      nameField.render(gc, g);
-      nameField.setBackgroundColor(Color.white);
-      nameField.setBorderColor(Color.black);
-      nameField.setTextColor(Color.black);
+      nameFieldUsing.setAcceptingInput(true);
+      nameFieldUsing.render(gc, g);
+      nameFieldUsing.setBackgroundColor(Color.white);
+      nameFieldUsing.setBorderColor(Color.black);
+      nameFieldUsing.setTextColor(Color.black);
     }
 
     if (Window.width == 1390) {
@@ -169,9 +179,9 @@ public class SinglePlayerEndGameState extends BasicGameState {
     }
 
     // Add the entered name to the global highscores
-    if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && nameField.hasFocus() && bestHighscore) {
+    if (gc.getInput().isKeyPressed(Input.KEY_ENTER) && nameFieldUsing.hasFocus() && bestHighscore) {
       try {
-        if (highscoreSystem.addGlobalScore(nameField.getText(), spgs.getScore(), spgs.getElapsedTime())) {
+        if (highscoreSystem.addGlobalScore(nameFieldUsing.getText(), spgs.getScore(), spgs.getElapsedTime())) {
           s.getState(States.MENU).init(gc, s);
           s.enterState(States.MENU);
         } else {

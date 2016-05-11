@@ -73,7 +73,9 @@ public class HighScoreState extends BasicGameState {
   private Image arrowImage;
 
   private boolean initializedSearchField;
-  private TextField searchField;
+  private TextField searchField1390;
+  private TextField searchField1132;
+  private TextField searchFieldUsing;
 
   public HighScoreState(HighscoreSystem highscoreSystem) {
     this.highscoreSystem = highscoreSystem;
@@ -105,7 +107,12 @@ public class HighScoreState extends BasicGameState {
 
     if (!initializedSearchField) {
       TrueTypeFont searchFont = Resources.getDefaultFont(8);
-      searchField = new TextField(gc, searchFont, Window.width / 2
+      searchField1390 = new TextField(gc, searchFont, 1390 / 2
+          - (300 + entryFont.getWidth("Search for a name: ")) / 2
+          + entryFont.getWidth("Search for a name: "), 20
+          + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, 300,
+          entryFont.getLineHeight());
+      searchField1132 = new TextField(gc, searchFont, 1132 / 2
           - (300 + entryFont.getWidth("Search for a name: ")) / 2
           + entryFont.getWidth("Search for a name: "), 20
           + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10, 300,
@@ -113,8 +120,14 @@ public class HighScoreState extends BasicGameState {
       initializedSearchField = true;
     }
 
-    searchField.setAcceptingInput(false);
-    searchField.setText("");
+    if (Window.width == 1390) {
+      searchFieldUsing = searchField1390;
+    } else if (Window.width == 1132) {
+      searchFieldUsing = searchField1132;
+    }
+
+    searchFieldUsing.setAcceptingInput(false);
+    searchFieldUsing.setText("");
 
     setTable("local");
     canScrollUp = false;
@@ -123,14 +136,14 @@ public class HighScoreState extends BasicGameState {
 
   private void setTable(String type) {
     startingEntryIndex = 0;
-    searchField.setText("");
-    searchField.setFocus(false);
+    searchFieldUsing.setText("");
+    searchFieldUsing.setFocus(false);
     highlightedNum = -1;
     invalidSearch = false;
 
     if (type.equals("local")) {
       localScoresInUse = true;
-      searchField.setAcceptingInput(false);
+      searchFieldUsing.setAcceptingInput(false);
       inUseString = "";
 
       // Set widths
@@ -140,7 +153,7 @@ public class HighScoreState extends BasicGameState {
       tableWidth = placeWidth + scoreWidth + timeWidth + dateWidth;
     } else {
       localScoresInUse = false;
-      searchField.setAcceptingInput(true);
+      searchFieldUsing.setAcceptingInput(true);
       inUseString = type;
 
       // Set scoresInUse
@@ -215,14 +228,14 @@ public class HighScoreState extends BasicGameState {
         / 2, 20 + headerFont.getLineHeight() + 10 + BUTTON_HEIGHT + 10,
         "Search for a name: ", Color.white);
     g.setColor(Color.white);
-    searchField.render(gc, g);
+    searchFieldUsing.render(gc, g);
     if (localScoresInUse) {
-      searchField.setBackgroundColor(Color.gray);
+      searchFieldUsing.setBackgroundColor(Color.gray);
     } else {
-      searchField.setBackgroundColor(Color.white);
+      searchFieldUsing.setBackgroundColor(Color.white);
     }
-    searchField.setBorderColor(Color.black);
-    searchField.setTextColor(Color.black);
+    searchFieldUsing.setBorderColor(Color.black);
+    searchFieldUsing.setTextColor(Color.black);
 
     // Draw 'invalid search' if applicable
     if (invalidSearch) {
@@ -436,11 +449,11 @@ public class HighScoreState extends BasicGameState {
     int buttonsX = Window.width / 2 - (BUTTON_WIDTH * 5 + 20 * 5) / 2;
 
     // Changing highscore displays
-    if ((gc.getInput().isKeyPressed(Input.KEY_1) && !searchField.hasFocus())
+    if ((gc.getInput().isKeyPressed(Input.KEY_1) && !searchFieldUsing.hasFocus())
         || (inY && posX >= buttonsX && posX <= buttonsX + BUTTON_WIDTH)) {
       setTable("local");
     }
-    if ((gc.getInput().isKeyPressed(Input.KEY_2) && !searchField.hasFocus())
+    if ((gc.getInput().isKeyPressed(Input.KEY_2) && !searchFieldUsing.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH + 20 && posX <= buttonsX
         + BUTTON_WIDTH * 2 + 20)) {
       if (highscoreSystem.isGlobal()) {
@@ -453,7 +466,7 @@ public class HighScoreState extends BasicGameState {
             "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     }
-    if ((gc.getInput().isKeyPressed(Input.KEY_3) && !searchField.hasFocus())
+    if ((gc.getInput().isKeyPressed(Input.KEY_3) && !searchFieldUsing.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH * 2 + 20 * 2 && posX <= buttonsX
         + BUTTON_WIDTH * 3 + 20 * 2)) {
       if (highscoreSystem.isGlobal()) {
@@ -466,7 +479,7 @@ public class HighScoreState extends BasicGameState {
             "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     }
-    if ((gc.getInput().isKeyPressed(Input.KEY_4) && !searchField.hasFocus())
+    if ((gc.getInput().isKeyPressed(Input.KEY_4) && !searchFieldUsing.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH * 3 + 20 * 3 && posX <= buttonsX
         + BUTTON_WIDTH * 4 + 20 * 3)) {
       if (highscoreSystem.isGlobal()) {
@@ -479,7 +492,7 @@ public class HighScoreState extends BasicGameState {
             "Connection Error", JOptionPane.ERROR_MESSAGE);
       }
     }
-    if ((gc.getInput().isKeyPressed(Input.KEY_5) && !searchField.hasFocus())
+    if ((gc.getInput().isKeyPressed(Input.KEY_5) && !searchFieldUsing.hasFocus())
         || (inY && posX >= buttonsX + BUTTON_WIDTH * 4 + 20 * 4 && posX <= buttonsX
         + BUTTON_WIDTH * 5 + 20 * 4)) {
       if (highscoreSystem.isGlobal()) {
@@ -501,9 +514,9 @@ public class HighScoreState extends BasicGameState {
     }
 
     // Searching
-    if (gc.getInput().isKeyDown(Input.KEY_ENTER) && searchField.hasFocus()
+    if (gc.getInput().isKeyDown(Input.KEY_ENTER) && searchFieldUsing.hasFocus()
         && !inUseString.equals("")) {
-      String[] score = highscoreSystem.getScoreFromName(searchField.getText(),
+      String[] score = highscoreSystem.getScoreFromName(searchFieldUsing.getText(),
           inUseString);
       if (score != null) {
         invalidSearch = false;
