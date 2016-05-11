@@ -44,6 +44,8 @@ public class TwoPlayerHost extends NetworkPlay {
   private Connection conn;
   private TwoPlayerStartServer twoPlayerStartServer;
 
+  private boolean refreshedBoundaries;
+
   public TwoPlayerHost(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
   }
@@ -70,6 +72,7 @@ public class TwoPlayerHost extends NetworkPlay {
 
     this.makeServer = false;
     this.setSize = false;
+    this.refreshedBoundaries = false;
 
     Player p1 = new Player(null, "player1");
     p1.setPlayer1(true);
@@ -137,8 +140,9 @@ public class TwoPlayerHost extends NetworkPlay {
         resizeWindow();
       }
 
-      if (players.get("1") != null) {
+      if (players.get("1") != null && !refreshedBoundaries) {
         players.get("1").refreshBoundaries();
+        refreshedBoundaries = true;
       }
 
       // Draw bounding box

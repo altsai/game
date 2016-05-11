@@ -103,6 +103,7 @@ public class GameServer {
     if (rs.next()) {
       int width = rs.getInt("width");
       int height = rs.getInt("height");
+      System.out.println(width + " " + height);
 
       if (Window.width > width || Window.height > height) {
         Main.setWidthHeight(width, height);
