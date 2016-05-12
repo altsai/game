@@ -15,6 +15,12 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import entities.Entity;
+import entities.Player;
+import entities.Zombie;
+import game_objects.Powerup;
 import powerups.Bomb;
 import powerups.Jail;
 import powerups.LaserBeam;
@@ -23,12 +29,6 @@ import powerups.TimeStop;
 import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import entities.Entity;
-import entities.Player;
-import entities.Zombie;
-import game_objects.Powerup;
 
 public class TwoPlayerHost extends NetworkPlay {
 
