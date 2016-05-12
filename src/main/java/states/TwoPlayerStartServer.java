@@ -23,7 +23,6 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import edu.brown.cs.altsai.game.Main;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 
@@ -365,25 +364,25 @@ public class TwoPlayerStartServer extends BasicGameState {
 
   private void handleSizing(int width, int height, String id) {
     // Add this width and height
-    try {
-      String add = "INSERT INTO screenSize VALUES (?, ?, ?)";
-      PreparedStatement prep;
-      prep = conn.prepareStatement(add);
-      prep.setString(1, id);
-      prep.setInt(2, Window.width);
-      prep.setInt(3, Window.height);
-
-      prep.execute();
-
-      prep.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-
-    // Set new width, height if necessary
-    if (Window.width > width || Window.height > height) {
-      Main.setWidthHeight(width, height);
-    }
+    //    try {
+    //      String add = "INSERT INTO screenSize VALUES (?, ?, ?)";
+    //      PreparedStatement prep;
+    //      prep = conn.prepareStatement(add);
+    //      prep.setString(1, id);
+    //      prep.setInt(2, Window.width);
+    //      prep.setInt(3, Window.height);
+    //
+    //      prep.execute();
+    //
+    //      prep.close();
+    //    } catch (SQLException e) {
+    //      e.printStackTrace();
+    //    }
+    //
+    //    // Set new width, height if necessary
+    //    if (Window.width > width || Window.height > height) {
+    //      Main.setWidthHeight(width, height);
+    //    }
   }
 
   public Connection getConn() {
