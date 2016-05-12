@@ -135,15 +135,16 @@ public class TwoPlayerHost extends NetworkPlay {
     if (this.errorMakingServer) {
       g.drawString("ERROR CREATING SERVER", 0, 0);
     } else if (server.getConnections().length > 0) {
-      if (!setSize) {
-        setSize = true;
-        resizeWindow();
-      }
+      // Size things
+      //      if (!setSize) {
+      //        setSize = true;
+      //        resizeWindow();
+      //      }
 
-      if (players.get("1") != null && !refreshedBoundaries) {
-        players.get("1").refreshBoundaries();
-        refreshedBoundaries = true;
-      }
+      //      if (players.get("1") != null && !refreshedBoundaries) {
+      //        players.get("1").refreshBoundaries();
+      //        refreshedBoundaries = true;
+      //      }
 
       // Draw bounding box
       g.setColor(Color.gray);
@@ -470,52 +471,52 @@ public class TwoPlayerHost extends NetworkPlay {
   protected void spawnZombie() {
     // check if the game should be spawning zombies (time stop may have stopped
     // spawns)
-    //    if (this.spawnOn) {
-    //
-    //      if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
-    //
-    //        // have a random player to target
-    //        String targetID = String.valueOf(random.nextInt(this.players.size()));
-    //        Player target = this.players.get(targetID);
-    //
-    //        // at any given time there is a 30% chance of multiple spawns
-    //        if (random.nextInt(9) < 3) {
-    //          for (int i = 0; i < this.difficultyLevel; i++) {
-    //            // spawn targeting a random player
-    //
-    //            Zombie newZombie = new Zombie(target, this.players);
-    //
-    //            newZombie.setSpeed(ZOMBIE_BASE_SPEED
-    //                + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-    //                * ZOMBIE_BASE_SPEED);
-    //            this.zombies.put(newZombie.getID(), newZombie);
-    //
-    //            // send the spawned zombie
-    //            this.server.sendNewZombie(newZombie.getID(), targetID);
-    //          }
-    //        }
-    //
-    //        Zombie newZombie = new Zombie(target, this.players);
-    //
-    //        newZombie.setSpeed(ZOMBIE_BASE_SPEED
-    //            + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
-    //            * ZOMBIE_BASE_SPEED);
-    //        this.zombies.put(newZombie.getID(), newZombie);
-    //
-    //        // send the zombie
-    //        this.server.sendNewZombie(newZombie.getID(), targetID);
-    //
-    //        this.lastZombieSpawnTime = System.currentTimeMillis();
-    //      }
-    //
-    //      if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
-    //        if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > 10000) {
-    //
-    //          this.difficultyLevel++;
-    //          this.lastDifficultyIncreaseTime = System.currentTimeMillis();
-    //        }
-    //      }
-    //    }
+    if (this.spawnOn) {
+
+      if (System.currentTimeMillis() - this.lastZombieSpawnTime >= ZOMBIE_SPAWN_DELAY) {
+
+        // have a random player to target
+        String targetID = String.valueOf(random.nextInt(this.players.size()));
+        Player target = this.players.get(targetID);
+
+        // at any given time there is a 30% chance of multiple spawns
+        if (random.nextInt(9) < 3) {
+          for (int i = 0; i < this.difficultyLevel; i++) {
+            // spawn targeting a random player
+
+            Zombie newZombie = new Zombie(target, this.players);
+
+            newZombie.setSpeed(ZOMBIE_BASE_SPEED
+                + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+                * ZOMBIE_BASE_SPEED);
+            this.zombies.put(newZombie.getID(), newZombie);
+
+            // send the spawned zombie
+            this.server.sendNewZombie(newZombie.getID(), targetID);
+          }
+        }
+
+        Zombie newZombie = new Zombie(target, this.players);
+
+        newZombie.setSpeed(ZOMBIE_BASE_SPEED
+            + ((this.difficultyLevel - 1) * SPEED_MULTIPLIER)
+            * ZOMBIE_BASE_SPEED);
+        this.zombies.put(newZombie.getID(), newZombie);
+
+        // send the zombie
+        this.server.sendNewZombie(newZombie.getID(), targetID);
+
+        this.lastZombieSpawnTime = System.currentTimeMillis();
+      }
+
+      if (this.difficultyLevel < MAX_DIFFICULTY_LEVEL) {
+        if (System.currentTimeMillis() - this.lastDifficultyIncreaseTime > 10000) {
+
+          this.difficultyLevel++;
+          this.lastDifficultyIncreaseTime = System.currentTimeMillis();
+        }
+      }
+    }
   }
 
   @Override
