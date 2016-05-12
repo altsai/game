@@ -135,15 +135,16 @@ public class TwoPlayerHost extends NetworkPlay {
     if (this.errorMakingServer) {
       g.drawString("ERROR CREATING SERVER", 0, 0);
     } else if (server.getConnections().length > 0) {
-      if (!setSize) {
-        setSize = true;
-        resizeWindow();
-      }
+      // Size things
+      //      if (!setSize) {
+      //        setSize = true;
+      //        resizeWindow();
+      //      }
 
-      if (players.get("1") != null && !refreshedBoundaries) {
-        players.get("1").refreshBoundaries();
-        refreshedBoundaries = true;
-      }
+      //      if (players.get("1") != null && !refreshedBoundaries) {
+      //        players.get("1").refreshBoundaries();
+      //        refreshedBoundaries = true;
+      //      }
 
       // Draw bounding box
       g.setColor(Color.gray);

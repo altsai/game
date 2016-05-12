@@ -30,8 +30,9 @@ public class Window {
     screenWidth = screenSize.getWidth();
     screenHeight = screenSize.getHeight();
     if (screenWidth >= 1440 && screenHeight >= 909) {
-      width = 1390;
-      height = 859;
+      // Changed to make same screen size always
+      width = 1132;
+      height = 700;
     } else {
       width = 1132;
       height = 700;
