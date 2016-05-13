@@ -10,6 +10,11 @@ import org.newdawn.slick.state.StateBasedGame;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 
+/**
+ * Class that controls the ending screen for offline multiplayer
+ * @author bl48
+ *
+ */
 public class TwoPlayerEndGame extends BasicGameState {
   //takes in the SinglePlayerGameState just played
   private GamePlayState gps;
@@ -28,7 +33,6 @@ public class TwoPlayerEndGame extends BasicGameState {
   @Override
   public void init(GameContainer gc, StateBasedGame s)
       throws SlickException {
-    // TODO Auto-generated method stub
     gc.getInput().clearControlPressedRecord();
     gc.getInput().clearKeyPressedRecord();
     gc.getInput().clearMousePressedRecord();

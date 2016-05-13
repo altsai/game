@@ -24,7 +24,7 @@ public class Network {
    */
   static public void register(EndPoint point) {
     Kryo kryo = point.getKryo();
-    //TODO: Register all kryo classes here
+    // Register all kryo classes here
     kryo.register(PlayerMove.class);
     kryo.register(PlayerJail.class);
     kryo.register(PlayerUpdate.class);

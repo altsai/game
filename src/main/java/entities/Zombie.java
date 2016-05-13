@@ -205,9 +205,9 @@ public class Zombie extends Entity {
   }
 
   /**
-   * Returns initial speed.
-   *
-   * @return inital speed
+   * Gets the initial speed of the zombie.
+   * 
+   * @return Double, initial speed of zombie.
    */
   public double getInitSpeed() {
     return initial_speed;

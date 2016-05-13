@@ -26,6 +26,10 @@ public class MenuState extends BasicGameState {
 
   private HighscoreSystem highscoreSystem;
 
+  /**
+   * The constructor for the MenuState.
+   * @param highscoreSystem  HighscoreSystem object.
+   */
   public MenuState(HighscoreSystem highscoreSystem) {
     this.highscoreSystem = highscoreSystem;
   }

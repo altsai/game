@@ -15,6 +15,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Handler that handles local requests for highscores (txt) file.
+ */
 public class LocalHandler {
 
   private File highscoresFile;

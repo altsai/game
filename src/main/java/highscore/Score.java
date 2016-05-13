@@ -2,6 +2,10 @@ package highscore;
 
 import java.util.Date;
 
+/**
+ * Score object that represents an instanc of a game score.
+ *
+ */
 public class Score {
 
   private String name;
