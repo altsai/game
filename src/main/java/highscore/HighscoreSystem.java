@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * HighScoreSystem that requests information from database.
+ *
+ */
 public class HighscoreSystem {
 
   public static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -119,11 +123,18 @@ public class HighscoreSystem {
     return timeString;
   }
 
+  /**
+   * Method that changes a list of scores to a list of string arrays.
+   * @param scores List of scores.
+   * @return List of arrays of strings
+   */
   private List<String[]> scoresToStrings(List<Score> scores) {
     // Fill the array with String[] of each Score
     List<String[]> toReturn = new ArrayList<>();
     for (Score score : scores) {
-      toReturn.add(new String[]{Integer.toString(score.getPlace()), score.getName(), Integer.toString(score.getScore()), timeToString(score.getTime()), FORMAT.format(score.getDate())});
+      toReturn.add(new String[]{Integer.toString(score.getPlace())
+          , score.getName(), Integer.toString(score.getScore())
+          , timeToString(score.getTime()), FORMAT.format(score.getDate())});
     }
 
     return toReturn;

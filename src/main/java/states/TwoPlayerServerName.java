@@ -10,6 +10,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import edu.brown.cs.altsai.game.Window;
 
+/**
+ * Class that controls the lobby page for picking servers to join.
+ *
+ */
 public class TwoPlayerServerName extends BasicGameState {
 
   private String serverName;
@@ -46,7 +50,6 @@ public class TwoPlayerServerName extends BasicGameState {
 
   @Override
   public int getID() {
-    // TODO Auto-generated method stub
     return States.TWO_PLAYER_NAME_SERVER;
   }
 

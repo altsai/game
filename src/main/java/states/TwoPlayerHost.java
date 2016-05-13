@@ -30,6 +30,11 @@ import server.GameServer;
 import server.Network.ZombieMove;
 import server.Network.ZombieMoveList;
 
+/**
+ * Two Player host object that controls the host's gameplay.
+ * @author bl48
+ *
+ */
 public class TwoPlayerHost extends NetworkPlay {
 
   private GameServer server;
@@ -46,6 +51,11 @@ public class TwoPlayerHost extends NetworkPlay {
 
   private boolean refreshedBoundaries;
 
+  /**
+   * Constructor for a two player host.
+   *
+   * @param twoPlayerStartServer   Takes in a start server state
+   */
   public TwoPlayerHost(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
   }
@@ -92,6 +102,9 @@ public class TwoPlayerHost extends NetworkPlay {
     monitorShutdown();
   }
 
+  /**
+   * Shutdownhook that deletes server from database on shutdown.
+   */
   public void monitorShutdown() {
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
@@ -103,6 +116,9 @@ public class TwoPlayerHost extends NetworkPlay {
     });
   }
 
+  /**
+   * Method to resize windows of the game.
+   */
   public void resizeWindow() {
     try {
       this.server.setSize();
@@ -135,16 +151,6 @@ public class TwoPlayerHost extends NetworkPlay {
     if (this.errorMakingServer) {
       g.drawString("ERROR CREATING SERVER", 0, 0);
     } else if (server.getConnections().length > 0) {
-      // Size things
-      // if (!setSize) {
-      // setSize = true;
-      // resizeWindow();
-      // }
-
-      // if (players.get("1") != null && !refreshedBoundaries) {
-      // players.get("1").refreshBoundaries();
-      // refreshedBoundaries = true;
-      // }
 
       // Draw bounding box
       g.setColor(Color.gray);
@@ -341,6 +347,9 @@ public class TwoPlayerHost extends NetworkPlay {
     return States.TWO_PLAYER_HOST;
   }
 
+  /**
+   * Method to send packets to the client about zombie movement.
+   */
   private void moveZombies() {
     if (this.server.getConnections().length > 0) {
       if (this.zombies.size() > 100) {

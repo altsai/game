@@ -110,10 +110,18 @@ public abstract class GamePlayState extends BasicGameState {
     gc.getInput().clearMousePressedRecord();
   }
 
+  /**
+   * Getter for time since the game has begun.
+   * @return Int, time since game as begun, milliseconds
+   */
   public int getElapsedTime() {
     return this.elapsedTime;
   }
 
+  /**
+   * Setter for setting the time since game has begun.
+   * @param newTime Int, time in milliseconds
+   */
   public void setElapsedTime(int newTime) {
     elapsedTime = newTime;
   }
@@ -278,12 +286,25 @@ public abstract class GamePlayState extends BasicGameState {
     }
   }
 
+  /**
+   * Method to update the times for powerups even when paused.
+   *
+   * Changes the times of powerups so that when you pause them, they
+   * don't dissappear after 10 seconds.
+   *
+   * @param gc      GameContainer object
+   * @param delta   Int, time since last update
+   */
   protected void updatePowerupsPaused(GameContainer gc, int delta) {
     for (Powerup p : this.powerups.values()) {
       p.updatePaused(gc, delta);
     }
   }
 
+  /**
+   * Method that breaks the formations of wall/arrow zombies.
+   * @param id  String, the id of the formation
+   */
   private void breakFormation(String id) {
     if (timeStopped) {
       return;
@@ -302,6 +323,10 @@ public abstract class GamePlayState extends BasicGameState {
     zombieFormations.remove(id);
   }
 
+  /**
+   * Method that replaces zombies.
+   * @param z   Zombie object
+   */
   private void replaceZombie(Zombie z) {
     Player target = this.players.get(String.valueOf(random.nextInt(this.players
         .size())));
@@ -361,10 +386,18 @@ public abstract class GamePlayState extends BasicGameState {
     }
   }
 
+  /**
+   * Gets the loser of the game played.
+   * @return String, line designating the loser
+   */
   public String getLoser() {
     return this.loser;
   }
 
+  /**
+   * Sets the loser of the game played.
+   * @param loser  STring, line designating the loser.
+   */
   public void setLoser(String loser) {
     this.loser = loser;
   }
@@ -390,26 +423,53 @@ public abstract class GamePlayState extends BasicGameState {
     this.spawnOn = flag;
   }
 
+  /**
+   * Sets if the game has ended.
+   * @param flat, Boolean true if game ended, else false.
+   */
   public void setGameEnd(boolean flat) {
     this.gameEnd = flat;
   }
 
+  /**
+   * Method to set the game play state to time stop.
+   *
+   * Called when a timestop powerup is used.
+   * @param t  Boolean, true if stop time, else false
+   */
   public void setTimeStopped(boolean t) {
     timeStopped = t;
   }
 
+  /**
+   * Method to check if time is stopped after using timestop powerup.
+   * @return boolean, true if stopped.
+   */
   public boolean isTimeStopped() {
     return timeStopped;
   }
 
+  /**
+   * Method to check if a zombie is on fire.
+   * @param id String, id of a zombie
+   * @return boolean, true if zombie is on fire, else false
+   */
   public boolean inOnFire(String id) {
     return (onFireTimes.get(id) != null);
   }
 
+  /**
+   * Method to check if the game has ended.
+   * @return boolean, true if game ended.
+   */
   public boolean isGameEnd() {
     return this.gameEnd;
   }
 
+  /**
+   * Sets the time that the game play state was initialized.
+   * @param time, long
+   */
   public void setTimeInit(long time) {
     this.initialDelayTime = time;
   }

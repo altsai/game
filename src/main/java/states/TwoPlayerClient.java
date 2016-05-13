@@ -19,6 +19,11 @@ import entities.Zombie;
 import game_objects.Powerup;
 import server.GameClient;
 
+/**
+ * Client class that controls the gameplay of the client.
+ * @author bl48
+ *
+ */
 public class TwoPlayerClient extends NetworkPlay {
 
   // list of constants
@@ -29,7 +34,12 @@ public class TwoPlayerClient extends NetworkPlay {
   private String playerID;
   private TwoPlayerStartServer twoPlayerStartServer;
 
-
+  /**
+   * Construction for a two player client class.
+   *
+   * @param twoPlayerStartServer
+   * Takes in a start server object that has ip addresses.
+   */
   public TwoPlayerClient(TwoPlayerStartServer twoPlayerStartServer) {
     this.twoPlayerStartServer = twoPlayerStartServer;
   }

@@ -14,6 +14,10 @@ import org.newdawn.slick.state.StateBasedGame;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 
+/**
+ * Class that controls the screen when the host ends the game.
+ *
+ */
 public class HostEndGame extends BasicGameState {
   //takes in the SinglePlayerGameState just played
   private GamePlayState gps;

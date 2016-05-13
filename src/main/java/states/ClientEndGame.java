@@ -14,6 +14,9 @@ import org.newdawn.slick.state.StateBasedGame;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 
+/**
+ * End game screen for when the client game ends.
+ */
 public class ClientEndGame extends BasicGameState {
   //takes in the SinglePlayerGameState just played
   private GamePlayState gps;

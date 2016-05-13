@@ -13,11 +13,16 @@ import org.newdawn.slick.state.StateBasedGame;
 import edu.brown.cs.altsai.game.Resources;
 import edu.brown.cs.altsai.game.Window;
 
+/**
+ * State that controls the page for instructions.
+ */
 public class AboutState extends BasicGameState {
 
+  // width of buttons
   private static final int BUTTON_WIDTH = 180;
   private static final int BUTTON_HEIGHT = 68;
 
+  // fonts used on the
   private TrueTypeFont headerFont;
   private TrueTypeFont textFont;
 

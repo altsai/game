@@ -24,13 +24,14 @@ import highscore.HighscoreSystem;
  *
  * Contains menus for high score data.
  *
- * @author bl48
  *
  */
 public class HighScoreState extends BasicGameState {
 
+  // high score system that access database
   private HighscoreSystem highscoreSystem;
 
+  // lists of scores
   private List<String[]> globalHighscores;
   private List<String[]> globalHighscoresOfDay;
   private List<String[]> globalHighscoresOfMonth;
@@ -77,6 +78,12 @@ public class HighScoreState extends BasicGameState {
   private TextField searchField1132;
   private TextField searchFieldUsing;
 
+  /**
+   * Constructor for the HighScoreState.
+   *
+   * Used by main to pass in a highscoreSystem.
+   * @param highscoreSystem  HighscoreSystem, the object that connects to database.
+   */
   public HighScoreState(HighscoreSystem highscoreSystem) {
     this.highscoreSystem = highscoreSystem;
 
@@ -134,6 +141,10 @@ public class HighScoreState extends BasicGameState {
     canScrollDown = false;
   }
 
+  /**
+   * Method that creats a table to be shown.
+   * @param type String, the header of the table
+   */
   private void setTable(String type) {
     startingEntryIndex = 0;
     searchFieldUsing.setText("");
@@ -175,6 +186,10 @@ public class HighScoreState extends BasicGameState {
     }
   }
 
+  /**
+   * Gets the maximum width of the time strings.
+   * @return int, max width of time strings.
+   */
   private int getTimeWidthLocal() {
     int max = 0;
     for (String[] score : localHighscores) {
@@ -184,6 +199,9 @@ public class HighScoreState extends BasicGameState {
     return max;
   }
 
+  /**
+   * Sets the name width.
+   */
   private void setNameTimeWidths() {
     int maxLengthName = 0;
     int maxLengthTime = 0;
