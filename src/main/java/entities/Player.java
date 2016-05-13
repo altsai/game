@@ -1,5 +1,10 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Powerup;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,11 +19,6 @@ import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Lists;
 
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Powerup;
-
 /**
  * Defines the Player object.
  *
@@ -29,47 +29,123 @@ import game_objects.Powerup;
  *
  */
 public class Player extends Entity implements PlayerAction {
+  /**
+   * Name of player.
+   */
   private String name;
 
+  /**
+   * Constructor for player.
+   *
+   * @param other
+   *          for the superconstructor; typically null
+   * @param name
+   *          the name of the player
+   */
   public Player(Entity other, String name) {
     super(other);
     this.name = name;
   }
 
+  /**
+   * Input keys for player 1.
+   */
   private final static int[] PLAYER1_CONTROLS = { Input.KEY_W, Input.KEY_S,
       Input.KEY_A, Input.KEY_D };
+
+  /**
+   * Input keys for player 2.
+   */
   private final static int[] PLAYER2_CONTROLS = { Input.KEY_UP, Input.KEY_DOWN,
       Input.KEY_LEFT, Input.KEY_RIGHT };
 
   // specific fields that players have
+  /**
+   * Number of lives player has.
+   */
   private int lives;
+
+  /**
+   * Powerup player is holding.
+   */
   private Powerup powerup;
+
+  /**
+   * Player's score.
+   */
   private int score;
+
+  /**
+   * Time they are invincible.
+   */
   public long invincibleTime;
+
+  /**
+   * Whether they are player 1.
+   */
   private boolean isPlayer1;
+
+  /**
+   * Timestamp for last bomb set off.
+   */
   private long lastBombFired;
+
+  /**
+   * Timestamp for last timestop used.
+   */
   private long lastTimeStop;
+
+  /**
+   * Timestamp for last fire powerup used.
+   */
   private long lastFire;
+
+  /**
+   * Whether the player can move.
+   */
   private boolean canMove;
+
+  /**
+   * Whether the player is immune (on fire).
+   */
   private boolean immune;
+
+  /**
+   * Particle effects for player on fire powerup.
+   */
   private ParticleSystem fireParticles;
   private FireEmitterCustom emitter;
-  private Map<String, Boolean> jails;
 
+  /**
+   * Map of player ids to whether they are jailed.
+   */
+  private Map<String, Boolean> jails;
 
   private static final int ANIMATION_FRAME_TIME = 150;
 
+  /**
+   * Animations for player.
+   */
   private SpriteSheet spriteSheetPlayer1;
   private Animation animationPlayer1;
   private SpriteSheet spriteSheetPlayer2;
   private Animation animationPlayer2;
 
+  /**
+   * Last direction moved.
+   */
   private float lastDir;
+
+  /**
+   * Player speed.
+   */
   public static final double PLAYER_SPEED = 0.3;
 
   public static final float EMITTER_SIZE = 30;
 
-  // advanced stats
+  /**
+   * Advanced statistics for end game display.
+   */
   private double distanceTraveled;
   private float lastX;
   private float lastY;
@@ -77,7 +153,6 @@ public class Player extends Entity implements PlayerAction {
   private int blackholeKills;
   private int laserKills;
   private int fireKills;
-
 
   @Override
   /**
@@ -118,12 +193,18 @@ public class Player extends Entity implements PlayerAction {
     initFire();
   }
 
+  /**
+   * Refreshes player boundaries.
+   */
   public void refreshBoundaries() {
     this.bottom = Window.height - (this.radius / 2);
     this.right = Window.width - (this.radius / 2);
 
   }
 
+  /**
+   * Refreshes player position.
+   */
   public void refreshXY() {
     this.setX(Window.width / 3);
     this.setY(Window.height / 2);
@@ -131,36 +212,64 @@ public class Player extends Entity implements PlayerAction {
 
   /**
    * Returns how many zombies were killed by bombs.
-   * @return  int    number of zombies killed by bombs.
+   *
+   * @return int number of zombies killed by bombs.
    */
   public int getBombKills() {
     return bombKills;
   }
 
+  /**
+   * Returns kills by black holes.
+   *
+   * @return number killed by black holes
+   */
   public int getBlackholeKills() {
     return blackholeKills;
   }
 
+  /**
+   * Sets kills by black holes.
+   */
   public void setBlackholeKills(int blackholeKills) {
     this.blackholeKills = blackholeKills;
   }
 
+  /**
+   * Sets kills by bombs.
+   */
   public void setBombKills(int bombKills) {
     this.bombKills = bombKills;
   }
 
+  /**
+   * Returns kills by laser.
+   *
+   * @return number killed by laser
+   */
   public int getLaserKills() {
     return laserKills;
   }
 
+  /**
+   * Sets kills by black holes.
+   */
   public void setLaserKills(int laserKills) {
     this.laserKills = laserKills;
   }
 
+  /**
+   * Returns kills by fire.
+   *
+   * @return number killed by fire
+   */
   public int getFireKills() {
     return fireKills;
   }
 
+  /**
+   * Sets kills by fire.
+   */
   public void setFireKills(int fireKills) {
     this.fireKills = fireKills;
   }
@@ -444,6 +553,12 @@ public class Player extends Entity implements PlayerAction {
     }
   }
 
+  /**
+   * Checks whether player has attempted to use powerup.
+   *
+   * @param input
+   *          the input key
+   */
   private void checkActionKeyTwoPlayerSameScreen(Input input) {
     if (this.isPlayer1) {
       if (input.isKeyPressed(Input.KEY_LSHIFT)) {
@@ -594,18 +709,18 @@ public class Player extends Entity implements PlayerAction {
   /**
    * Returns the distance traveled by the player in feet.
    *
-   * Takes a pixel size and using the screen DPI and resolution,
-   * calculates the feet traveled.
+   * Takes a pixel size and using the screen DPI and resolution, calculates the
+   * feet traveled.
    *
-   * @return  double      Feet traveled by the player.
+   * @return double Feet traveled by the player.
    */
   public double getDistTraveled() {
     return Math.round(this.distanceTraveled * 100.0) / 100.0;
   }
 
   private double movedPixels(float x, float y) {
-    double squaredDist = Math.pow(x - this.lastX, 2) +
-        Math.pow(y - this.lastY, 2);
+    double squaredDist = Math.pow(x - this.lastX, 2)
+        + Math.pow(y - this.lastY, 2);
     return Math.sqrt(squaredDist);
   }
 
@@ -689,14 +804,31 @@ public class Player extends Entity implements PlayerAction {
     }
   }
 
+  /**
+   * Removes jail from player.
+   *
+   * @param id
+   *          the id of player to unjail
+   */
   public void removeJail(String id) {
     jails.remove(id);
   }
 
+  /**
+   * Adds jail to player.
+   *
+   * @param id
+   *          the id of the player to jail
+   */
   public void addJail(String id) {
     jails.put(id, true);
   }
 
+  /**
+   * Returns whether the player is jailed.
+   * 
+   * @return whether the palyer is jailed.
+   */
   public boolean isJailed() {
     for (String s : jails.keySet()) {
       if (jails.get(s)) {

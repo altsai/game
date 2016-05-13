@@ -1,5 +1,10 @@
 package entities;
 
+import edu.brown.cs.altsai.game.Resources;
+import edu.brown.cs.altsai.game.Window;
+import effects.FireEmitterCustom;
+import game_objects.Circle;
+
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -9,11 +14,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.particles.ParticleSystem;
 
 import com.google.common.collect.Maps;
-
-import edu.brown.cs.altsai.game.Resources;
-import edu.brown.cs.altsai.game.Window;
-import effects.FireEmitterCustom;
-import game_objects.Circle;
 
 /**
  * Defines the zombie object.
@@ -36,16 +36,30 @@ public class Zombie extends Entity {
     setSpawn();
   }
 
+  /**
+   * Whether the zombie is part of a wall.
+   */
   protected boolean wallInPlace;
 
+  /**
+   * Initial speed of zombie.
+   */
   protected double initial_speed;
 
-  // zombies keep track of a player and a specific target area of the player.
+  /**
+   * The targeted player.
+   */
   protected Circle player;
 
+  /**
+   * Particle system for fire effects.
+   */
   protected ParticleSystem fireParticles;
   protected FireEmitterCustom emitter;
 
+  /**
+   * All players in the game.
+   */
   protected Map<String, Player> allPlayers;
 
   /**
@@ -103,6 +117,9 @@ public class Zombie extends Entity {
     initFire();
   }
 
+  /**
+   * Initializes fire animation effects.
+   */
   protected void initFire() {
     fireParticles = new ParticleSystem(Resources.getImage("particle"), 1500);
     try {
@@ -115,10 +132,21 @@ public class Zombie extends Entity {
     }
   }
 
+  /**
+   * Sets zombie target.
+   *
+   * @param other
+   *          the new target
+   */
   public void setTarget(Circle other) {
     this.player = other;
   }
 
+  /**
+   * Returns the zombie target.
+   *
+   * @return the zombie target
+   */
   public Circle getTarget() {
     return this.player;
   }
@@ -165,8 +193,6 @@ public class Zombie extends Entity {
 
   @Override
   public void die() {
-    // TODO Auto-generated method stub
-
   }
 
   /**
@@ -178,14 +204,31 @@ public class Zombie extends Entity {
     return this.state;
   }
 
+  /**
+   * Returns initial speed.
+   *
+   * @return inital speed
+   */
   public double getInitSpeed() {
     return initial_speed;
   }
 
+  /**
+   * Sets initial speed.
+   *
+   * @param s
+   *          the initial speed to set zombie field to
+   */
   public void setInitSpeed(double s) {
     initial_speed = s;
   }
 
+  /**
+   * Sets zombie id.
+   *
+   * @param i
+   *          the id
+   */
   public void setZombID(String i) {
     id = i;
   }
