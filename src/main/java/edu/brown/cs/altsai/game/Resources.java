@@ -3,8 +3,6 @@ package edu.brown.cs.altsai.game;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -33,7 +31,7 @@ public class Resources {
   private static Font defaultFont;
   static {
     try {
-      InputStream myStream = new BufferedInputStream(new FileInputStream("src/main/java/font/mono_0756_Regular.ttf"));
+      InputStream myStream = Resources.class.getResourceAsStream("/font/mono_0756_Regular.ttf");
       Font font = Font.createFont(Font.TRUETYPE_FONT, myStream);
       GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
       ge.registerFont(font);
@@ -55,64 +53,64 @@ public class Resources {
 
     // load in all the files that are initially needed
     try {
-      images.put("player", loadImage("/src/main/java/img/player_1.png"));
-      images.put("player2", loadImage("/src/main/java/img/player_2.png"));
-      images.put("zombie", loadImage("/src/main/java/img/zombie.png"));
-      images.put("life1", loadImage("/src/main/java/img/heart_green.png"));
-      images.put("life2", loadImage("/src/main/java/img/heart_orange.png"));
-      images.put("bomb", loadImage("/src/main/java/img/bomb_icon.png"));
-      images.put("speed", loadImage("/src/main/java/img/speed_icon.png"));
-      images.put("timestop", loadImage("/src/main/java/img/timestop_icon.png"));
-      images.put("background", loadImage("/src/main/java/img/background.png"));
-      images.put("backgroundMainMenu", loadImage("/src/main/java/img/background_main_menu.png"));
-      images.put("backgroundMainMenuSmall", loadImage("/src/main/java/img/background_main_menu_small.png"));
-      images.put("connectionPage", loadImage("/src/main/java/img/connection_page.png"));
-      images.put("connectionPageSmall", loadImage("/src/main/java/img/connection_page_small.png"));
-      images.put("gray_arrow", loadImage("/src/main/java/img/gray_arrow.png"));
-      images.put("3", loadImage("/src/main/java/img/3_image.png"));
-      images.put("2", loadImage("/src/main/java/img/2_image.png"));
-      images.put("1", loadImage("/src/main/java/img/1_image.png"));
-      images.put("gameOver1", loadImage("/src/main/java/img/gameOver1.png"));
-      images.put("gameOver2", loadImage("/src/main/java/img/gameOver2.png"));
-      images.put("gameOver1Small", loadImage("/src/main/java/img/gameOver1_small.png"));
-      images.put("gameOver2Small", loadImage("/src/main/java/img/gameOver2_small.png"));
-      images.put("statsbox", loadImage("src/main/java/img/statsbox.png"));
-      images.put("statsboxSmall", loadImage("src/main/java/img/statsbox_small.png"));
+      images.put("player", loadImage("img/player_1.png"));
+      images.put("player2", loadImage("img/player_2.png"));
+      images.put("zombie", loadImage("img/zombie.png"));
+      images.put("life1", loadImage("img/heart_green.png"));
+      images.put("life2", loadImage("img/heart_orange.png"));
+      images.put("bomb", loadImage("img/bomb_icon.png"));
+      images.put("speed", loadImage("img/speed_icon.png"));
+      images.put("timestop", loadImage("img/timestop_icon.png"));
+      images.put("background", loadImage("img/background.png"));
+      images.put("backgroundMainMenu", loadImage("img/background_main_menu.png"));
+      images.put("backgroundMainMenuSmall", loadImage("img/background_main_menu_small.png"));
+      images.put("connectionPage", loadImage("img/connection_page.png"));
+      images.put("connectionPageSmall", loadImage("img/connection_page_small.png"));
+      images.put("gray_arrow", loadImage("img/gray_arrow.png"));
+      images.put("3", loadImage("img/3_image.png"));
+      images.put("2", loadImage("img/2_image.png"));
+      images.put("1", loadImage("img/1_image.png"));
+      images.put("gameOver1", loadImage("img/gameOver1.png"));
+      images.put("gameOver2", loadImage("img/gameOver2.png"));
+      images.put("gameOver1Small", loadImage("img/gameOver1_small.png"));
+      images.put("gameOver2Small", loadImage("img/gameOver2_small.png"));
+      images.put("statsbox", loadImage("img/statsbox.png"));
+      images.put("statsboxSmall", loadImage("img/statsbox_small.png"));
 
-      images.put("aboutPage", loadImage("/src/main/java/img/aboutpage.png"));
-      images.put("aboutPageSmall", loadImage("/src/main/java/img/aboutpage_small.png"));
+      images.put("aboutPage", loadImage("img/aboutpage.png"));
+      images.put("aboutPageSmall", loadImage("img/aboutpage_small.png"));
 
-      images.put("button", loadImage("/src/main/java/img/buttons/buttonrounded1.png"));
-      images.put("buttonSingle", loadImage("/src/main/java/img/buttons/spg_button.png"));
-      images.put("buttonMulti", loadImage("/src/main/java/img/buttons/omulti_button.png"));
-      images.put("buttonRank", loadImage("/src/main/java/img/buttons/rankings_button.png"));
-      images.put("buttonAbout", loadImage("/src/main/java/img/buttons/about_button.png"));
-      images.put("buttonLocal", loadImage("/src/main/java/img//buttons/local_button.png"));
-      images.put("buttonYear", loadImage("/src/main/java/img/buttons/gyear_button.png"));
-      images.put("buttonMonth", loadImage("/src/main/java/img/buttons/gmonth_button.png"));
-      images.put("buttonToday", loadImage("/src/main/java/img/buttons/gtoday_button.png"));
-      images.put("buttonAllTime", loadImage("/src/main/java/img/buttons/gall_button.png"));
+      images.put("button", loadImage("img/buttons/buttonrounded1.png"));
+      images.put("buttonSingle", loadImage("img/buttons/spg_button.png"));
+      images.put("buttonMulti", loadImage("img/buttons/omulti_button.png"));
+      images.put("buttonRank", loadImage("img/buttons/rankings_button.png"));
+      images.put("buttonAbout", loadImage("img/buttons/about_button.png"));
+      images.put("buttonLocal", loadImage("img/buttons/local_button.png"));
+      images.put("buttonYear", loadImage("img/buttons/gyear_button.png"));
+      images.put("buttonMonth", loadImage("img/buttons/gmonth_button.png"));
+      images.put("buttonToday", loadImage("img/buttons/gtoday_button.png"));
+      images.put("buttonAllTime", loadImage("img/buttons/gall_button.png"));
       images.put("buttonMainMenu",
-          loadImage("/src/main/java/img/buttons/main_small_button.png"));
+          loadImage("img/buttons/main_small_button.png"));
       images.put("buttonMainMenuLarge",
-          loadImage("/src/main/java/img/buttons/main_button.png"));
-      images.put("buttonResume", loadImage("/src/main/java/img/buttons/resume_button.png"));
+          loadImage("img/buttons/main_button.png"));
+      images.put("buttonResume", loadImage("img/buttons/resume_button.png"));
       images.put("buttonMultiOffline",
-          loadImage("/src/main/java/img/buttons/offmulti_button.png"));
+          loadImage("img/buttons/offmulti_button.png"));
       sprites.put("bomb_explosion",
-          loadSprite("/src/main/java/img/bomb_animation_large.png", 300, 300));
+          loadSprite("img/bomb_animation_large.png", 300, 300));
       sprites.put("injuredAnimationPlayer1",
-          loadSprite("/src/main/java/img/player_hit_animation_player_1.png", 30, 30));
+          loadSprite("img/player_hit_animation_player_1.png", 30, 30));
       sprites.put("injuredAnimationPlayer2",
-          loadSprite("/src/main/java/img/player_hit_animation_player_2.png", 30, 30));
-      images.put("blackhole", loadImage("/src/main/java/img/blackhole_icon.png"));
-      images.put("blackholeLarge", loadImage("/src/main/java/img/blackhole.png"));
-      images.put("fire", loadImage("/src/main/java/img/fire_icon.png"));
-      images.put("jail", loadImage("/src/main/java/img/jail_icon.png"));
-      images.put("laserbeam", loadImage("/src/main/java/img/laser_icon.png"));
-      images.put("particle", loadImage("/src/main/java/img/particle.png"));
-      images.put("particle_black", loadImage("/src/main/java/img/particle_black.png"));
-      sprites.put("lasershot", loadSprite("/src/main/java/img/lasershot.png", 120, 120));
+          loadSprite("img/player_hit_animation_player_2.png", 30, 30));
+      images.put("blackhole", loadImage("img/blackhole_icon.png"));
+      images.put("blackholeLarge", loadImage("img/blackhole.png"));
+      images.put("fire", loadImage("img/fire_icon.png"));
+      images.put("jail", loadImage("img/jail_icon.png"));
+      images.put("laserbeam", loadImage("img/laser_icon.png"));
+      images.put("particle", loadImage("img/particle.png"));
+      images.put("particle_black", loadImage("img/particle_black.png"));
+      sprites.put("lasershot", loadSprite("img/lasershot.png", 120, 120));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
