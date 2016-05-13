@@ -450,7 +450,7 @@ public class Player extends Entity implements PlayerAction {
         usePowerup();
       }
     } else {
-      if (input.isKeyPressed(Input.KEY_RCONTROL)) {
+      if (input.isKeyPressed(Input.KEY_RSHIFT)) {
         usePowerup();
       }
     }
