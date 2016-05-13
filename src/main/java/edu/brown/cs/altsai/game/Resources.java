@@ -26,16 +26,32 @@ import org.newdawn.slick.TrueTypeFont;
  *
  */
 public class Resources {
+  /**
+   * Map names of images to images.
+   */
   private static Map<String, Image> images;
+
+  /**
+   * Map name of sprites to spritesheets.
+   */
   private static Map<String, SpriteSheet> sprites;
+
+  /**
+   * Map name of sounds to sounds.
+   */
   private static Map<String, Sound> sounds;
 
+  /**
+   * Font used in the game.
+   */
   private static Font defaultFont;
   static {
     try {
-      InputStream myStream = new BufferedInputStream(new FileInputStream("src/main/java/font/mono_0756_Regular.ttf"));
+      InputStream myStream = new BufferedInputStream(new FileInputStream(
+          "src/main/java/font/mono_0756_Regular.ttf"));
       Font font = Font.createFont(Font.TRUETYPE_FONT, myStream);
-      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+      GraphicsEnvironment ge = GraphicsEnvironment
+          .getLocalGraphicsEnvironment();
       ge.registerFont(font);
       defaultFont = font;
     } catch (FontFormatException | IOException e) {
@@ -64,55 +80,82 @@ public class Resources {
       images.put("speed", loadImage("/src/main/java/img/speed_icon.png"));
       images.put("timestop", loadImage("/src/main/java/img/timestop_icon.png"));
       images.put("background", loadImage("/src/main/java/img/background.png"));
-      images.put("backgroundMainMenu", loadImage("/src/main/java/img/background_main_menu.png"));
-      images.put("backgroundMainMenuSmall", loadImage("/src/main/java/img/background_main_menu_small.png"));
-      images.put("connectionPage", loadImage("/src/main/java/img/connection_page.png"));
-      images.put("connectionPageSmall", loadImage("/src/main/java/img/connection_page_small.png"));
+      images.put("backgroundMainMenu",
+          loadImage("/src/main/java/img/background_main_menu.png"));
+      images.put("backgroundMainMenuSmall",
+          loadImage("/src/main/java/img/background_main_menu_small.png"));
+      images.put("connectionPage",
+          loadImage("/src/main/java/img/connection_page.png"));
+      images.put("connectionPageSmall",
+          loadImage("/src/main/java/img/connection_page_small.png"));
       images.put("gray_arrow", loadImage("/src/main/java/img/gray_arrow.png"));
       images.put("3", loadImage("/src/main/java/img/3_image.png"));
       images.put("2", loadImage("/src/main/java/img/2_image.png"));
       images.put("1", loadImage("/src/main/java/img/1_image.png"));
       images.put("gameOver1", loadImage("/src/main/java/img/gameOver1.png"));
       images.put("gameOver2", loadImage("/src/main/java/img/gameOver2.png"));
-      images.put("gameOver1Small", loadImage("/src/main/java/img/gameOver1_small.png"));
-      images.put("gameOver2Small", loadImage("/src/main/java/img/gameOver2_small.png"));
+      images.put("gameOver1Small",
+          loadImage("/src/main/java/img/gameOver1_small.png"));
+      images.put("gameOver2Small",
+          loadImage("/src/main/java/img/gameOver2_small.png"));
       images.put("statsbox", loadImage("src/main/java/img/statsbox.png"));
-      images.put("statsboxSmall", loadImage("src/main/java/img/statsbox_small.png"));
+      images.put("statsboxSmall",
+          loadImage("src/main/java/img/statsbox_small.png"));
 
       images.put("aboutPage", loadImage("/src/main/java/img/aboutpage.png"));
-      images.put("aboutPageSmall", loadImage("/src/main/java/img/aboutpage_small.png"));
+      images.put("aboutPageSmall",
+          loadImage("/src/main/java/img/aboutpage_small.png"));
 
-      images.put("button", loadImage("/src/main/java/img/buttons/buttonrounded1.png"));
-      images.put("buttonSingle", loadImage("/src/main/java/img/buttons/spg_button.png"));
-      images.put("buttonMulti", loadImage("/src/main/java/img/buttons/omulti_button.png"));
-      images.put("buttonRank", loadImage("/src/main/java/img/buttons/rankings_button.png"));
-      images.put("buttonAbout", loadImage("/src/main/java/img/buttons/about_button.png"));
-      images.put("buttonLocal", loadImage("/src/main/java/img//buttons/local_button.png"));
-      images.put("buttonYear", loadImage("/src/main/java/img/buttons/gyear_button.png"));
-      images.put("buttonMonth", loadImage("/src/main/java/img/buttons/gmonth_button.png"));
-      images.put("buttonToday", loadImage("/src/main/java/img/buttons/gtoday_button.png"));
-      images.put("buttonAllTime", loadImage("/src/main/java/img/buttons/gall_button.png"));
+      images.put("button",
+          loadImage("/src/main/java/img/buttons/buttonrounded1.png"));
+      images.put("buttonSingle",
+          loadImage("/src/main/java/img/buttons/spg_button.png"));
+      images.put("buttonMulti",
+          loadImage("/src/main/java/img/buttons/omulti_button.png"));
+      images.put("buttonRank",
+          loadImage("/src/main/java/img/buttons/rankings_button.png"));
+      images.put("buttonAbout",
+          loadImage("/src/main/java/img/buttons/about_button.png"));
+      images.put("buttonLocal",
+          loadImage("/src/main/java/img//buttons/local_button.png"));
+      images.put("buttonYear",
+          loadImage("/src/main/java/img/buttons/gyear_button.png"));
+      images.put("buttonMonth",
+          loadImage("/src/main/java/img/buttons/gmonth_button.png"));
+      images.put("buttonToday",
+          loadImage("/src/main/java/img/buttons/gtoday_button.png"));
+      images.put("buttonAllTime",
+          loadImage("/src/main/java/img/buttons/gall_button.png"));
       images.put("buttonMainMenu",
           loadImage("/src/main/java/img/buttons/main_small_button.png"));
       images.put("buttonMainMenuLarge",
           loadImage("/src/main/java/img/buttons/main_button.png"));
-      images.put("buttonResume", loadImage("/src/main/java/img/buttons/resume_button.png"));
+      images.put("buttonResume",
+          loadImage("/src/main/java/img/buttons/resume_button.png"));
       images.put("buttonMultiOffline",
           loadImage("/src/main/java/img/buttons/offmulti_button.png"));
       sprites.put("bomb_explosion",
           loadSprite("/src/main/java/img/bomb_animation_large.png", 300, 300));
-      sprites.put("injuredAnimationPlayer1",
-          loadSprite("/src/main/java/img/player_hit_animation_player_1.png", 30, 30));
-      sprites.put("injuredAnimationPlayer2",
-          loadSprite("/src/main/java/img/player_hit_animation_player_2.png", 30, 30));
-      images.put("blackhole", loadImage("/src/main/java/img/blackhole_icon.png"));
-      images.put("blackholeLarge", loadImage("/src/main/java/img/blackhole.png"));
+      sprites.put(
+          "injuredAnimationPlayer1",
+          loadSprite("/src/main/java/img/player_hit_animation_player_1.png",
+              30, 30));
+      sprites.put(
+          "injuredAnimationPlayer2",
+          loadSprite("/src/main/java/img/player_hit_animation_player_2.png",
+              30, 30));
+      images.put("blackhole",
+          loadImage("/src/main/java/img/blackhole_icon.png"));
+      images.put("blackholeLarge",
+          loadImage("/src/main/java/img/blackhole.png"));
       images.put("fire", loadImage("/src/main/java/img/fire_icon.png"));
       images.put("jail", loadImage("/src/main/java/img/jail_icon.png"));
       images.put("laserbeam", loadImage("/src/main/java/img/laser_icon.png"));
       images.put("particle", loadImage("/src/main/java/img/particle.png"));
-      images.put("particle_black", loadImage("/src/main/java/img/particle_black.png"));
-      sprites.put("lasershot", loadSprite("/src/main/java/img/lasershot.png", 120, 120));
+      images.put("particle_black",
+          loadImage("/src/main/java/img/particle_black.png"));
+      sprites.put("lasershot",
+          loadSprite("/src/main/java/img/lasershot.png", 120, 120));
     } catch (SlickException e) {
       System.out.println("ERROR: No player.png found");
     }
@@ -197,6 +240,13 @@ public class Resources {
     return sounds.get(name);
   }
 
+  /**
+   * Sets font.
+   * 
+   * @param size
+   *          the size of the font
+   * @return a font
+   */
   public static TrueTypeFont getDefaultFont(float size) {
     return new TrueTypeFont(defaultFont.deriveFont(size), true);
   }

@@ -1,5 +1,7 @@
 package edu.brown.cs.altsai.game;
 
+import highscore.HighscoreSystem;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +15,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import highscore.HighscoreSystem;
 import states.AboutState;
 import states.ClientEndGame;
 import states.HighScoreState;
@@ -32,10 +33,31 @@ import states.TwoPlayerStartServer;
  */
 public class Main extends StateBasedGame {
 
+  /**
+   * Connection to database.
+   */
   private Connection conn;
+
+  /**
+   * High score system for the game.
+   */
   private HighscoreSystem highscoreSystem;
+
+  /**
+   * AppContainer.
+   */
   private static AppGameContainer app;
 
+  /**
+   * Instantiates Main menu.
+   *
+   * @throws NumberFormatException
+   *           upon number format exception
+   * @throws IOException
+   *           upon IO error
+   * @throws ParseException
+   *           upon parse error
+   */
   public Main() throws NumberFormatException, IOException, ParseException {
     super("WASD To Live");
 
@@ -45,16 +67,24 @@ public class Main extends StateBasedGame {
     } catch (Exception e) {
       JOptionPane.showMessageDialog(null, "Unable to connect to the internet. "
           + "The game is now running in offline mode.\nTo run in online mode, "
-          + "fix your connection and restart the game.", "Connection Error"
-          , JOptionPane.WARNING_MESSAGE);
+          + "fix your connection and restart the game.", "Connection Error",
+          JOptionPane.WARNING_MESSAGE);
       this.highscoreSystem = new HighscoreSystem("highscores.txt", 10);
     }
   }
 
+  /**
+   * Instantiates a connection to the database.
+   *
+   * @return a connection to the database
+   * @throws SQLException
+   *           upon sql exception
+   * @throws ClassNotFoundException
+   *           upon class not found
+   */
   private Connection instantiateConnection() throws SQLException,
-  ClassNotFoundException {
-    String url =
-        "jdbc:mysql://cs32db.csox7dghpjsn.us-east-1.rds.amazonaws.com:3306/";
+      ClassNotFoundException {
+    String url = "jdbc:mysql://cs32db.csox7dghpjsn.us-east-1.rds.amazonaws.com:3306/";
     String userName = "cs32user";
     String password = "cs32pass";
     String dbName = "cs32db";
@@ -70,12 +100,20 @@ public class Main extends StateBasedGame {
       app = new AppGameContainer(new Main());
       app.setDisplayMode(Window.width, Window.height, false);
       app.start();
-    } catch (SlickException
-        | IOException | NumberFormatException | ParseException e) {
+    } catch (SlickException | IOException | NumberFormatException
+        | ParseException e) {
       e.printStackTrace();
     }
   }
 
+  /**
+   * Sets parameters of window.
+   *
+   * @param widthNew
+   *          width of window
+   * @param heightNew
+   *          height of window
+   */
   public static void setWidthHeight(int widthNew, int heightNew) {
     Window.setWidthHeight(widthNew, heightNew);
     try {
