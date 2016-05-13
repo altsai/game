@@ -118,6 +118,17 @@ public class Player extends Entity implements PlayerAction {
     initFire();
   }
 
+  public void refreshBoundaries() {
+    this.bottom = Window.height - (this.radius / 2);
+    this.right = Window.width - (this.radius / 2);
+
+  }
+
+  public void refreshXY() {
+    this.setX(Window.width / 3);
+    this.setY(Window.height / 2);
+  }
+
   /**
    * Returns how many zombies were killed by bombs.
    * @return  int    number of zombies killed by bombs.
@@ -439,7 +450,7 @@ public class Player extends Entity implements PlayerAction {
         usePowerup();
       }
     } else {
-      if (input.isKeyPressed(Input.KEY_RCONTROL)) {
+      if (input.isKeyPressed(Input.KEY_RSHIFT)) {
         usePowerup();
       }
     }
